@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget xmlns="http://www.samsung.com/">
+  <cpname></cpname>
+  <cplogo></cplogo>
+  <cpauthjs></cpauthjs>
+  <ThumbIcon>icon.png</ThumbIcon>
+  <BigThumbIcon>icon.png</BigThumbIcon>
+  <ListIcon>icon.png</ListIcon>
+  <BigListIcon>icon.png</BigListIcon>
+  <category></category>
+  <autoUpdate>n</autoUpdate>
+  <ver>0.100</ver>
+  <mgrver></mgrver>
+  <fullwidget>y</fullwidget>
+  <type>user</type>
+  <srcctl>y</srcctl>
+  <ticker>n</ticker>
+  <childlock>n</childlock>
+  <videomute>n</videomute>
+  <dcont>y</dcont>
+  <widgetname>tvdomru</widgetname>
+  <description></description>
+  <width>1280</width>
+  <height>720</height>
+  <author>
+    <name></name>
+    <email></email>
+    <link></link>
+    <organization></organization>
+  </author>
+</widget>

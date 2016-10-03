@@ -1,0 +1,14 @@
+{
+    "id": "com.trubatv.app",
+    "version": "0.0.2",
+    "vendor": "trubainc",
+    "type": "web",
+    "main": "index.html",
+    "title": "trubatv",
+	"bgColor": "#1e88e5",
+	"bgImage": "preview.png",
+    "icon": "icon.png",
+    "iconColor": "#1e88e5",
+    "largeIcon": "largeIcon.png",
+    "uiRevision":2
+}
