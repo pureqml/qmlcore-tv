@@ -9,9 +9,10 @@ Item {
 	property bool	ready: false;
 	property bool	muted: false;
 	property bool	paused: false;
-	property bool	autoPlay: false;
 	property bool	waiting: false;
 	property bool	seeking: false;
+	property bool	autoPlay: false;
+	property bool	networkConnected: true;
 	property int	duration;
 	property int	progress;
 	property int	buffered;
@@ -26,6 +27,18 @@ Item {
 		} catch (e) {
 			log("Current state: " + webapis.avplay.getState());
 			log(e);
+		}
+	}
+
+	onRecursiveVisibleChanged: {
+		var webapis = this._webapis
+		if (value) {
+			webapis.avplay.restore()
+			if (webapis.avplay.getState() == "PLAYING")
+			this.closeVideo()
+			this.playImpl()
+		} else {
+			webapis.avplay.suspend()
 		}
 	}
 
@@ -180,5 +193,13 @@ Item {
 			}
 		};
 		this.playImpl()
+
+		this._webapis.network.addNetworkStateChangeListener(function(data) {
+			if (data == 4) {		// Network is connected again.
+				self.networkConnected = true
+			} else if (data == 5) {	// Network is disconnected.
+				self.networkConnected = false
+			}
+		})
 	}
 }
