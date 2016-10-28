@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app_content>
+<app_type>2</app_type>
+<capability>
+<sdk_version>01.05.00</sdk_version>
+<use_internet>Y</use_internet>
+<use_magic>Y</use_magic>
+<use_camera>N</use_camera>
+<use_3d>N</use_3d>
+<memory_size>64</memory_size>
+<resolution>1280,720</resolution>
+</capability>
+</app_content>
