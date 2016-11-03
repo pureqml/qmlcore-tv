@@ -1,1 +1,4 @@
-{ "strict": false }
+{
+	"strict": false,
+	"requires": ["html5"]
+}
