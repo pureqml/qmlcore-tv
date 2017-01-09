@@ -1,4 +1,4 @@
-if ('webOS' in window) {
+if ('webOS' in window || 'webos' in window) {
 	log = function(dummy) {
 		var args = copyArguments(arguments)
 		console.log("[QML] " + args.join(" "))
