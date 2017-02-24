@@ -1,8 +1,5 @@
 if ('webOS' in window || 'webos' in window) {
-	log = function(dummy) {
-		var args = copyArguments(arguments)
-		console.log("[QML] " + args.join(" "))
-	}
+	log = console.log.bind(console)
 
 	log("WebOS detected")
 	exports.core.vendor = "LG"

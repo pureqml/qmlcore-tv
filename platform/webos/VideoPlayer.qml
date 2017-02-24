@@ -97,7 +97,7 @@ Item {
 	onError: {
 		this.paused = false
 		this.waiting = false
-		var player = this.element.dom
+		var player = this.player
 
 		if (!player || !player.error)
 			return
@@ -125,8 +125,8 @@ Item {
 	}
 
 	constructor: {
-		var player
-		player = this._context.createElement('video')
+		this.player = this._context.createElement('video')
+		var player = this.player
 		player.dom.preload = "metadata"
 
 		var dom = player.dom
@@ -179,7 +179,6 @@ Item {
 
 		volumeStorage.read()
 		this.volume = volumeStorage.value ? +(volumeStorage.value) : 1.0
-
-		player.dom.style.backgroundColor = this.backgroundColor;
+		this.player.dom.style.backgroundColor = this.backgroundColor;
 	}
 }
