@@ -1,3 +1,6 @@
+log = console.log.bind(console)
+
+
 if ('tizen' in window) {
 	log("[QML] Tizen")
 	exports.core.vendor = "samsung"
