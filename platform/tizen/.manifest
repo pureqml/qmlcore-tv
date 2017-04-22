@@ -1,4 +1,4 @@
 {
 	"strict": false,
-	"requires": ["html5"]
+	"requires": ["html5", "web.canvas"]
 }
