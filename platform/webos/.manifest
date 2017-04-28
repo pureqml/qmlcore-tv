@@ -1,4 +1,5 @@
 {
 	"requires": ["html5"],
+	"templates": ["*.html", "appinfo.json"],
 	"strict": false
 }
