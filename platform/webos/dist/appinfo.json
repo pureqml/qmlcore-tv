@@ -8,7 +8,7 @@
 	"bgColor": "#cccccc",
 	"bgImage": "preview.png",
 	"icon": "icon.png",
-	"iconColor": "#cccccc",
+	"iconColor": "#c8e6c9",
 	"splashBackground": "splash.png",
 	"disableBackHistoryAPI":true,
 	"uiRevision":1
