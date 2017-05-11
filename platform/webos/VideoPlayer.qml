@@ -17,20 +17,6 @@ Item {
 
 	LocalStorage { id: volumeStorage; name: "volume"; }
 
-	//Timer {
-		//interval: 500;
-		//repeat: true;
-		//running: true;
-
-		//onTriggered: {
-			//var player = this.parent.element.dom
-			//this.parent.duration = player.duration ? this.parent._player.duration : 0
-			//this.parent.muted = player.muted
-			//this.parent.ready = player.readyState || this.parent.flash;	//TODO: temporary fix.
-			//this.parent.paused = this.parent.ready && (player.paused || this.parent.flasPlayerPaused);
-		//}
-	//}
-
 	function _update(name, value) {
 		switch (name) {
 			case 'loop': this.element.dom.loop = value; break
@@ -38,17 +24,6 @@ Item {
 		}
 
 		qml.core.Item.prototype._update.apply(this, arguments);
-	}
-
-	getFlashMovieObject(movieName):
-	{
-		if (window.document[movieName])
-			return window.document[movieName];
-		if (navigator.appName.indexOf("Microsoft Internet")==-1)
-			if (document.embeds && document.embeds[movieName])
-				return document.embeds[movieName];
-		else
-			return document.getElementById(movieName);
 	}
 
 	play: {
