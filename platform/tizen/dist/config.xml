@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://yourdomain/BasicProject" version="1.0.0" viewmodes="maximized">
-    <tizen:application id="aG5DHG5Yku.BasicProject" package="aG5DHG5Yku" required_version="2.3"/>
+<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://yourdomain/{% block title %}{% endblock %}" version="1.0.0" viewmodes="maximized">
+    <tizen:application id="aG5DHG5Yku.{% block title %}{% endblock %}" package="aG5DHG5Yku" required_version="2.3"/>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.normal.1080.1920"/>
     <icon src="icon.png"/>
-    <name>BasicProject</name>
+    <name>{% block title %}{% endblock %}</name>
     <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
     <tizen:profile name="tv-samsung-public"/>
     <tizen:setting screen-orientation="landscape" context-menu="enable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
