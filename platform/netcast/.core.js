@@ -1,6 +1,6 @@
 if ('NetCastExit' in window) {
 	log = function(dummy) {
-		var args = copyArguments(arguments)
+		COPY_ARGS(args, 0)
 		console.log("[QML] " + args.join(" "))
 	}
 

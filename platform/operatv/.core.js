@@ -1,6 +1,6 @@
 if ('VK_UNSUPPORTED' in window) {
 	log = function(dummy) {
-		var args = copyArguments(arguments)
+		COPY_ARGS(args, 0)
 		console.log("[QML] " + args.join(" "))
 	}
 	log("operatv detected")

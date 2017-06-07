@@ -10,7 +10,7 @@ if ('Common' in window) {
 	exports.core.os = "smartTV"
 
 	log = function(dummy) {
-		var args = copyArguments(arguments)
+		COPY_ARGS(args, 0)
 		alert("[QML] " + args.join(" "))
 	}
 
