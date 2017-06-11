@@ -113,7 +113,7 @@ Item {
 			if (isNaN(event))
 				return
 
-			switch (parseInt(val1)) {
+			switch (parseInt(event)) {
 			case -1: //Fired on error?
 				break;
 			case 6: //Was fired when the file as at the end... After 8 was fired
