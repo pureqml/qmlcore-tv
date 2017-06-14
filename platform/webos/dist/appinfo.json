@@ -1,10 +1,10 @@
 {
-	"id": "com.{% block title %}{% endblock %}.app",
+	"id": "com.{{ title }}.app",
 	"version": "1.0.0",
-	"vendor": "{% block vendor %}{% endblock %}",
+	"vendor": "{{ title }}",
 	"type": "web",
 	"main": "index.html",
-	"title": "{% block title %}{% endblock %}",
+	"title": "{{ title }}",
 	"bgColor": "#cccccc",
 	"bgImage": "preview.png",
 	"icon": "icon.png",

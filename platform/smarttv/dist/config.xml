@@ -10,7 +10,7 @@
   <BigListIcon>icon.png</BigListIcon>
   <category></category>
   <autoUpdate>n</autoUpdate>
-  <ver>0.100</ver>
+  <ver>1.000</ver>
   <mgrver></mgrver>
   <fullwidget>y</fullwidget>
   <type>user</type>
@@ -19,14 +19,14 @@
   <childlock>n</childlock>
   <videomute>n</videomute>
   <dcont>y</dcont>
-  <widgetname>tvdomru</widgetname>
+  <widgetname>{{ title }}</widgetname>
   <description></description>
   <width>1280</width>
   <height>720</height>
   <author>
-    <name></name>
+    <name>{{ author }}</name>
     <email></email>
     <link></link>
-    <organization></organization>
+    <organization>{{ vendor }}</organization>
   </author>
 </widget>
