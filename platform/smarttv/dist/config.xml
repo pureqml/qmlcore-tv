@@ -21,8 +21,8 @@
   <dcont>y</dcont>
   <widgetname>{{ title }}</widgetname>
   <description></description>
-  <width>1280</width>
-  <height>720</height>
+  <width>{{ resolutionWidth | default(1280) }}</width>
+  <height>{{ resolutionHeight | default(720) }}</height>
   <author>
     <name>{{ author }}</name>
     <email></email>
