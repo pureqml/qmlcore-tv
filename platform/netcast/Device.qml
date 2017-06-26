@@ -1,4 +1,4 @@
-Item {
+Object {
 	property bool macAccessable: true;
 	property string macAddress;
 

@@ -1,4 +1,4 @@
-Item {
+Object {
 	property bool macAccessable: false;
 
 	//TODO: impl
