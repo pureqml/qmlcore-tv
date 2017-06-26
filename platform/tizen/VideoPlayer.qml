@@ -1,6 +1,6 @@
 Item {
-	signal finished;
 	signal error;
+	signal finished;
 	property string	source;
 	property Color	backgroundColor: "#000";
 	property float	volume: 1.0;
@@ -32,6 +32,9 @@ Item {
 
 	onRecursiveVisibleChanged: {
 		var webapis = this._webapis
+		if (!webapis)
+			return
+
 		if (value) {
 			webapis.avplay.restore()
 			if (webapis.avplay.getState() == "PLAYING")
@@ -81,10 +84,9 @@ Item {
 		}
 	}
 
-	seekTo(val): {
-		var webapis = this._webapis
-		webapis.avplay.seekTo(val)
-	}
+	seek(val): { this.seekTo(this.progress + val) }
+
+	seekTo(val): { log("Seek to", val); this._webapis.avplay.seekTo(val) }
 
 	updateDuration: {
 		//duration is given in millisecond
@@ -95,7 +97,7 @@ Item {
 	updateCurrentTime: {
 		//current time is given in millisecond
 		var webapis = this._webapis
-		var currentTime = webapis.avplay.getCurrentTime();
+		this.progress = webapis.avplay.getCurrentTime() / 1000;
 	}
 
 	onAutoPlayChanged: {
@@ -160,19 +162,15 @@ Item {
 		var self = this
 		this._listener = {
 			onbufferingstart : function() {
-				log("Buffering start.");
 				//showLoading();
 			},
 			onbufferingprogress : function(percent) {
-				log("Buffering progress data : " + percent);
 				//updateLoading(percent);
 			},
 			onbufferingcomplete : function() {
-				log("Buffering complete.");
 				//hideLoading();
 			},
 			oncurrentplaytime : function(currentTime) {
-				log("Current Playtime : " + currentTime);
 				self.updateCurrentTime(currentTime);
 			},
 			onevent : function(eventType, eventData) {
@@ -192,7 +190,8 @@ Item {
 				log("Stream Completed");
 			}
 		};
-		this.playImpl()
+		if (this.autoPlay && this.source)
+			this.playImpl()
 
 		this._webapis.network.addNetworkStateChangeListener(function(data) {
 			if (data == 4) {		// Network is connected again.
