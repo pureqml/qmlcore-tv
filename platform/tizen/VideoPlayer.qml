@@ -86,16 +86,16 @@ Item {
 
 	seek(val): { this.seekTo(this.progress + val) }
 
-	seekTo(val): { log("Seek to", val); this._webapis.avplay.seekTo(val) }
+	seekTo(val): { log("Seek to", val, this.progress); this._webapis.avplay.seekTo(val * 1000) }
 
 	updateDuration: {
 		//duration is given in millisecond
 		var webapis = this._webapis
-		var duration = webapis.avplay.getDuration();
+		this.duration = webapis.avplay.getDuration() / 1000;
+		log("Duration", this.duration)
 	}
 
 	updateCurrentTime: {
-		//current time is given in millisecond
 		var webapis = this._webapis
 		this.progress = webapis.avplay.getCurrentTime() / 1000;
 	}
