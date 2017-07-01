@@ -59,6 +59,8 @@ Item {
 		this.element.dom.volume = this.volume
 	}
 
+	stop: { this.pause() }
+
 	pause: {
 		this.element.dom.pause()
 	}
