@@ -11,7 +11,7 @@ Object {
 	fillRequest(method, args, success, error, complete): {
 		var res = {
 			method: method,
-			parameters: args, 
+			parameters: args,
 			onSuccess: function(response) { success(response) }
 		}
 
@@ -28,6 +28,11 @@ Object {
 			res['resubscribeStatus'] = args.resubscribeStatus
 
 		return res;
+	}
+
+	getDeviceId(callback, error): {
+		var request = this.fillRequest("deviceid/getIDs", { "idType": ["LGUDID"] }, callback, error)
+		this.requestImpl("luna://com.webos.service.sm", request)
 	}
 
 	keyManager(method, args, success, error, complete): {
