@@ -8,6 +8,7 @@
 	"bgColor": "{{ iconColor | default('#cccccc') }}",
 	"bgImage": "preview.png",
 	"icon": "icon.png",
+	"largeIcon": "icon.png",
 	"resolution":"{{ resolutionWidth | default(1280) }}x{{ resolutionHeight | default(720) }}",
 	"iconColor": "#{{ iconColor | default('#c8e6c9') }}",
 	"splashBackground": "splash.png",
