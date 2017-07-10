@@ -20,7 +20,15 @@ Object {
 	getDeviceId(callback): {
 		var self = this
 		luna.getDeviceId(
-			function(res) { callback(res.idList.idValue) },
+			function(res) {
+				if (res.returnValue && res.idList && res.idList.length) {
+					log("Succss, deviceId:", res.idList[0].idValue)
+					callback(res.idList[0].idValue)
+				} else {
+					log("Bad response, device Id will be generated", res)
+					self.generateId(callback)
+				}
+			},
 			function(res) { log("Failed to get device id directly"); self.generateId(callback) }
 		)
 	}
