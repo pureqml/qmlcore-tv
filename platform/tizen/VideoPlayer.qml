@@ -4,14 +4,13 @@ Item {
 	property string	source;
 	property Color	backgroundColor: "#000";
 	property float	volume: 1.0;
-	property bool	loop: false;
-	property bool	flash: true;
-	property bool	ready: false;
-	property bool	muted: false;
-	property bool	paused: false;
-	property bool	waiting: false;
-	property bool	seeking: false;
-	property bool	autoPlay: false;
+	property bool	loop;
+	property bool	ready;
+	property bool	muted;
+	property bool	paused;
+	property bool	waiting;
+	property bool	seeking;
+	property bool	autoPlay;
 	property bool	networkConnected: true;
 	property int	duration;
 	property int	progress;
@@ -23,6 +22,7 @@ Item {
 		log('Play Video', this.source);
 		try {
 			webapis.avplay.play();
+			this.paused = webapis.avplay.getState() == "PAUSED"
 			log("Current state: " + webapis.avplay.getState());
 		} catch (e) {
 			log("Current state: " + webapis.avplay.getState());
@@ -38,7 +38,7 @@ Item {
 		if (value) {
 			webapis.avplay.restore()
 			if (webapis.avplay.getState() == "PLAYING")
-			this.closeVideo()
+				this.closeVideo()
 			this.playImpl()
 		} else {
 			webapis.avplay.suspend()
@@ -64,6 +64,7 @@ Item {
 		log('Pause Video');
 		try {
 			webapis.avplay.pause();
+			this.paused = webapis.avplay.getState() == "PAUSED"
 			log("Current state: " + webapis.avplay.getState());
 		} catch (e) {
 			log("Current state: " + webapis.avplay.getState());
