@@ -87,7 +87,11 @@ Item {
 
 	seek(val): { this.seekTo(this.progress + val) }
 
-	seekTo(val): { log("Seek to", val, this.progress); this._webapis.avplay.seekTo(val * 1000) }
+	seekTo(val): {
+		log("Seek to", val, this.progress)
+		this.seeking = true
+		this._webapis.avplay.seekTo(val * 1000)
+	}
 
 	updateDuration: {
 		//duration is given in millisecond
@@ -163,15 +167,18 @@ Item {
 		var self = this
 		this._listener = {
 			onbufferingstart : function() {
-				//showLoading();
+				log("onbufferingstart")
+				self.waiting = true
 			},
 			onbufferingprogress : function(percent) {
-				//updateLoading(percent);
+				log("onbufferingprogress")
 			},
 			onbufferingcomplete : function() {
-				//hideLoading();
+				log("onbufferingcomplete")
+				self.waiting = false
 			},
 			oncurrentplaytime : function(currentTime) {
+				self.seeking = false
 				self.updateCurrentTime(currentTime);
 			},
 			onevent : function(eventType, eventData) {
