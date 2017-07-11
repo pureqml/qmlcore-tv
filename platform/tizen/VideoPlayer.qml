@@ -147,6 +147,7 @@ Item {
 	playImpl: {
 		log("playImpl")
 		var webapis = this._webapis
+		this.duration = 0
 		log("playImpl open")
 		webapis.avplay.open(this.source);
 		log("playImpl setListener")
