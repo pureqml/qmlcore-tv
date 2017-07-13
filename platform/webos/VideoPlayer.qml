@@ -1,6 +1,6 @@
 Item {
-	signal finished;
 	signal error;
+	signal finished;
 	property string	source;
 	property Color	backgroundColor: "#000";
 	property float	volume: 1.0;
@@ -108,7 +108,7 @@ Item {
 
 		var dom = player.dom
 		var self = this
-		player.on('play', function() { self.waiting = false; self.paused = dom.paused }.bind(this))
+		player.on('play', function() { self.waiting = false; self.paused = dom.paused; self.ready = dom.readyState }.bind(this))
 		player.on('error', function() { log("Player error occured"); self.error() }.bind(this))
 		player.on('pause', function() { self.paused = dom.paused }.bind(this))
 		player.on('ended', function() { self.finished() }.bind(this))
