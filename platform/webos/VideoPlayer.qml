@@ -130,6 +130,7 @@ Item {
 		player.on('durationchange', function() {
 			var d = dom.duration
 			self.duration = isFinite(d) ? d : 0
+			self.progress = dom.currentTime
 		}.bind(this))
 
 		player.on('progress', function() {
