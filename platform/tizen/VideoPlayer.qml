@@ -197,6 +197,7 @@ Item {
 			},
 			onstreamcompleted : function() {
 				log("Stream Completed");
+				self.finished()
 			}
 		};
 		if (this.autoPlay && this.source)
