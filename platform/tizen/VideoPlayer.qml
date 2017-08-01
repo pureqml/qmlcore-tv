@@ -117,6 +117,7 @@ Item {
 
 	onSourceChanged: {
 		log("src", value)
+		this.ready = false
 		var webapis = this._webapis
 		if (webapis.avplay.getState() == "PLAYING")
 			this.closeVideo()
@@ -159,6 +160,7 @@ Item {
 		log("Current state: " + webapis.avplay.getState());
 		log("prepare complete");
 		this.updateDuration()
+		this.ready = webapis.avplay.getState() === "READY"
 
 		if (this.autoPlay)
 			this.play()
@@ -187,6 +189,7 @@ Item {
 			},
 			onerror : function(eventType) {
 				log("error type: " + eventType);
+				self.ready = false
 				self.error(eventType)
 			},
 			onsubtitlechange : function(duration, text, data3, data4) {
@@ -197,6 +200,7 @@ Item {
 			},
 			onstreamcompleted : function() {
 				log("Stream Completed");
+				self.ready = false
 				self.finished()
 			}
 		};
