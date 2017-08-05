@@ -119,7 +119,8 @@ Item {
 		log("src", value)
 		this.ready = false
 		var webapis = this._webapis
-		if (webapis.avplay.getState() == "PLAYING")
+		var state = webapis.avplay.getState()
+		if (state == "PLAYING" || state == "PAUSED")
 			this.closeVideo()
 		this.playImpl()
 	}
