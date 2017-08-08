@@ -30,6 +30,11 @@ Object {
 		return res;
 	}
 
+	getSystemInfo(callback, error): {
+		var request = this.fillRequest("getSystemInfo", { "keys": ["modelName", "firmwareVersion", "UHD", "sdkVersion", "_3d"] }, callback, error)
+		this.requestImpl("luna://com.webos.service.tv.systemproperty", request)
+	}
+
 	getDeviceId(callback, error): {
 		var request = this.fillRequest("deviceid/getIDs", { "idType": ["LGUDID"] }, callback, error)
 		this.requestImpl("luna://com.webos.service.sm", request)

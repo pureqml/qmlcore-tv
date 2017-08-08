@@ -1,5 +1,10 @@
 Object {
 	property bool macAccessable: false;
+	property bool supportingUhd;
+	property bool supporting3d;
+	property string modelName;
+	property string firmware;
+	property string sdk;
 
 	LunaServiceApi { id: luna; }
 
@@ -35,4 +40,17 @@ Object {
 
 	//TODO: impl
 	getMacAddress(callback): { }
+
+
+	fillSystemInfo(info): {
+		this.supportingUhd = info.UHD
+		this.supporting3d = info._3d
+		this.firmware = info.firmwareVersion
+		this.modelName = info.modelName
+		this.sdk = info.sdkVersion
+	}
+
+	onCompleted: {
+		luna.getSystemInfo(function(res) {log("SUCCES GET INFO", res)}, function(res) {log("FAILED TOGET INFO", res)})
+	}
 }
