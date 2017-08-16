@@ -38,9 +38,7 @@ Object {
 		)
 	}
 
-	//TODO: impl
-	getMacAddress(callback): { }
-
+	getMacAddress(callback): { log("Not supported") }
 
 	fillSystemInfo(info): {
 		this.supportingUhd = info.UHD
@@ -51,6 +49,7 @@ Object {
 	}
 
 	onCompleted: {
-		luna.getSystemInfo(function(res) {log("SUCCES GET INFO", res)}, function(res) {log("FAILED TOGET INFO", res)})
+		var self = this
+		luna.getSystemInfo(function(res) { log("Device info", res); self.fillSystemInfo(res) }, function(res) {log("Failed to get device info", res)})
 	}
 }
