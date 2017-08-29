@@ -1,7 +1,7 @@
 {
 	"id": "com.{{ title }}.app",
 	"version": "1.0.0",
-	"vendor": "{{ author.name | default('PureQML Team') }}",
+	"vendor": "{{ author.name | default('Jhon Doe') if author is defined else 'Jhon Doe' }}",
 	"type": "web",
 	"main": "index.html",
 	"title": "{{ title }}",

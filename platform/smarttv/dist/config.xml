@@ -24,9 +24,9 @@
   <width>{{ resolutionWidth | default(1280) }}</width>
   <height>{{ resolutionHeight | default(720) }}</height>
   <author>
-    <name>{{ author }}</name>
-    <email></email>
-    <link></link>
-    <organization>{{ author.name | default('PureQML Team') }}</organization>
+    <name>{{ author.name | default('John Doe') if author is defined else 'John Doe' }}</name>
+    <email>{{ author.email if author is defined else '' }}</email>
+    <link>{{ author.site if author is defined else '' }}</link>
+    <organization>{{ author.organization | default('PureQML Team') if author is defined else 'PureQML Team' }}</organization>
   </author>
 </widget>
