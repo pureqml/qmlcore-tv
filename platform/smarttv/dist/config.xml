@@ -27,6 +27,6 @@
     <name>{{ author }}</name>
     <email></email>
     <link></link>
-    <organization>{{ vendor }}</organization>
+    <organization>{{ author.name | default('PureQML Team') }}</organization>
   </author>
 </widget>
