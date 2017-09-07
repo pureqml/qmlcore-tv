@@ -1,5 +1,5 @@
 var Player = function(ui) {
-	var player = this._context.createElement('object')
+	var player = ui._context.createElement('object')
 	player.dom.setAttribute("id", "av-player")
 	player.dom.setAttribute("type", "application/avplayer")
 	if (!window.webapis) {
@@ -10,9 +10,10 @@ var Player = function(ui) {
 	log("WEBAPIS", this._webapis)
 
 	this.ui = ui
-	this.element.remove()
-	this.element = player
-	this.parent.element.append(this.element)
+
+	ui.element.remove()
+	ui.element = player
+	ui.parent.element.append(this.element)
 
 	//old onCompleted:
 	var self = this
