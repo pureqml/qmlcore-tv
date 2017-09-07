@@ -1,3 +1,5 @@
+_globals.core.__videoBackends.tizen = function() { return _globals.tizen.video }
+
 log = console.log.bind(console)
 
 if ('tizen' in window) {
