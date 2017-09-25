@@ -39,7 +39,8 @@ Item {
 			webapis.avplay.restore()
 			if (webapis.avplay.getState() == "PLAYING")
 				this.closeVideo()
-			this.playImpl()
+			if (this.autoPlay)
+				this.playImpl()
 		} else {
 			webapis.avplay.suspend()
 		}
@@ -75,13 +76,16 @@ Item {
 	stop: {
 		var webapis = this._webapis
 		log("Current state: " + webapis.avplay.getState());
-		log('Stop Video');
-		try {
-			webapis.avplay.stop();
-			log("Current state: " + webapis.avplay.getState());
-		} catch (e) {
-			log("Current state: " + webapis.avplay.getState());
-			log(e);
+		var state = webapis.avplay.getState()
+		if (state == "PLAYING" || state == "PAUSED") {
+			log('Stop Video');
+			try {
+				webapis.avplay.stop();
+				log("Current state: " + webapis.avplay.getState());
+			} catch (e) {
+				log("Current state: " + webapis.avplay.getState());
+				log(e);
+			}
 		}
 	}
 
@@ -116,12 +120,9 @@ Item {
 	onHeightChanged: { this.updateRect() }
 
 	onSourceChanged: {
-		log("src", value)
 		this.ready = false
 		var webapis = this._webapis
-		var state = webapis.avplay.getState()
-		if (state == "PLAYING" || state == "PAUSED")
-			this.closeVideo()
+		log("src", value)
 		this.playImpl()
 	}
 
@@ -147,24 +148,33 @@ Item {
 	}
 
 	playImpl: {
-		log("playImpl")
 		var webapis = this._webapis
+		var state = webapis.avplay.getState()
+		if (state != 'NONE')
+			this.closeVideo()
+		if (!this.source)
+			return
+		log("playImpl", this.source, "state", state)
 		this.duration = 0
+
 		log("playImpl open")
 		webapis.avplay.open(this.source);
 		log("playImpl setListener")
 		webapis.avplay.setListener(this._listener);
-		log("playImpl prepare")
-		webapis.avplay.prepare();
 		log("Init player, src:", this.source, "width:", this.width, "height:", this.height)
 		webapis.avplay.setDisplayRect(this.x, this.y, this.width, this.height);
-		log("Current state: " + webapis.avplay.getState());
-		log("prepare complete");
-		this.updateDuration()
-		this.ready = webapis.avplay.getState() === "READY"
 
-		if (this.autoPlay)
-			this.play()
+		var self = this
+		var selectedSource = this.source
+		log("playImpl prepareAync")
+		webapis.avplay.prepareAsync(function() {
+			log("Current state: " + webapis.avplay.getState());
+			log("prepare complete", selectedSource, "sour", self.source);
+			self.updateDuration()
+			self.ready = webapis.avplay.getState() === "READY"
+			if (self.autoPlay)
+				self.play()
+		}.bind(this), function(event) { log("Failed to prepare"); self.error(event) }.bind(this))
 	}
 
 	onCompleted: {
@@ -173,37 +183,37 @@ Item {
 			onbufferingstart : function() {
 				log("onbufferingstart")
 				self.waiting = true
-			},
+			}.bind(this),
 			onbufferingprogress : function(percent) {
 				log("onbufferingprogress")
-			},
+			}.bind(this),
 			onbufferingcomplete : function() {
 				log("onbufferingcomplete")
 				self.waiting = false
-			},
+			}.bind(this),
 			oncurrentplaytime : function(currentTime) {
 				self.seeking = false
 				self.updateCurrentTime(currentTime);
-			},
+			}.bind(this),
 			onevent : function(eventType, eventData) {
 				log("event type: " + eventType + ", data: " + eventData);
-			},
+			}.bind(this),
 			onerror : function(eventType) {
 				log("error type: " + eventType);
 				self.ready = false
 				self.error(eventType)
-			},
+			}.bind(this),
 			onsubtitlechange : function(duration, text, data3, data4) {
 				log("Subtitle Changed.");
-			},
+			}.bind(this),
 			ondrmevent : function(drmEvent, drmData) {
 				log("DRM callback: " + drmEvent + ", data: " + drmData);
-			},
+			}.bind(this),
 			onstreamcompleted : function() {
 				log("Stream Completed");
 				self.ready = false
 				self.finished()
-			}
+			}.bind(this)
 		};
 		if (this.autoPlay && this.source)
 			this.playImpl()
