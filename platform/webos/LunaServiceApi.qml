@@ -49,4 +49,9 @@ Object {
 		var request = this.fillRequest("getStatus", {"subscribe":true}, callback)
 		this.requestImpl("luna://com.palm.connectionmanager", request)
 	}
+
+	launchApp(id, params, callback, error): {
+		var request = this.fillRequest("launch", { 'id': id, 'params': params }, callback, error)
+		this.requestImpl("luna://com.webos.applicationManager", request)
+	}
 }

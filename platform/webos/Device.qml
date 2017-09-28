@@ -38,6 +38,8 @@ Object {
 		)
 	}
 
+	launchApp(id, params, callback, error): { luna.launchApp(id, params, callback, error) }
+
 	getMacAddress(callback): { log("Not supported") }
 
 	fillSystemInfo(info): {
