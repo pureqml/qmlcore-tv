@@ -1,4 +1,5 @@
 Object {
+	signal appLaunched;
 	property bool macAccessable: false;
 	property bool supportingUhd;
 	property bool supporting3d;
@@ -53,5 +54,6 @@ Object {
 	onCompleted: {
 		var self = this
 		luna.getSystemInfo(function(res) { log("Device info", res); self.fillSystemInfo(res) }, function(res) {log("Failed to get device info", res)})
+		document.addEventListener('webOSLaunch', function(event, params) { self.appLaunched(event && event.detail ? event.detail : undefined) }, true);
 	}
 }
