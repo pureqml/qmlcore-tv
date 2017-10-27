@@ -1,5 +1,5 @@
 {
-	"requires": ["html5"],
+	"requires": ["html5", "video.html5"],
 	"templates": ["*.html", "appinfo.json"],
 	"strict": false
 }

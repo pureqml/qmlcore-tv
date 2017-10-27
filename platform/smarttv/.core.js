@@ -1,3 +1,4 @@
+_globals.core.__videoBackends.smarttv = function() { return _globals.smarttv.video }
 //samsung guts
 var widgetAPI
 var tvKey
