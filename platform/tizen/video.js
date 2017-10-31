@@ -20,17 +20,17 @@ var Player = function(ui) {
 	this._listener = {
 		onbufferingstart : function() {
 		log("onbufferingstart")
-		self.waiting = true
+		self.ui.waiting = true
 		},
 		onbufferingprogress : function(percent) {
 			log("onbufferingprogress")
 		},
 		onbufferingcomplete : function() {
 			log("onbufferingcomplete")
-			self.waiting = false
+			self.ui.waiting = false
 		},
 		oncurrentplaytime : function(currentTime) {
-			self.seeking = false
+			self.ui.seeking = false
 			self.updateCurrentTime(currentTime);
 		},
 		onevent : function(eventType, eventData) {
@@ -38,7 +38,7 @@ var Player = function(ui) {
 		},
 		onerror : function(eventType) {
 			log("error type: " + eventType);
-			self.ready = false
+			self.ui.ready = false
 			self.error(eventType)
 		},
 		onsubtitlechange : function(duration, text, data3, data4) {
@@ -49,8 +49,8 @@ var Player = function(ui) {
 		},
 		onstreamcompleted : function() {
 			log("Stream Completed");
-			self.ready = false
-			self.finished()
+			self.ui.ready = false
+			self.ui.finished()
 		}
 	};
 
@@ -65,39 +65,51 @@ var Player = function(ui) {
 
 Player.prototype.setSource = function(value) {
 	log("src", value)
-	this.ready = false
-	var webapis = this._webapis
-	var state = webapis.avplay.getState()
-	if (state == "PLAYING" || state == "PAUSED")
-		this.closeVideo()
+	this.ui.ready = false
 	this.playImpl()
 }
 
 Player.prototype.playImpl = function() {
-	log("playImpl")
 	var webapis = this._webapis
-	this.ui.duration = 0
+	var state = webapis.avplay.getState()
+	var ui = this.ui
+	log("playImpl", state, "src", ui.source)
+
+	if (state != 'NONE')
+		this.closeVideo()
+
+	if (!ui.source)
+		return
+
+	log("playImpl", ui.source, "state", state)
+	ui.duration = 0
+
 	log("playImpl open")
-	webapis.avplay.open(this.source);
+	webapis.avplay.open(ui.source);
 	log("playImpl setListener")
 	webapis.avplay.setListener(this._listener);
-	log("playImpl prepare")
+	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
+	webapis.avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
+
+	var selectedSource = ui.source
+	log("playImpl prepareAync")
 	webapis.avplay.prepare();
-	log("Init player, src:", this.source, "width:", this.width, "height:", this.height)
-	webapis.avplay.setDisplayRect(this.x, this.y, this.width, this.height);
 	log("Current state: " + webapis.avplay.getState());
-	log("prepare complete");
+	log("prepare complete", selectedSource, "source", ui.source);
 	this.updateDuration()
-	this.ui.ready = webapis.avplay.getState() === "READY"
+	ui.ready = webapis.avplay.getState() === "READY"
+	log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
+	if (ui.autoPlay)
+		this.play()
 }
 
 Player.prototype.play = function() {
 	var webapis = this._webapis
 	log("Current state: " + webapis.avplay.getState());
-	log('Play Video', this.source);
+	log('Play Video', this.ui.source);
 	try {
 		webapis.avplay.play();
-		this.paused = webapis.avplay.getState() == "PAUSED"
+		this.ui.paused = webapis.avplay.getState() == "PAUSED"
 		log("Current state: " + webapis.avplay.getState());
 	} catch (e) {
 		log("Current state: " + webapis.avplay.getState());
@@ -111,11 +123,10 @@ Player.prototype.setVisibility = function(visible) {
 	if (!webapis)
 		return
 
+	log("setVisibility", visible, "state", webapis.avplay.getState())
 	if (visible) {
-		webapis.avplay.restore()
-		if (webapis.avplay.getState() == "PLAYING")
-			this.closeVideo()
-		this.playImpl()
+		if (this.ui.autoPlay)
+			this.playImpl()
 	} else {
 		webapis.avplay.suspend()
 	}
@@ -127,7 +138,7 @@ Player.prototype.pause = function() {
 	log('Pause Video');
 	try {
 		webapis.avplay.pause();
-		this.paused = webapis.avplay.getState() == "PAUSED"
+		this.ui.paused = webapis.avplay.getState() == "PAUSED"
 		log("Current state: " + webapis.avplay.getState());
 	} catch (e) {
 		log("Current state: " + webapis.avplay.getState());
@@ -150,12 +161,12 @@ Player.prototype.stop = function() {
 }
 
 Player.prototype.seek = function(delta) {
-	this.seekTo(this.ui.progress + val)
+	this.seekTo(this.ui.progress + delta)
 }
 
 Player.prototype.seekTo = function(tp) {
 	log("Seek to", tp, this.ui.progress)
-	this.seeking = true
+	this.ui.seeking = true
 	this._webapis.avplay.seekTo(tp * 1000)
 }
 
