@@ -10,7 +10,7 @@ var Player = function(ui) {
 
 	ui.element.remove()
 	ui.element = player
-	ui.parent.element.append(this.element)
+	ui.parent.element.append(ui.element)
 
 	///onCompleted:
 
