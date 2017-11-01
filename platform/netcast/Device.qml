@@ -8,7 +8,7 @@ Object {
 
 	constructor: { this._device = document.getElementById("device") }
 
-	getDeviceId(callback): { callback({ text: this.getDeviceProperty("serialNumber") })}
+	getDeviceId(callback): { callback(this.getDeviceProperty("serialNumber")) }
 	getMacAddress(callback): { callback({ text: this.getDeviceProperty("net_macAddress") }) }
 
 	//Supported properties:
