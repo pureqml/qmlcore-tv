@@ -27,6 +27,7 @@ var Player = function(ui) {
 		},
 		onbufferingcomplete : function() {
 			log("onbufferingcomplete")
+			self.ui.seeking = false
 			self.ui.waiting = false
 		},
 		oncurrentplaytime : function(currentTime) {
