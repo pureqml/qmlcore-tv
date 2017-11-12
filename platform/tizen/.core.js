@@ -32,6 +32,7 @@ if ('tizen' in window) {
 		inputDevice.registerKey("MediaRewind")
 		inputDevice.registerKey("MediaPlay")
 		inputDevice.registerKey("MediaStop")
+		inputDevice.registerKey("MediaPause")
 	} else {
 		log('"inputDevice" is undefined dont forget to add privilege: <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/> into the "config.xml"')
 	}
@@ -52,6 +53,7 @@ if ('tizen' in window) {
 		39: 'Right',
 		40: 'Down',
 		13: 'Select',
+		19: 'SimplePause',
 		403: 'Red',
 		404: 'Green',
 		405: 'Yellow',
