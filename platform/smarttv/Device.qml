@@ -5,7 +5,7 @@ Object {
 	property string modelName;
 	property string sdk;
 
-	getDeviceId(callback): { callback("samsungsmarttvdevice") }
+	getDeviceId(callback): { callback("smarttv" + Math.random().toString(36).substr(2, 9)) }
 
 	getMacAddress(callback): { log("Not supported") }
 }
