@@ -31,14 +31,18 @@ var Player = function(ui) {
 			ui.ready = true
 			break;
 		case 8: //Playback came to an end (case found when rewind came to the start of the file)
+			ui.finished()
 			break;
 		case 9: // SEF init ?
 			break;
 		case 11: //Fired after 9
 			break;
 		case 12: //Fired after last 13 event. Buffering complete
+			ui.waiting = false
+			ui.seeking = false
 			break;
 		case 13:// Possible that this indicates the buffering level in %
+			ui.waiting = true
 			break;
 		case 14: //Fired every 0.5 seconds with current playback time in val2
 			ui.progress = arg * 1.0 / 1000
@@ -81,6 +85,7 @@ Player.prototype.play = function() {
 	log("calling initialize")
 	player.Execute("InitPlayer", this.source + "|COMPONENT=HLS")
 	//player.Execute("SetInitialBufferSize", 400*1024);
+	this.ui.waiting = true
 	log("calling StartPlayback")
 	log("StartPlayback returns", player.Execute("StartPlayback"))
 	this.started = true;
@@ -95,6 +100,7 @@ Player.prototype.pause = function() {
 
 Player.prototype.seek = function(delta) {
 	log('seekTo', delta)
+	this.ui.seeking = true
 	this.player.dom.Execute("JumpForward", delta)
 }
 
