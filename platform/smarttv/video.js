@@ -94,19 +94,20 @@ Player.prototype.pause = function() {
 }
 
 Player.prototype.seek = function(delta) {
-	log('NOT IMPLEMENTED: seek', delta)
+	log('seekTo', delta)
+	this.player.dom.Execute("JumpForward", delta)
 }
 
 Player.prototype.seekTo = function(tp) {
-	log('NOT IMPLEMENTED: seekTo', delta)
+	this.seek(tp - this.ui.progress)
 }
 
 Player.prototype.setVolume = function(volume) {
-	log('NOT IMPLEMENTED: setVolume', delta)
+	log('NOT IMPLEMENTED: setVolume', volume)
 }
 
 Player.prototype.setMute = function(muted) {
-	log('NOT IMPLEMENTED: mute', delta)
+	log('NOT IMPLEMENTED: mute', muted)
 }
 
 Player.prototype.setRect = function(l, t, r, b) {
