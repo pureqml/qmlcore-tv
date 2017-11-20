@@ -17,6 +17,7 @@ if ('Common' in window) {
 
 	log("loading")
 	widgetAPI = new window.Common.API.Widget() // Creates Common module
+	_globals.core.smartTvApi = widgetAPI
 	log("widget ok")
 	tvKey = new window.Common.API.TVKeyValue()
 	log("tv ok")
