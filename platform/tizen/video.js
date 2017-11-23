@@ -106,14 +106,16 @@ Player.prototype.playImpl = function() {
 
 Player.prototype.play = function() {
 	var webapis = this._webapis
-	log("Current state: " + webapis.avplay.getState());
+	if (!webapis || !webapis.avplay) {
+		log("Can't play - player not init yet")
+		return
+	}
 	log('Play Video', this.ui.source);
 	try {
 		webapis.avplay.play();
 		this.ui.paused = webapis.avplay.getState() == "PAUSED"
 		log("Current state: " + webapis.avplay.getState());
 	} catch (e) {
-		log("Current state: " + webapis.avplay.getState());
 		log(e);
 	}
 }
@@ -135,14 +137,17 @@ Player.prototype.setVisibility = function(visible) {
 
 Player.prototype.pause = function() {
 	var webapis = this._webapis
-	log("Current state: " + webapis.avplay.getState());
+	if (!webapis || !webapis.avplay) {
+		log("Can't pause - player not init yet")
+		return
+	}
+
 	log('Pause Video');
 	try {
 		webapis.avplay.pause();
 		this.ui.paused = webapis.avplay.getState() == "PAUSED"
 		log("Current state: " + webapis.avplay.getState());
 	} catch (e) {
-		log("Current state: " + webapis.avplay.getState());
 		log(e);
 	}
 }
