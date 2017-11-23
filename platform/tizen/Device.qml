@@ -3,7 +3,12 @@ Object {
 	property string modelName;
 	property string firmware;
 
-	getDeviceId(callback): { callback(window.tizen.systeminfo.getCapability("http://tizen.org/system/tizenid")) }
+	getDeviceId(callback): {
+		var tizenDeviceId = window.tizen.systeminfo.getCapability("http://tizen.org/system/tizenid")
+		if (!tizenDeviceId)
+			tizenDeviceId = "tizen" + Math.random().toString(36).substr(2, 9)
+		callback(tizenDeviceId)
+	}
 
 	//TODO: impl
 	getMacAddress(callback): { }
