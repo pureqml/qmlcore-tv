@@ -54,14 +54,6 @@ var Player = function(ui) {
 			self.ui.finished()
 		}
 	};
-
-	this._webapis.network.addNetworkStateChangeListener(function(data) {
-		if (data == 4) {		// Network is connected again.
-			self.networkConnected = true
-		} else if (data == 5) {	// Network is disconnected.
-			self.networkConnected = false
-		}
-	})
 }
 
 Player.prototype.setSource = function(value) {
