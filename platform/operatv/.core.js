@@ -30,3 +30,7 @@ if ('VK_UNSUPPORTED' in window) {
 
 	log("operatv initialized")
 }
+
+exports.closeApp = function() {
+	log("Close operatv app. Not implemented yet")
+}

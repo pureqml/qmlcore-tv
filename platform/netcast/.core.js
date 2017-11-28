@@ -41,3 +41,7 @@ exports.core.keyCodes = {
 }
 
 log("NetCast initialized")
+
+exports.closeApp = function() {
+	window.NetCastBack();
+}

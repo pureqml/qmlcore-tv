@@ -69,5 +69,9 @@ if ('tizen' in window) {
 		10009: 'Back'
 	}
 
+	exports.closeApp = function() {
+		window.tizen.application.getCurrentApplication().exit();
+	}
+
 	log("tizen initialized")
 }
