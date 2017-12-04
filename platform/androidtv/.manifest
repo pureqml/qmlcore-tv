@@ -1,0 +1,5 @@
+{
+	"requires": ["html5", "android"],
+	"templates": ["*.html", "config.xml"],
+	"strict": false
+}
