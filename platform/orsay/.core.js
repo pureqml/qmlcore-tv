@@ -8,7 +8,7 @@ if ('Common' in window) {
 	alert("[QML] samsung smart tv")
 	exports.core.vendor = "samsung"
 	exports.core.device = 1
-	exports.core.os = "smartTV"
+	exports.core.os = "orsay"
 
 	log = function(dummy) {
 		COPY_ARGS(args, 0)
@@ -65,5 +65,5 @@ if ('Common' in window) {
 		widgetAPI.sendExitEvent();
 	}
 
-	log("smartTV initialized")
+	log("Orsay initialized")
 }
