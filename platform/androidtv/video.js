@@ -9,18 +9,14 @@ Player.prototype.setSource = function(value) {
 Player.prototype.play = function() {
 	var ui = this._ui
 	log("Play URL:", ui.source)
-	VideoPlayer.play(
+	CordovaVideoPlayerActivity.play(
 		ui.source,
-		{
-			volume: 1.0,
-			scalingMode: VideoPlayer.SCALING_MODE.SCALE_TO_FIT_WITH_CROPPING
-		},
 		function() {
 			log("video completed");
 			ui.finished()
 		},
 		function(err) {
-			console.log("VideoPlayer error:", err);
+			console.log("Video error:", err);
 			ui.error(err)
 		}
 	);
