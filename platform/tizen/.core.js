@@ -1,4 +1,5 @@
 _globals.core.__videoBackends.tizen = function() { return _globals.tizen.video }
+_globals.core.__deviceBackend = function() { return _globals.tizen.device }
 
 log = console.log.bind(console)
 

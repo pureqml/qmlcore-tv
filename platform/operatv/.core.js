@@ -1,4 +1,6 @@
 if ('VK_UNSUPPORTED' in window) {
+	_globals.core.__deviceBackend = function() { return _globals.operatv.device }
+
 	log = function(dummy) {
 		COPY_ARGS(args, 0)
 		console.log("[QML] " + args.join(" "))

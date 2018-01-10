@@ -1,4 +1,5 @@
-_globals.core.__videoBackends.smarttv = function() { return _globals.smarttv.video }
+_globals.core.__videoBackends.orsay = function() { return _globals.orsay.video }
+_globals.core.__deviceBackend = function() { return _globals.orsay.device }
 //samsung guts
 var widgetAPI
 var tvKey

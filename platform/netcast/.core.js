@@ -1,4 +1,6 @@
 if ('NetCastExit' in window) {
+	_globals.core.__deviceBackend = function() { return _globals.netcast.device }
+
 	log = function(dummy) {
 		COPY_ARGS(args, 0)
 		console.log("[QML] " + args.join(" "))

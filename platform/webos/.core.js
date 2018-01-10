@@ -1,4 +1,6 @@
 if ('webOS' in window || 'webos' in window) {
+	_globals.core.__deviceBackend = function() { return _globals.webos.device }
+
 	log = console.log.bind(console)
 
 	log("WebOS detected")
