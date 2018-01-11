@@ -4,7 +4,6 @@ var Device = function(ui) {
 		ui.deviceId = device.uuid
 		ui.modelName = device.model
 		ui.firmware = device.version
-		log("MODEL", ui)
 	}
 }
 
