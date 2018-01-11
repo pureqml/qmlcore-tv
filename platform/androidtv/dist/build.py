@@ -30,6 +30,7 @@ def build(app, title):
     os.system('cp ../banner.png ./platforms/android/res/drawable-port-xxxhdpi/.')
 
     os.system('cordova plugin add https://github.com/comrat/Cordova-Android-TV-Plugin')
+    os.system('cordova plugin add cordova-plugin-device')
     os.system('cordova plugin add cordova-plugin-video-player')
     os.system('cordova build android')
     os.chdir('..')
