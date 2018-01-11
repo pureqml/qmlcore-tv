@@ -7,3 +7,9 @@ document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
 	_globals._context.system.vendor = device.manufacturer
 }
+
+document.addEventListener("click", handler, true);
+function handler(e){
+	e.stopPropagation();
+	e.preventDefault();
+}
