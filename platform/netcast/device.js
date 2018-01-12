@@ -42,7 +42,7 @@ var Device = function(ui) {
 //timeZone
 //platform
 //chipset
-Device.prototype.getDeviceProperty(val): { return this._device[val] }
+Device.prototype.getDeviceProperty = function(val) { return this._device[val] }
 
 exports.createDevice = function(ui) {
 	return new Device(ui)

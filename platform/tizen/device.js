@@ -8,7 +8,7 @@ var Device = function(ui) {
 	window.tizen.systeminfo.getPropertyValue("BUILD", this.fillDeviceInfo.bind(this), function(error) { log("Failed to get devceinfo", error) });
 }
 
-Device.prototype.getDeviceProperty(device): {
+Device.prototype.getDeviceProperty = function(device) {
 	if (!device) {
 		log("Device info is null")
 		return
