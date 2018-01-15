@@ -1,10 +1,10 @@
 var Device = function(ui) {
-	document.addEventListener("deviceready", onDeviceReady, false);
 	function onDeviceReady() {
 		ui.deviceId = device.uuid
 		ui.modelName = device.model
 		ui.firmware = device.version
 	}
+	ui._context.document.on('deviceready', onDeviceReady);
 }
 
 exports.createDevice = function(ui) {
