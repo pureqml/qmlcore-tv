@@ -1,9 +1,8 @@
 var Device = function(ui) {
 	this._ui = ui
-	ui.deviceId = deviceString + "_" + Math.random().toString(36).substr(2, 9)
-
 	var self = this
 	this.lunaGetSystemInfo(function(res) { log("Device info", res); self.fillSystemInfo(res) }, function(res) { log("Failed to get device info", res) })
+	this.getDeviceId(function(deviceId) { log("Get ID", deviceId); ui.deviceId = deviceId }.bind(this))
 }
 
 Device.prototype.lunaRequestImpl = function(serviceUri, requestObject) {
