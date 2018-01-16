@@ -17,6 +17,16 @@ Device.prototype.getDeviceProperty = function(device) {
 	this._ui.firmware = device.buildVersion
 }
 
+Device.prototype.fillDeviceInfo = function(device) {
+	if (!device) {
+		log("Device info is null")
+		return
+	}
+	this._ui.modelName = device.model
+	this._ui.firmware = device.buildVersion
+}
+
+
 exports.createDevice = function(ui) {
 	return new Device(ui)
 }
