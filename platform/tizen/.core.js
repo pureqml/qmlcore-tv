@@ -25,7 +25,6 @@ if ('tizen' in window) {
 		inputDevice.registerKey("ColorF1Green")
 		inputDevice.registerKey("ColorF2Yellow")
 		inputDevice.registerKey("ColorF3Blue")
-		inputDevice.registerKey("Menu")
 		inputDevice.registerKey("ChannelUp")
 		inputDevice.registerKey("ChannelDown")
 		inputDevice.registerKey("MediaFastForward")
