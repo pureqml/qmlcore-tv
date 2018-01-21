@@ -56,6 +56,11 @@ var Player = function(ui) {
 	};
 }
 
+Player.prototype.getAVPlay = function() {
+	var webapis = this._webapis
+	return webapis && webapis.avplay ? webapis.avplay : null
+}
+
 Player.prototype.setSource = function(value) {
 	log("src", value)
 	this.ui.ready = false
@@ -63,8 +68,12 @@ Player.prototype.setSource = function(value) {
 }
 
 Player.prototype.playImpl = function() {
-	var webapis = this._webapis
-	var state = webapis.avplay.getState()
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
+	var state = avplay.getState()
 	var ui = this.ui
 	log("playImpl", state, "src", ui.source)
 
@@ -78,35 +87,35 @@ Player.prototype.playImpl = function() {
 	ui.duration = 0
 
 	log("playImpl open")
-	webapis.avplay.open(ui.source);
+	avplay.open(ui.source);
 	log("playImpl setListener")
-	webapis.avplay.setListener(this._listener);
+	avplay.setListener(this._listener);
 	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
-	webapis.avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
+	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 
 	var selectedSource = ui.source
 	log("playImpl prepareAync")
-	webapis.avplay.prepare();
-	log("Current state: " + webapis.avplay.getState());
+	avplay.prepare();
+	log("Current state: " + avplay.getState());
 	log("prepare complete", selectedSource, "source", ui.source);
 	this.updateDuration()
-	ui.ready = webapis.avplay.getState() === "READY"
+	ui.ready = avplay.getState() === "READY"
 	log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
 	if (ui.autoPlay)
 		this.play()
 }
 
 Player.prototype.play = function() {
-	var webapis = this._webapis
-	if (!webapis || !webapis.avplay) {
-		log("Can't play - player not init yet")
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
 		return
 	}
 	log('Play Video', this.ui.source);
 	try {
-		webapis.avplay.play();
-		this.ui.paused = webapis.avplay.getState() == "PAUSED"
-		log("Current state: " + webapis.avplay.getState());
+		avplay.play();
+		this.ui.paused = avplay.getState() == "PAUSED"
+		log("Current state: " + avplay.getState());
 	} catch (e) {
 		log(e);
 	}
@@ -114,31 +123,33 @@ Player.prototype.play = function() {
 
 //fixme: move this logic to core?
 Player.prototype.setVisibility = function(visible) {
-	var webapis = this._webapis
-	if (!webapis)
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
 		return
+	}
 
-	log("setVisibility", visible, "state", webapis.avplay.getState())
+	log("setVisibility", visible, "state", avplay.getState())
 	if (visible) {
 		if (this.ui.autoPlay)
 			this.playImpl()
 	} else {
-		webapis.avplay.suspend()
+		avplay.suspend()
 	}
 }
 
 Player.prototype.pause = function() {
-	var webapis = this._webapis
-	if (!webapis || !webapis.avplay) {
-		log("Can't pause - player not init yet")
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
 		return
 	}
 
-	log('Pause Video');
+	log('Pause Video', avplay);
 	try {
-		webapis.avplay.pause();
-		this.ui.paused = webapis.avplay.getState() == "PAUSED"
-		log("Current state: " + webapis.avplay.getState());
+		avplay.pause();
+		this.ui.paused = avplay.getState() == "PAUSED"
+		log("Current state: " + avplay.getState());
 	} catch (e) {
 		log(e);
 	}
@@ -146,14 +157,19 @@ Player.prototype.pause = function() {
 
 //missing API in VideoPlayer
 Player.prototype.stop = function() {
-	var webapis = this._webapis
-	log("Current state: " + webapis.avplay.getState());
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
+
+	log("Current state: " + avplay.getState());
 	log('Stop Video');
 	try {
-		webapis.avplay.stop();
-		log("Current state: " + webapis.avplay.getState());
+		avplay.stop();
+		log("Current state: " + avplay.getState());
 	} catch (e) {
-		log("Current state: " + webapis.avplay.getState());
+		log("Current state: " + avplay.getState());
 		log(e);
 	}
 }
@@ -163,9 +179,14 @@ Player.prototype.seek = function(delta) {
 }
 
 Player.prototype.seekTo = function(tp) {
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
 	log("Seek to", tp, this.ui.progress)
 	this.ui.seeking = true
-	this._webapis.avplay.seekTo(tp * 1000)
+	avplay.seekTo(tp * 1000)
 }
 
 Player.prototype.setVolume = function(volume) {
@@ -175,36 +196,51 @@ Player.prototype.setMute = function(muted) {
 }
 
 Player.prototype.setRect = function(l, t, r, b) {
-	var webapis = this._webapis
-	webapis.avplay.setDisplayRect(l, t, r - l, b - t)
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
+	avplay.setDisplayRect(l, t, r - l, b - t)
 }
 
 Player.prototype.setBackgroundColor = function(color) {
 }
 
 Player.prototype.closeVideo = function() {
-	var webapis = this._webapis
-	log("Current state: " + webapis.avplay.getState());
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
+	log("Current state: " + avplay.getState());
 	log('Close Video');
 	try {
-		webapis.avplay.close();
-		log("Current state: " + webapis.avplay.getState());
+		avplay.close();
+		log("Current state: " + avplay.getState());
 	} catch (e) {
-		log("Current state: " + webapis.avplay.getState());
+		log("Current state: " + avplay.getState());
 		log(e);
 	}
 }
 
 Player.prototype.updateDuration = function() {
-	//duration is given in millisecond
-	var webapis = this._webapis
-	this.ui.duration = webapis.avplay.getDuration() / 1000
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
+	this.ui.duration = avplay.getDuration() / 1000
 	log("Duration", this.ui.duration)
 }
 
 Player.prototype.updateCurrentTime = function() {
-	var webapis = this._webapis
-	this.ui.progress = webapis.avplay.getCurrentTime() / 1000
+	var avplay = this.getAVPlay()
+	if (!avplay) {
+		log("AVPlay was not initialized")
+		return
+	}
+	this.ui.progress = avplay.getCurrentTime() / 1000
 }
 
 exports.createPlayer = function(ui) {
