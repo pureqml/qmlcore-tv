@@ -55,6 +55,7 @@ Player.prototype.play = function() {
 	ExoPlayer.show(
 		{
 			url: ui.source,
+			autoPlay: ui.autoPlay,
 			controller: controllerConfig
 		},
 		function(event) {
@@ -63,7 +64,6 @@ Player.prototype.play = function() {
 				switch (event.eventKeycode) {
 					case 'KEYCODE_BACK':
 						exo.close()
-						ui.stop()
 						break
 					case 'KEYCODE_DPAD_LEFT':
 						exo.seekTo(self._position - 30000)
@@ -73,7 +73,8 @@ Player.prototype.play = function() {
 						break
 					case 'KEYCODE_DPAD_CENTER':
 					case 'KEYCODE_MEDIA_PLAY_PAUSE':
-						exo.playPause()
+						if (ui.ready)
+							exo.playPause()
 						break
 				}
 				ExoPlayer.showController()
@@ -84,6 +85,8 @@ Player.prototype.play = function() {
 					log("Player event", e)
 					ui.duration = e.duration
 					self._position = parseInt(e.position)
+					if (ui.duration > 0)
+						ui.ready = true
 					var state = e.playbackState
 					if (state == "STATE_ENDED") {
 						exo.close()
