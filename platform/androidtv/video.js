@@ -43,7 +43,7 @@ Player.prototype.play = function() {
 
 	if (movie)
 		controllerConfig = {
-			streamImage: movie.baseUrl + (movie.horizontal ? movie.horizontal.image_15x : (model.packshot ? model.packshot.image_15x : (model.thumbnail ? model.thumbnail.image_15x : ""))),
+			streamImage: movie.baseUrl + (movie.horizontal ? movie.horizontal.image_15x : (movie.packshot ? movie.packshot.image_15x : (movie.thumbnail ? movie.thumbnail.image_15x : ""))),
 			streamTitle: movie.title,
 			streamDescription: movie.description,
 			hideProgress: false,
