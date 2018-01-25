@@ -63,6 +63,7 @@ Player.prototype.play = function() {
 				log("EventKeyCode " + event.eventKeycode)
 				switch (event.eventKeycode) {
 					case 'KEYCODE_BACK':
+					case 'KEYCODE_ESCAPE':
 						exo.close()
 						break
 					case 'KEYCODE_DPAD_LEFT':
