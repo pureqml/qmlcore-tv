@@ -17,41 +17,51 @@ var Player = function(ui) {
 
 	//old onCompleted:
 	var self = this
+	var context = ui._context
 	this._listener = {
 		onbufferingstart : function() {
-		log("onbufferingstart")
-		self.ui.waiting = true
+			log("onbufferingstart")
+			self.ui.waiting = true
+			context._processActions()
 		},
 		onbufferingprogress : function(percent) {
 			log("onbufferingprogress")
+			context._processActions()
 		},
 		onbufferingcomplete : function() {
 			log("onbufferingcomplete")
 			self.ui.seeking = false
 			self.ui.waiting = false
+			context._processActions()
 		},
 		oncurrentplaytime : function(currentTime) {
 			self.ui.seeking = false
 			self.updateCurrentTime(currentTime);
+			context._processActions()
 		},
 		onevent : function(eventType, eventData) {
 			log("event type: " + eventType + ", data: " + eventData);
+			context._processActions()
 		},
 		onerror : function(eventType) {
 			log("error type: " + eventType);
 			self.ui.ready = false
 			self.error(eventType)
+			context._processActions()
 		},
 		onsubtitlechange : function(duration, text, data3, data4) {
 			log("Subtitle Changed.");
+			context._processActions()
 		},
 		ondrmevent : function(drmEvent, drmData) {
 			log("DRM callback: " + drmEvent + ", data: " + drmData);
+			context._processActions()
 		},
 		onstreamcompleted : function() {
 			log("Stream Completed");
 			self.ui.ready = false
 			self.ui.finished()
+			context._processActions()
 		}
 	};
 }
