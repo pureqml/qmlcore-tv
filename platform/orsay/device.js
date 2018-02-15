@@ -7,6 +7,8 @@ var Device = function(ui) {
 			ui.modelName = info.getModel()
 			ui.firmware = info.getFirmware()
 			ui.sdk = info.getVersion()
+			ui.country = info.getCountry()
+			ui.language = info.getLanguage()
 		} else {
 			log("Info object is undefined")
 		}
