@@ -68,25 +68,29 @@ Player.prototype.setSource = function(url) {
 
 Player.prototype.play = function() {
 	log("video play source ", this.source)
-
+	var ui = this.ui
 	var player = this.player.dom
+
 	if (!player.Execute) {
 		log("PLAY video player not initialized yet")
 		this.startTimer()
 		return;
 	}
 
-	if (this.ui.paused) {
+	if (ui.paused) {
 		log("video play resume")
 		player.Execute("Resume")
-		this.ui.paused = false
+		ui.paused = false
+		return
+	} else if (ui.ready) {
+		log("Stream is playing already")
 		return
 	}
 
 	log("calling initialize")
 	player.Execute("InitPlayer", this.source + "|COMPONENT=HLS")
 	//player.Execute("SetInitialBufferSize", 400*1024);
-	this.ui.waiting = true
+	ui.waiting = true
 	log("calling StartPlayback")
 	log("StartPlayback returns", player.Execute("StartPlayback"))
 }
