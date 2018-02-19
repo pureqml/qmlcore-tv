@@ -5,7 +5,6 @@ var Player = function(ui) {
 
 	player.dom.setAttribute("classid", "clsid:SAMSUNG-INFOLINK-SEF")
 	this.ui = ui
-	this.started = false
 	this.source = ''
 
 	ui.element.remove()
@@ -54,7 +53,6 @@ var Player = function(ui) {
 
 	player.dom.Open('Player', '1.000', 'Player')
 	player.dom.OnEvent = 'Player.onEvent'
-	this.started = false
 }
 
 Player.prototype.startTimer = function() {
@@ -64,6 +62,7 @@ Player.prototype.startTimer = function() {
 
 Player.prototype.setSource = function(url) {
 	this.ui.ready = false
+	this.ui.paused = false
 	this.source = url
 }
 
@@ -77,9 +76,11 @@ Player.prototype.play = function() {
 		return;
 	}
 
-	if (this.started) {
-		log("video play stop ")
-		player.Execute("Stop")
+	if (this.ui.paused) {
+		log("video play resume")
+		player.Execute("Resume")
+		this.ui.paused = false
+		return
 	}
 
 	log("calling initialize")
@@ -88,13 +89,18 @@ Player.prototype.play = function() {
 	this.ui.waiting = true
 	log("calling StartPlayback")
 	log("StartPlayback returns", player.Execute("StartPlayback"))
-	this.started = true;
+}
+
+Player.prototype.stop = function() {
+	log("video stop")
+	this.player.dom.Execute("Stop")
 }
 
 Player.prototype.pause = function() {
-	if (this.started) {
-		log("video play stop ")
-		this.player.dom.Execute("Stop")
+	if (this.ui.ready) {
+		log("video pause")
+		this.player.dom.Execute("Pause")
+		this.ui.paused = true
 	}
 }
 
@@ -122,7 +128,9 @@ Player.prototype.setRect = function(l, t, r, b) {
 }
 
 Player.prototype.setVisibility = function(visible) {
-	log('NOT IMPLEMENTED: setVisibility')
+	log('videoplayer setVisibility', visible)
+	if (!visible)
+		this.stop()
 }
 
 
