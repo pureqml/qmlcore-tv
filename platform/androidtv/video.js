@@ -28,13 +28,19 @@ Player.prototype.setSource = function(value) {
 Player.prototype.play = function() {
 	var ui = this._ui
 
+	var exo = ExoPlayer
+	if (!this._lifecycleHandled) {
+		ui._context.document.on("pause", function() { log("Pause activity", exo); exo.close() });
+		ui._context.document.on("resume", function() { log("Resume to activity") });
+		this._lifecycleHandled = true
+	}
+
 	if (ui.paused) {
 		log("PLAY")
 		ExoPlayer.playPause()
 		return
 	}
 
-	var exo = ExoPlayer
 	var self = this
 	log("Play URL:", ui.source)
 	ui.ready = false
