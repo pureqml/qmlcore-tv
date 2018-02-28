@@ -87,7 +87,7 @@ Player.prototype.play = function() {
 					var state = e.playbackState
 					if (state == "STATE_ENDED") {
 						exo.close()
-						ui.finished()
+						ui.finished(e.position && e.duration && e.position >= e.duration)
 					}
 				},
 				function(e) { log("Failed to get state", e)}
