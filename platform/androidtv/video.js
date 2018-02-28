@@ -1,16 +1,6 @@
 var Player = function(ui) {
 	this._ui = ui
 
-	this._keyMap = {
-		'KEYCODE_BACK': 'Back',
-		'KEYCODE_DPAD_UP': 'Up',
-		'KEYCODE_DPAD_LEFT': 'Left',
-		'KEYCODE_DPAD_DOWN': 'Down',
-		'KEYCODE_DPAD_RIGHT': 'Right',
-		'KEYCODE_DPAD_CENTER': 'Select',
-		'KEYCODE_MEDIA_PLAY_PAUSE': 'Pause'
-	}
-
 	var self = this
 	ui.setMovie = function(movie) {
 		self._movie = movie
