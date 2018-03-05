@@ -1,4 +1,5 @@
 if ('webOS' in window || 'webos' in window) {
+	_globals.core.__videoBackends.webos = function() { return _globals.webos.video }
 	_globals.core.__deviceBackend = function() { return _globals.webos.device }
 
 	log = console.log.bind(console)
