@@ -81,7 +81,9 @@ Player.prototype.play = function() {
 				function(e) {
 					log("Player event", e)
 					ui.duration = e.duration
-					self._position = parseInt(e.position)
+					var position = parseInt(e.position)
+					self._position = position
+					ui.progress = position * 1.0 / 1000
 					if (ui.duration > 0)
 						ui.ready = true
 					var state = e.playbackState
@@ -110,9 +112,15 @@ Player.prototype.stop = function() {
 }
 
 Player.prototype.seek = function(delta) {
+	var exo = ExoPlayer
+	if (exo)
+		exo.seekTo(this._position + delta * 1000)
 }
 
 Player.prototype.seekTo = function(tp) {
+	var exo = ExoPlayer
+	if (exo)
+		exo.seekTo(tp * 1000)
 }
 
 Player.prototype.setVolume = function(volume) {
