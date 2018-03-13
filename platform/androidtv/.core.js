@@ -13,3 +13,5 @@ function handler(e){
 	e.stopPropagation();
 	e.preventDefault();
 }
+
+log("AndroidTV initialized")
