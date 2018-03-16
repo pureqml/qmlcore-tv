@@ -2,6 +2,7 @@ _globals.core.__deviceBackend = function() { return _globals.hisense.device }
 
 log = console.log.bind(console)
 log("Hisense detected")
+exports.core.os = "hisense"
 exports.core.vendor = "Hisense"
 exports.core.device = 1
 
