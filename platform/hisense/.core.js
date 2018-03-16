@@ -68,7 +68,7 @@ exports.core.keyCodes = {
 	417: 'FastForward'
 }
 exports.closeApp = function() {
-	close()
+	window.close()
 }
 
 log("Hisense initialized")
