@@ -55,11 +55,16 @@ exports.core.keyCodes = {
 	88: 'X',
 	89: 'Y',
 	90: 'Z',
-	112: 'Red',
-	113: 'Green',
-	114: 'Yellow',
-	115: 'Blue',
-	230: 'RightAlt'
+	403: 'Red',
+	404: 'Green',
+	405: 'Yellow',
+	406: 'Blue',
+	230: 'RightAlt',
+	19: 'Pause',
+	413: 'Stop',
+	415: 'Play',
+	412: 'Rewind',
+	417: 'FastForward'
 }
 exports.closeApp = function() {
 	close()
