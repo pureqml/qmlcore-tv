@@ -49,6 +49,8 @@ var Player = function(ui) {
 		default:
 			break;
 		}
+
+		ui._context._processActions();
 	}
 
 	player.dom.Open('Player', '1.000', 'Player')

@@ -33,7 +33,8 @@ if ('Common' in window) {
 		pluginAPI.unregistKey(tvKey.KEY_VOL_UP);
 		pluginAPI.unregistKey(tvKey.KEY_VOL_DOWN);
 		pluginAPI.unregistKey(tvKey.KEY_MUTE);
-		log("plugin ok, sending ready")
+		log("plugin ok, sending ready", context)
+		context._processActions();
 	}
 
 	exports.core.keyCodes = {
