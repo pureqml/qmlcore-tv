@@ -14,4 +14,14 @@ function handler(e){
 	e.preventDefault();
 }
 
+window.cordovaExecCall = function(name, args, callback, error) {
+	log("cordovaExecCall", name, "args", args)
+	if (window.cordova) {
+		window.cordova.exec(callback, error, "AndroidTV", name, args);
+	} else {
+		log("Cordova undefined error")
+		error()
+	}
+};
+
 log("AndroidTV initialized")
