@@ -12,7 +12,7 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	window.Player = {}
-	window.Player.onEvent = function(event, arg) {
+	window.Player.onEvent = this.ui._context.wrapNativeCallback(function(event, arg) {
 		log("VIDEO PLAYER EVENT" +  event + " ARG" + arg)
 		if (isNaN(event))
 			return
@@ -49,9 +49,7 @@ var Player = function(ui) {
 		default:
 			break;
 		}
-
-		ui._context._processActions();
-	}
+	})
 
 	player.dom.Open('Player', '1.000', 'Player')
 	player.dom.OnEvent = 'Player.onEvent'
@@ -59,7 +57,7 @@ var Player = function(ui) {
 
 Player.prototype.startTimer = function() {
 	if (this._crunchTimer === null)
-		this._crunchTimer = setInterval(this.play.bind(this), 5000)
+		this._crunchTimer = setInterval(this.ui._context.wrapNativeCallback(this.play).bind(this), 5000)
 }
 
 Player.prototype.setSource = function(url) {
