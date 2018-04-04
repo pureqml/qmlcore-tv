@@ -19,51 +19,47 @@ var Player = function(ui) {
 	var self = this
 	var context = ui._context
 	this._listener = {
-		onbufferingstart : function() {
+		onbufferingstart : this.wrapCallback(function() {
 			log("onbufferingstart")
 			self.ui.waiting = true
-			context._processActions()
-		},
-		onbufferingprogress : function(percent) {
+		}),
+		onbufferingprogress : this.wrapCallback(function(percent) {
 			log("onbufferingprogress")
 			context._processActions()
-		},
-		onbufferingcomplete : function() {
+		}),
+		onbufferingcomplete : this.wrapCallback(function() {
 			log("onbufferingcomplete")
 			self.ui.seeking = false
 			self.ui.waiting = false
-			context._processActions()
-		},
-		oncurrentplaytime : function(currentTime) {
+		}),
+		oncurrentplaytime : this.wrapCallback(function(currentTime) {
 			self.ui.seeking = false
 			self.updateCurrentTime(currentTime);
-			context._processActions()
-		},
-		onevent : function(eventType, eventData) {
+		}),
+		onevent : this.wrapCallback(function(eventType, eventData) {
 			log("event type: " + eventType + ", data: " + eventData);
-			context._processActions()
-		},
-		onerror : function(eventType) {
+		}),
+		onerror : this.wrapCallback(function(eventType) {
 			log("error type: " + eventType);
 			self.ui.ready = false
 			self.error(eventType)
-			context._processActions()
-		},
-		onsubtitlechange : function(duration, text, data3, data4) {
+		}),
+		onsubtitlechange : this.wrapCallback(function(duration, text, data3, data4) {
 			log("Subtitle Changed.");
-			context._processActions()
-		},
-		ondrmevent : function(drmEvent, drmData) {
+		}),
+		ondrmevent : this.wrapCallback(function(drmEvent, drmData) {
 			log("DRM callback: " + drmEvent + ", data: " + drmData);
-			context._processActions()
-		},
-		onstreamcompleted : function() {
+		}),
+		onstreamcompleted : this.wrapCallback(function() {
 			log("Stream Completed");
 			self.ui.ready = false
 			self.ui.finished()
-			context._processActions()
-		}
+		})
 	};
+}
+
+Player.prototype.wrapCallback = function(callback) {
+	return this.ui._context.wrapNativeCallback(callback)
 }
 
 Player.prototype.getAVPlay = function() {
