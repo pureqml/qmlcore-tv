@@ -51,9 +51,15 @@ var Player = function(ui) {
 			log("DRM callback: " + drmEvent + ", data: " + drmData);
 		}),
 		onstreamcompleted : this.wrapCallback(function() {
-			log("Stream Completed");
-			self.ui.ready = false
-			self.ui.finished()
+			if (self.ui.loop) {
+				log("Video is looped play it again")
+				var avplay = self.getAVPlay()
+				avplay.seekTo(0)
+			} else {
+				log("Stream Completed");
+				self.ui.ready = false
+				self.ui.finished()
+			}
 		})
 	};
 }
@@ -100,7 +106,7 @@ Player.prototype.playImpl = function() {
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 
 	var selectedSource = ui.source
-	log("playImpl prepareAync")
+	log("playImpl prepare")
 	avplay.prepare();
 	log("Current state: " + avplay.getState());
 	log("prepare complete", selectedSource, "source", ui.source);
@@ -211,6 +217,9 @@ Player.prototype.setRect = function(l, t, r, b) {
 }
 
 Player.prototype.setBackgroundColor = function(color) {
+}
+
+Player.prototype.setLoop = function(loop) {
 }
 
 Player.prototype.closeVideo = function() {
