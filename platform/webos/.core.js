@@ -45,6 +45,13 @@ if ('webOS' in window || 'webos' in window) {
 	log("webos initialized")
 
 	exports.closeApp = function() {
+		if (window.close)
+			window.close()
+		else
+			window.webOS.platformBack();
+	}
+
+	exports.platformBack = function() {
 		window.webOS.platformBack();
 	}
 }
