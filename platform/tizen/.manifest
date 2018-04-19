@@ -1,4 +1,4 @@
 {
 	"strict": false,
-	"requires": ["html5"]
+	"requires": ["web"]
 }

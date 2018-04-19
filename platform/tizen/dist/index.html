@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}{% endblock %}</title>
-	<meta charset="utf-8">
-	<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-
+{% extends "index.html" %}
+{% block head %}
 	<script src="$WEBAPIS/webapis/webapis.js"></script>
-
-	<script src="modernizr-custom.js"></script>
-	{% block head %}{% endblock %}
-</head>
-<body style="font-family: Roboto">
-	{% block content %}{% endblock %}
-	<script src="{{app}}"></script>
-</body>
-</html>
+{% endblock %}
