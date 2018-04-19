@@ -1,5 +1,5 @@
 {
 	"strict": false,
 	"templates": ["*.html", "config.xml"],
-	"requires": ["html5"]
+	"requires": ["web"]
 }

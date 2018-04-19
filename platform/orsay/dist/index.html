@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}{% endblock %}</title>
-	<meta charset="utf-8">
-	<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-
+{% extends "index.html" %}
+{% block head %}
 	<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Widget.js"></script>
 	<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/TVKeyValue.js"></script>
 	<script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/API/Plugin.js"></script>
@@ -13,12 +8,4 @@
 	<object id="pluginAudio" border=0 classid="clsid:SAMSUNG-INFOLINK-AUDIO"></object>
 	<object id="pluginObjectTVMW" border="0" classid="clsid:SAMSUNG-INFOLINK-TVMW"></object>
 	<object id="pluginObjectNNavi" border=0 classid="clsid:SAMSUNG-INFOLINK-NNAVI"></object>
-
-	<script src="modernizr-custom.js"></script>
-	{% block head %}{% endblock %}
-</head>
-<body style="font-family: Roboto">
-	{% block content %}{% endblock %}
-	<script src="{{app}}"></script>
-</body>
-</html>
+{% endblock %}
