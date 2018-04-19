@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}{% endblock %}</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link href='http://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+{% extends "index.html" %}
+{% block head %}
 	<script src="webOSjs-0.1.0/webOS.js"></script>
-	<script src="modernizr-custom.js"></script>
-	{% block head %}{% endblock %}
-</head>
-<body style="font-family: Roboto">
-	{% block content %}{% endblock %}
-	<script src="{{app}}"></script>
-</body>
-</html>
+{% endblock %}
