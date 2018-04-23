@@ -34,6 +34,8 @@ var Player = function(ui) {
 		}),
 		oncurrentplaytime : this.wrapCallback(function(currentTime) {
 			self.ui.seeking = false
+			if (currentTime)
+				self.ui.waiting = false
 			self.updateCurrentTime(currentTime);
 		}),
 		onevent : this.wrapCallback(function(eventType, eventData) {
