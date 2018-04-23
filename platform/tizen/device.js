@@ -6,6 +6,12 @@ var Device = function(ui) {
 	ui.deviceId = tizenDeviceId
 
 	window.tizen.systeminfo.getPropertyValue("BUILD", this.fillDeviceInfo.bind(this), function(error) { log("Failed to get devceinfo", error) });
+
+	var webapis = window.webapis
+	if (webapis && webapis.avinfo)
+		ui.supportingHdr = webapis.avinfo.isHdrTvSupport()
+	else
+		log("ERROR: webapis is undefined")
 }
 
 Device.prototype.getDeviceProperty = function(device) {
@@ -22,8 +28,9 @@ Device.prototype.fillDeviceInfo = function(device) {
 		log("Device info is null")
 		return
 	}
-	this._ui.modelName = device.model
-	this._ui.firmware = device.buildVersion
+	var ui = this._ui
+	ui.modelName = device.model
+	ui.firmware = device.buildVersion
 }
 
 
