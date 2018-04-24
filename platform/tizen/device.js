@@ -12,6 +12,16 @@ var Device = function(ui) {
 		ui.supportingHdr = webapis.avinfo.isHdrTvSupport()
 	else
 		log("ERROR: webapis is undefined")
+
+	var userAgent = window.navigator ? window.navigator.userAgent : ""
+	if (userAgent) {
+		userAgent = userAgent.toLowerCase()
+		var begin = userAgent.indexOf("tizen")
+		var endSemicolon = userAgent.indexOf(";", begin)
+		var endBrace = userAgent.indexOf(")", begin)
+		var end = endSemicolon > -1 && endSemicolon < endBrace ? endSemicolon : (endBrace < 0 ? userAgent.length - 1 : endBrace)
+		ui.sdk = userAgent.substring(begin + 6, end)
+	}
 }
 
 Device.prototype.getDeviceProperty = function(device) {
