@@ -148,7 +148,11 @@ Player.prototype.setVisibility = function(visible) {
 		if (this.ui.autoPlay)
 			this.playImpl()
 	} else {
-		avplay.suspend()
+		try {
+			avplay.suspend()
+		} catch (e) {
+			log("Failed to suspend avplay", e)
+		}
 	}
 }
 
