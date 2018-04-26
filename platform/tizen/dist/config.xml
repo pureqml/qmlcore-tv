@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://yourdomain/{{ title }}" version="1.0.0" viewmodes="maximized">
+    <access origin="*" subdomains="true"></access>
     <tizen:application id="aG5DHG5Yku.{{ title }}" package="aG5DHG5Yku" required_version="2.3"/>
     <content src="index.html"/>
-	<feature name="http://tizen.org/feature/screen.size.normal.{{ resolutionHeight | default(1080) }}.{{ resolutionWidth | default(1920) }}"/>
+    <feature name="http://tizen.org/feature/screen.size.normal.{{ resolutionHeight | default(1080) }}.{{ resolutionWidth | default(1920) }}"/>
+    <feature name="http://tizen.org/feature/network"/>
     <icon src="icon.png"/>
+    <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="true"/>
     <name>{{ title }}</name>
-    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+    <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
+    <tizen:privilege name="http://developer.samsung.com/privilege/avplay"/>
+    <tizen:privilege name="http://developer.samsung.com/privilege/productinfo"/>
     <tizen:privilege name="http://tizen.org/privilege/internet"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
     <tizen:profile name="tv-samsung-public"/>
     <tizen:setting screen-orientation="landscape" context-menu="enable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
 </widget>
