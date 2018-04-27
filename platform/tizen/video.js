@@ -106,24 +106,10 @@ Player.prototype.playImpl = function() {
 	avplay.setListener(this._listener);
 	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
-
-	var selectedSource = ui.source
-	try {
-		var uhd = window.webapis.productinfo.isUdPanelSupported();
-		if (uhd) {
-			avplay.setStreamingProperty("SET_MODE_4K", "TRUE");
-			log("4K mode prepared")
-		} else {
-			log("4K is not supported")
-		}
-	} catch (e) {
-		log('Failed to get "isUdPanelSupported" probably i\'ve forget to add considered privilege in config.xml: <tizen:privilege name="http://developer.samsung.com/privilege/productinfo"/>')
-	}
-
 	log("playImpl prepare")
 	avplay.prepare();
 	log("Current state: " + avplay.getState());
-	log("prepare complete", selectedSource, "source", ui.source);
+	log("prepare complete source", ui.source);
 	this.updateDuration()
 	ui.ready = avplay.getState() === "READY"
 	log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
