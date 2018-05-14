@@ -22,6 +22,9 @@ var Device = function(ui) {
 		var end = endSemicolon > -1 && endSemicolon < endBrace ? endSemicolon : (endBrace < 0 ? userAgent.length - 1 : endBrace)
 		ui.sdk = userAgent.substring(begin + 6, end)
 	}
+
+	if (webapis && webapis.productinfo)
+		ui.supportingUhd = webapis.productinfo.isUdPanelSupported()
 }
 
 Device.prototype.getDeviceProperty = function(device) {

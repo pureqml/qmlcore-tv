@@ -77,7 +77,7 @@ Player.prototype.fillDeviceInfo = function(device) {
 		var webapis = window.webapis
 		log("Device modelName", modelName)
 		if (webapis && webapis.productinfo) {
-			this._uhdSupported = webapis && webapis.productinfo && webapis.productinfo.isUdPanelSupported()
+			this._uhdSupported = webapis.productinfo.isUdPanelSupported()
 		} else {
 			log("productinfo is undefined try to retrive UHD support flag from modelname")
 			var checkUhdSubName = function(sub) { return modelName.indexOf(sub) >= 0 }
