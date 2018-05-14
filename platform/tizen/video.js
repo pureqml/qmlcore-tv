@@ -64,6 +64,28 @@ var Player = function(ui) {
 			}
 		})
 	};
+
+	var tizen = window.tizen
+	if (tizen && tizen.systeminfo)
+		tizen.systeminfo.getPropertyValue("BUILD", this.fillDeviceInfo.bind(this));
+}
+
+Player.prototype.fillDeviceInfo = function(device) {
+	log("Fill deviceinfo in player", device)
+	if (device && device.model) {
+		var modelName = device.model.toLowerCase()
+		var webapis = window.webapis
+		log("Device modelName", modelName)
+		if (webapis && webapis.productinfo) {
+			this._uhdSupported = webapis && webapis.productinfo && webapis.productinfo.isUdPanelSupported()
+		} else {
+			log("productinfo is undefined try to retrive UHD support flag from modelname")
+			var checkUhdSubName = function(sub) { return modelName.indexOf(sub) >= 0 }
+			this._uhdSupported = checkUhdSubName("mu") || checkUhdSubName("ks") || checkUhdSubName("ku") || checkUhdSubName("hu")
+		}
+	} else {
+		this._uhdSupported = false
+	}
 }
 
 Player.prototype.wrapCallback = function(callback) {
@@ -106,6 +128,8 @@ Player.prototype.playImpl = function() {
 	avplay.setListener(this._listener);
 	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
+	log("Set UHD flag", this._uhdSupported)
+	avplay.setStreamingProperty("SET_MODE_4K", this._uhdSupported ? "TRUE" : "FALSE");
 	log("playImpl prepare")
 	avplay.prepare();
 	log("Current state: " + avplay.getState());
