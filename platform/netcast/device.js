@@ -7,6 +7,8 @@ var Device = function(ui) {
 	ui.deviceId = this.getDeviceProperty("serialNumber")
 	ui.firmware = this.getDeviceProperty("version")
 	ui.sdk = this.getDeviceProperty("SDKVersion")
+	ui.language = this.getDeviceProperty("tvLanguage2")
+	ui.country = this.getDeviceProperty("tvCountry2")
 }
 
 //Supported properties:
