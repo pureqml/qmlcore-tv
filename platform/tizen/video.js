@@ -128,8 +128,8 @@ Player.prototype.playImpl = function() {
 	avplay.setListener(this._listener);
 	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
-	log("Set UHD flag", this._uhdSupported)
-	avplay.setStreamingProperty("SET_MODE_4K", this._uhdSupported ? "TRUE" : "FALSE");
+	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying)
+	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
 	log("playImpl prepare")
 	avplay.prepare();
 	log("Current state: " + avplay.getState());
