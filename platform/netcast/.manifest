@@ -1,4 +1,4 @@
 {
 	"strict": false,
-	"requires": ["web", "video.html5"]
+	"requires": ["html5", "web", "video.html5"]
 }
