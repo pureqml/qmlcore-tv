@@ -109,15 +109,14 @@ Player.prototype.playImpl = function() {
 		log("AVPlay was not initialized")
 		return
 	}
-	var state = avplay.getState()
 	var ui = this.ui
+	if (!ui.source)
+		return
+	var state = avplay.getState()
 	log("playImpl", state, "src", ui.source)
 
 	if (state != 'NONE')
 		this.closeVideo()
-
-	if (!ui.source)
-		return
 
 	log("playImpl", ui.source, "state", state)
 	ui.duration = 0
