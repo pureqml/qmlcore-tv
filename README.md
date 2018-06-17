@@ -1,1 +1,1 @@
-# qml2js TV plugin
+# PureQML TV plugin
