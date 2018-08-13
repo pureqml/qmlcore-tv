@@ -10,7 +10,7 @@
 	"icon": "icon.png",
 	"largeIcon": "icon.png",
 	"resolution":"{{ resolutionWidth | default(1280) }}x{{ resolutionHeight | default(720) }}",
-	"iconColor": "{{ iconColor | default('#c8e6c9') }}",
+	"iconColor": "{{ iconColor | default('#eeeeee') }}",
 	"splashBackground": "splash.png",
 	"disableBackHistoryAPI":true,
 	"uiRevision":1
