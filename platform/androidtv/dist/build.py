@@ -15,6 +15,7 @@ def build(app, title):
 	os.system('cp config.xml %s' %(app))
 	os.chdir(app)
 	os.system('cordova platform add android')
+	{% block commands %}{% endblock %}
 
 	os.system('cp ../banner.png ./platforms/android/res/drawable-land-hdpi/.')
 	os.system('cp ../banner.png ./platforms/android/res/drawable-land-ldpi/.')
@@ -32,6 +33,7 @@ def build(app, title):
 	os.system('cordova plugin add https://github.com/comrat/Cordova-Android-TV-Plugin')
 	os.system('cordova plugin add cordova-plugin-device')
 	os.system('cordova plugin add cordova-plugin-exoplayer')
+	{% block plugins %}{% endblock %}
 	os.system('cordova build android')
 	os.chdir('..')
 
