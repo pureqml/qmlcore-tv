@@ -229,9 +229,11 @@ Player.prototype.seekTo = function(tp) {
 }
 
 Player.prototype.setVolume = function(volume) {
+	log("Not implemented")
 }
 
 Player.prototype.setMute = function(muted) {
+	log("Not implemented")
 }
 
 Player.prototype.setRect = function(l, t, r, b) {
@@ -244,9 +246,11 @@ Player.prototype.setRect = function(l, t, r, b) {
 }
 
 Player.prototype.setBackgroundColor = function(color) {
+	log("Not implemented")
 }
 
 Player.prototype.setLoop = function(loop) {
+	log("Not implemented")
 }
 
 Player.prototype.closeVideo = function() {
