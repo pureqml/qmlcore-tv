@@ -3,6 +3,9 @@ var Device = function(ui) {
 	var self = this
 	this.lunaGetSystemInfo(function(res) { log("Device info", res); self.fillSystemInfo(res) }, function(res) { log("Failed to get device info", res) })
 	this.getDeviceId(function(deviceId) { log("Get ID", deviceId); ui.deviceId = deviceId }.bind(this))
+	ui.createDrmClient = this.createDrmClient.bind(this)
+	ui.sendDrmMessage = this.sendDrmMessage.bind(this)
+	ui.unloadDrmClient = this.unloadDrmClient.bind(this)
 }
 
 Device.prototype.lunaRequestImpl = function(serviceUri, requestObject) {
@@ -75,6 +78,21 @@ Device.prototype.lunaRequestImpl = function(serviceUri, requestObject) {
 		return
 	}
 	window.webOS.service.request(serviceUri, requestObject)
+}
+
+Device.prototype.createDrmClient = function(options, callback, error) {
+	var request = this.lunaFillRequest("load", options, callback, error)
+	this.lunaRequestImpl("luna://com.webos.service.drm", request)
+}
+
+Device.prototype.sendDrmMessage = function(options, callback, error) {
+	var request = this.lunaFillRequest("sendDrmMessage", options, callback, error)
+	this.lunaRequestImpl("luna://com.webos.service.drm", request)
+}
+
+Device.prototype.unloadDrmClient = function(clientId, callback, error) {
+	var request = this.lunaFillRequest("unload", { "clientId": clientId }, callback, error)
+	this.lunaRequestImpl("luna://com.webos.service.drm", request)
 }
 
 Device.prototype.lunaGetDeviceId = function(callback, error) {
