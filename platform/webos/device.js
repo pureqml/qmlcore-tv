@@ -6,6 +6,7 @@ var Device = function(ui) {
 	ui.createDrmClient = this.createDrmClient.bind(this)
 	ui.sendDrmMessage = this.sendDrmMessage.bind(this)
 	ui.unloadDrmClient = this.unloadDrmClient.bind(this)
+	ui.subscribeLicensingError = this.subscribeLicensingError.bind(this)
 }
 
 Device.prototype.lunaRequestImpl = function(serviceUri, requestObject) {
@@ -92,6 +93,11 @@ Device.prototype.sendDrmMessage = function(options, callback, error) {
 
 Device.prototype.unloadDrmClient = function(clientId, callback, error) {
 	var request = this.lunaFillRequest("unload", { "clientId": clientId }, callback, error)
+	this.lunaRequestImpl("luna://com.webos.service.drm", request)
+}
+
+Device.prototype.subscribeLicensingError = function(options, callback, error) {
+	var request = this.lunaFillRequest("getRightsError", options, callback, error)
 	this.lunaRequestImpl("luna://com.webos.service.drm", request)
 }
 
