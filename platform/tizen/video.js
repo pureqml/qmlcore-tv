@@ -172,7 +172,7 @@ Player.prototype.play = function() {
 	}
 }
 
-Player.prototype.setupDrm = function(type, options) {
+Player.prototype.setupDrm = function(type, options, callback, error) {
 	if (type === "widevine") {
 		this._drm = {}
 		this._drm["widevine"] = options
@@ -180,8 +180,11 @@ Player.prototype.setupDrm = function(type, options) {
 		this._drm = {}
 		this._drm["playready"] = options
 	} else {
-		throw new Error("Unkbown or not supported DRM type " + type)
+		error ? error(new Error("Unkbown or not supported DRM type " + type)) : log("Unkbown or not supported DRM type " + type)
 	}
+
+	if (callback)
+		callback()
 }
 
 //fixme: move this logic to core?
