@@ -104,11 +104,24 @@ Player.prototype.setDrmSource = function(source) {
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
 	sourceElement.setAttribute('src', source);
-	sourceElement.setAttribute('type', 'application/vnd.ms-sstr+xml');
-	// sourceElement.setAttribute('type', 'application/vnd.ms-sstr+xml;mediaOption=' + mediaOption);
-	// sourceElement.setAttribute('type', 'application/dash+xml;mediaOption=' + mediaOption);
-	// sourceElement.setAttribute('type', 'application/vnd.apple.mpegurl;mediaOption=' + mediaOption);
-	// sourceElement.setAttribute('type', 'application/x-mpegurl;mediaOption=' + mediaOption);
+
+	var urlLower = source.toLowerCase()
+	var querryIndex = source.indexOf("?")
+	if (querryIndex >= 0)
+		urlLower = urlLower.substring(0, querryIndex)
+	var extIndex = urlLower.lastIndexOf(".")
+	var extension = urlLower.substring(extIndex, urlLower.length)
+	var type = ""
+	if (extension === ".m3u8" || extension === ".m3u")
+		type = "application/x-mpegURL"
+	else if (extension === ".mpd")
+		type = "application/dash+xml"
+	else
+		type = "application/vnd.ms-sstr+xml"
+	sourceElement.setAttribute('type', type);
+	// mediaOption are needed according documentation but it doesnt work for some streams
+	// sourceElement.setAttribute('type', type + ';mediaOption=' + mediaOption);
+
 	if (!this._sourceElement)
 		ui.element.append(sourceElement);
 	this._sourceElement = sourceElement
