@@ -121,7 +121,6 @@ Player.prototype.playImpl = function() {
 
 	log("playImpl", ui.source, "state", state)
 	ui.duration = 0
-
 	log("playImpl open")
 	avplay.open(ui.source);
 	log("playImpl setListener")
@@ -130,21 +129,6 @@ Player.prototype.playImpl = function() {
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
-
-	if (this._drm) {
-		var drm = this._drm
-		log('Apply DRM:', this._drm);
-		if (drm.widevine) {
-			var deviceId = window.webapis.drminfo.getEsn('WIDEVINE');
-			var licenseServer = drm.widevine.laServer;
-			var drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
-			avplay.setStreamingProperty("WIDEVINE", drmParam);
-		} else if (drm.playready) {
-			var drmParam = { LicenseServer: drm.playready.laServer };
-			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
-		}
-	}
-
 	log("playImpl prepare")
 	avplay.prepare();
 	log("Current state: " + avplay.getState());
@@ -181,6 +165,19 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 		this._drm["playready"] = options
 	} else {
 		error ? error(new Error("Unkbown or not supported DRM type " + type)) : log("Unkbown or not supported DRM type " + type)
+	}
+
+	var avplay = this.getAVPlay()
+	var drm = this._drm
+	log('Apply DRM:', this._drm);
+	if (drm.widevine) {
+		var deviceId = window.webapis.drminfo.getEsn('WIDEVINE');
+		var licenseServer = drm.widevine.laServer;
+		var drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
+		avplay.setStreamingProperty("WIDEVINE", drmParam);
+	} else if (drm.playready) {
+		var drmParam = { LicenseServer: drm.playready.laServer };
+		avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
 	}
 
 	if (callback)
