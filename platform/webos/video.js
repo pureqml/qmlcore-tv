@@ -201,7 +201,6 @@ Player.prototype.subscribeLicensingError = function(options, callback, error) {
 Player.prototype.getDrmClientId = function(type, callback) {
 	var self = this
 	var appId = "com." + ($manifest$title || "pureqml") + ".app"
-	log("CREATEDRM", type, appId)
 	this.createDrmClient(
 		{ "drmType": type, "appId": appId },
 		function(result) {
