@@ -1,5 +1,5 @@
 {
-	"requires": ["video.html5"],
+	"requires": ["video.html5", "video.shaka"],
 	"templates": ["*.html", "appinfo.json"],
 	"strict": false
 }
