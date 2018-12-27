@@ -2,9 +2,6 @@ var Player = function(ui) {
 	var player = ui._context.createElement('video')
 	player.dom.preload = "metadata"
 
-	if (ui.autoPlay)
-		player.setAttribute('autoplay', "")
-
 	var dom = player.dom
 	player.on('play', function() { ui.waiting = false; ui.paused = dom.paused }.bind(ui))
 	player.on('pause', function() { ui.paused = dom.paused }.bind(ui))
@@ -72,6 +69,8 @@ var Player = function(ui) {
 	ui.element.remove()
 	ui.element = player
 	ui.parent.element.append(ui.element)
+
+	this.setAutoPlay(ui.autoPlay)
 }
 
 Player.prototype = Object.create(_globals.video.html5.backend.Player.prototype)
