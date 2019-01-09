@@ -104,12 +104,7 @@ Player.prototype.setDrmSource = function(source) {
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
 	sourceElement.setAttribute('src', source);
 
-	var urlLower = source.toLowerCase()
-	var querryIndex = source.indexOf("?")
-	if (querryIndex >= 0)
-		urlLower = urlLower.substring(0, querryIndex)
-	var extIndex = urlLower.lastIndexOf(".")
-	var extension = urlLower.substring(extIndex, urlLower.length)
+	var extension = this._extension
 	var type = ""
 	if (extension === ".m3u8" || extension === ".m3u")
 		type = "application/x-mpegURL"
@@ -128,10 +123,36 @@ Player.prototype.setDrmSource = function(source) {
 	this.element.dom.play()
 }
 
+Player.prototype.playDashUrl = function(source) {
+	var ui = this.ui
+	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
+	sourceElement.setAttribute('src', source);
+	sourceElement.setAttribute('type', "application/dash+xml");
+
+	if (!this._sourceElement)
+		ui.element.append(sourceElement);
+
+	this._sourceElement = sourceElement
+	this.element.dom.load()
+	this.element.dom.play()
+}
+
+Player.prototype.getFileExtension = function(filePath) {
+	var urlLower = filePath.toLowerCase()
+	var querryIndex = filePath.indexOf("?")
+	if (querryIndex >= 0)
+		urlLower = urlLower.substring(0, querryIndex)
+	var extIndex = urlLower.lastIndexOf(".")
+	return urlLower.substring(extIndex, urlLower.length)
+}
+
 Player.prototype.setSource = function(url) {
 	this.ui.ready = false
+	this._extension = this.getFileExtension(url)
 	if (this._drmClientId) {
 		this.setDrmSource(url)
+	} else if (this._extension === ".mpd") {
+		this.playDashUrl(url)
 	} else {
 		this.element.dom.src = url
 	}
