@@ -44,7 +44,7 @@ This manifest imports video backends from generic html5 and Shaka, and also pass
 
 ## .core.js
 
-This file is added really early in resulting js, if specific platform was activated. You may even override log function in it. Normally platforms declare their own key mapping if any, and/or some specific core functions, like close application or handling back button. See platform/<name>/.core.js as a good example how to do it. 
+This file is added really early in resulting js, if specific platform was activated. You may even override log function in it. Normally platforms declare their own key mapping if any, and/or some specific core functions, like close application or handling back button. See platform/&lt;name&gt;/.core.js as a good example how to do it. 
 
 ## dist/*
 
@@ -52,6 +52,6 @@ Content of this folder has been installed into resulting application directory, 
 
 ## Anything else
 
-Anything else goes like normal package into "_globals.platform.<name>", so you can put additional qml components, include javascript modules, pretty much like anywhere else where .manifest is present. 
+Anything else goes like normal package into "\_globals.platform.&lt;name&gt;", so you can put additional qml components, include javascript modules, pretty much like anywhere else where .manifest is present. 
   
 If you have any questions feel free to drop us an email, or seek telegram/gitter support on our site: https://pureqml.com
