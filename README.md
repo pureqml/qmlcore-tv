@@ -25,7 +25,7 @@ To build an app for specific platform use this command:
 
 # Adding New Platform
 
-Platform is pretty much similar to any qml package you may have, just a directory with .manifest file in it. Platforms have some additional handling in build command (-p/--platform switch), but that's pretty much it. All dependencies are processed as anywhere else, platform code may have dist/ folder with additional file, its own components and javascript modules, etc. 
+Platform is pretty much similar to any qml package you may have, just a directory with .manifest file in it. Platforms have some additional handling in build command (-p/--platform switch), but that's pretty much it. All dependencies are processed as anywhere else, platform code may have dist/ folder with additional files: own components and javascript modules, etc. 
 
 ## Name
 Pick a name relevant to platform or platform family. Ideally internal name, recognisable in professional community. Create platform/<name> directory. A few names are webos, orsay, tizen, we prefer lowercase kebab notation. 
