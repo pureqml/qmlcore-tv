@@ -67,6 +67,7 @@ exports.core.keyCodes = {
 	412: 'Rewind',
 	417: 'FastForward'
 }
+
 exports.closeApp = function() {
 	window.close()
 }
