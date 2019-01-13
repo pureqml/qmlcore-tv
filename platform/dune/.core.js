@@ -1,15 +1,20 @@
 _globals.core.__deviceBackend = function() { return _globals.dune.device }
 
-log = console.log.bind(console)
-log("Dune detected")
 exports.core.os = "linux"
 exports.core.vendor = "dune"
 exports.core.device = 1
 
-document.body.innerHTML = "<object id='device' type='application/x-netcast-info'></object>"
+document.body.innerHTML = '<object type="application/xf-dune-stb-api" id="duneapi"></object>'
 var stb = document.getElementById("duneapi");
+
+log = function(dummy) {
+	COPY_ARGS(args, 0)
+	stb.log("[QML] " + args.join(" "))
+}
+log("Dune detected")
+
 if (!stb || !stb.init()) {
-	log("DUne STB API initialization failed");
+	log("Dune STB API initialization failed");
 	return
 }
 
