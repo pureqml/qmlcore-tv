@@ -184,6 +184,26 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 		callback()
 }
 
+Player.prototype.getVideoTracks = function() {
+	var video = []
+	var avplay = this.getAVPlay()
+	var tracks = avplay.getTotalTrackInfo()
+
+	for (var i = 0; i < tracks.length; ++i) {
+		var track = tracks[i]
+		if (track.type !== "VIDEO")
+			continue
+
+		var info = JSON.parse(track.extra_info)
+		video.push({
+			id: parseInt(track.index),
+			width: parseInt(info.Width),
+			height: parseInt(info.Height)
+		})
+	}
+	return video
+}
+
 //fixme: move this logic to core?
 Player.prototype.setVisibility = function(visible) {
 	var avplay = this.getAVPlay()
