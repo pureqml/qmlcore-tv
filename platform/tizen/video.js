@@ -328,6 +328,9 @@ Player.prototype.updateDuration = function() {
 	log("Duration", this.ui.duration)
 }
 
+Player.prototype.setAutoPlay = function(autoPlay) {
+}
+
 Player.prototype.updateCurrentTime = function() {
 	var avplay = this.getAVPlay()
 	if (!avplay) {
