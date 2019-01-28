@@ -225,6 +225,23 @@ Player.prototype.getAudioTracks = function() {
 	return audio
 }
 
+Player.prototype.setAudioTrack = function(trackId) {
+	var avplay = this.getAVPlay()
+	var tracks = avplay.getTotalTrackInfo()
+
+	var found = tracks.filter(function(element) {
+		return parseInt(element.index) === trackId
+	})
+
+	log("Try to set audio track", found)
+	if (found && found.length)
+		avplay.setSelectTrack('AUDIO', parseInt(found[0].index));
+}
+
+Player.prototype.setVideoTrack = function(trackId) {
+	log("setVideoTrack not implemented")
+}
+
 //fixme: move this logic to core?
 Player.prototype.setVisibility = function(visible) {
 	var avplay = this.getAVPlay()
