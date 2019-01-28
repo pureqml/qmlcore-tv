@@ -217,9 +217,9 @@ Player.prototype.getAudioTracks = function() {
 		var info = JSON.parse(track.extra_info)
 		audio.push({
 			id: parseInt(track.index),
-			language: parseInt(info.language),
+			language: info.language,
 			bitRate: parseInt(info.bit_rate),
-			codec: parseInt(info.fourCC)
+			codec: info.fourCC
 		})
 	}
 	return audio
