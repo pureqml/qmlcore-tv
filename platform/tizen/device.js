@@ -46,7 +46,6 @@ Device.prototype.fillDeviceInfo = function(device) {
 	ui.firmware = device.buildVersion
 }
 
-
 exports.createDevice = function(ui) {
 	return new Device(ui)
 }

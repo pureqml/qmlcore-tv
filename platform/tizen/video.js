@@ -204,6 +204,27 @@ Player.prototype.getVideoTracks = function() {
 	return video
 }
 
+Player.prototype.getAudioTracks = function() {
+	var audio = []
+	var avplay = this.getAVPlay()
+	var tracks = avplay.getTotalTrackInfo()
+
+	for (var i = 0; i < tracks.length; ++i) {
+		var track = tracks[i]
+		if (track.type !== "AUDIO")
+			continue
+
+		var info = JSON.parse(track.extra_info)
+		audio.push({
+			id: parseInt(track.index),
+			language: parseInt(info.language),
+			bitRate: parseInt(info.bit_rate),
+			codec: parseInt(info.fourCC)
+		})
+	}
+	return audio
+}
+
 //fixme: move this logic to core?
 Player.prototype.setVisibility = function(visible) {
 	var avplay = this.getAVPlay()
