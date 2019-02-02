@@ -239,7 +239,23 @@ Player.prototype.setAudioTrack = function(trackId) {
 }
 
 Player.prototype.setVideoTrack = function(trackId) {
-	log("setVideoTrack not implemented")
+	log("setVideoTrack for", trackId)
+	var avplay = this.getAVPlay()
+	var tracks = avplay.getTotalTrackInfo()
+
+	var found = tracks.filter(function(element) {
+		return parseInt(element.index) === trackId
+	})
+
+	log("Found", found)
+	if (!found || !found.length)
+		return
+	var info = JSON.parse(found[0].extra_info)
+	var bitRateString = 'BITRATES=' + info.Bit_rate;
+	log("Found info", bitRateString, "INFO", info)
+	avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString);
+	avplay.close();
+	this.playImpl();
 }
 
 //fixme: move this logic to core?
