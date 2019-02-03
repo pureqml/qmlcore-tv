@@ -254,8 +254,10 @@ Player.prototype.setVideoTrack = function(trackId) {
 	var bitRateString = 'BITRATES=' + info.Bit_rate;
 	log("Found info", bitRateString, "INFO", info)
 	avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString);
+	var prevProgress = this.ui.progress
 	avplay.close();
 	this.playImpl();
+	this.seekTo(prevProgress)
 }
 
 //fixme: move this logic to core?
