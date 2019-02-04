@@ -71,6 +71,13 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	this.setAutoPlay(ui.autoPlay)
+
+	var self = this
+	ui._context.document.on('visibilitychange', function() {
+		if (self._drmClientId && document.hidden) {
+			self.unloadDrmClient()
+		}
+	})
 }
 
 Player.prototype = Object.create(_globals.video.html5.backend.Player.prototype)
