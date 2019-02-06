@@ -47,7 +47,6 @@ var Player = function(ui) {
 		ui.waiting = false
 		if (!ui.seeking)
 			ui.progress = dom.currentTime
-		log("UPDATE", ui.progress)
 	}.bind(ui))
 
 	player.on('durationchange', function() {
