@@ -71,6 +71,9 @@ var Player = function(ui) {
 
 	this.setAutoPlay(ui.autoPlay)
 
+	this._xhr = new XMLHttpRequest()
+	this._xhr.addEventListener('load', this.parseManifest.bind(this))
+
 	var self = this
 	ui._context.document.on('visibilitychange', function() {
 		if (self._drmClientId && document.hidden) {
@@ -81,12 +84,39 @@ var Player = function(ui) {
 
 Player.prototype = Object.create(_globals.video.html5.backend.Player.prototype)
 
-Player.prototype.setSource = function(url) {
-	this.ui.ready = false
-	if (this._drmClientId) {
-		this.setDrmSource(url)
-	} else {
-		this.element.dom.src = url
+Player.prototype.parseManifest = function(data) {
+	var lines = data.target.responseText.split('\n');
+	var url = this.ui.source
+	this._videoTracks = []
+	for (var i = 0; i < lines.length - 1; ++i) {
+		var line = lines[i]
+		var nextLine = lines[i + 1]
+		if (line.indexOf('#EXT-X-STREAM-INF') == 0) {
+			var attributes = line.split(',');
+			var track = {
+				id: this._videoTracks.length,
+				url: nextLine.indexOf("http") === 0 ? nextLine : (url.substring(0, url.lastIndexOf('/') + 1) + nextLine)
+			}
+			for (var j = 0; j < attributes.length; ++j) {
+				var param = attributes[j].split('=');
+				if (param.length > 1) {
+					switch (param[0].trim().toLowerCase()) {
+						case "bandwidth":
+							track.bandwidth = param[1].trim()
+							break
+						case "audio":
+							track.audio = param[1].trim()
+							break
+						case "resolution":
+							var size = param[1].split("x")
+							track.width = size[0]
+							track.height = size[1]
+							break
+					}
+				}
+			}
+			this._videoTracks.push(track)
+		}
 	}
 }
 
@@ -129,6 +159,10 @@ Player.prototype.setDrmSource = function(source) {
 	this.element.dom.play()
 }
 
+Player.prototype.getVideoTracks = function() {
+	return this._videoTracks || []
+}
+
 Player.prototype.playDashUrl = function(source) {
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
@@ -144,6 +178,8 @@ Player.prototype.playDashUrl = function(source) {
 }
 
 Player.prototype.getFileExtension = function(filePath) {
+	if (!filePath)
+		return ""
 	var urlLower = filePath.toLowerCase()
 	var querryIndex = filePath.indexOf("?")
 	if (querryIndex >= 0)
@@ -159,6 +195,12 @@ Player.prototype.setSource = function(url) {
 		this.setDrmSource(url)
 	} else if (this._extension === ".mpd") {
 		this.playDashUrl(url)
+	} else if (this._extension === ".m3u8" || this._extension === ".m3u") {
+		if (url) {
+			this._xhr.open('GET', url);
+			this._xhr.send()
+		}
+		this.element.dom.src = url
 	} else {
 		this.element.dom.src = url
 	}
