@@ -163,6 +163,21 @@ Player.prototype.getVideoTracks = function() {
 	return this._videoTracks || []
 }
 
+Player.prototype.setVideoTrack = function(trackId) {
+	if (!this._videoTracks || this._videoTracks.length <= 0) {
+		log("There is no available video track", this._videoTracks)
+		return
+	}
+	if (trackId >= this._videoTracks.length) {
+		log("Track with id", trackId, "not found")
+		return
+	}
+	var progress = this.ui.progress
+	log("Set video", this._videoTracks[trackId])
+	this.element.dom.src = this._videoTracks[trackId].url
+	this.seekTo(progress)
+}
+
 Player.prototype.playDashUrl = function(source) {
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
