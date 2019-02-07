@@ -10,8 +10,8 @@ var Player = function(ui) {
 	player.on('canplay', function() { log("canplay", dom.readyState); ui.ready = dom.readyState }.bind(ui))
 	player.on('seeking', function() { log("seeking"); ui.seeking = true; ui.waiting = true }.bind(ui))
 	player.on('waiting', function() { log("waiting"); ui.waiting = true }.bind(ui))
-	player.on('stalled', function() { log("Was stalled", dom.networkState); dom.play() }.bind(ui))
-	player.on('emptied', function() { log("Was emptied", dom.networkState); dom.play()}.bind(ui))
+	player.on('stalled', function() { log("Was stalled", dom.networkState); if (!dom.paused) dom.play() }.bind(ui))
+	player.on('emptied', function() { log("Was emptied", dom.networkState); if (!dom.paused) dom.play()}.bind(ui))
 	player.on('volumechange', function() { ui.muted = dom.muted }.bind(ui))
 	player.on('canplaythrough', function() { log("ready to play"); ui.paused = dom.paused }.bind(ui))
 
