@@ -125,12 +125,26 @@ Player.prototype.setDrmSource = function(source) {
 	var options = {};
 	options.option = {};
 	options.option.drm = {};
+
+	var extension = this._extension
+	var type = ""
+	if (extension === ".m3u8" || extension === ".m3u") {
+		options.mediaTransportType = "HLS";
+		type = "application/x-mpegURL"
+	} else if (extension === ".mpd") {
+		type = "application/dash+xml"
+	} else if (extension === ".mp4") {
+		type = "video/mp4"
+		options.mediaTransportType = "URI";
+	} else {
+		type = "application/vnd.ms-sstr+xml"
+	}
+
 	if (this._drmType == "widevine") {
 		options.mediaTransportType = "WIDEVINE";
 		options.option.drm.type = "widevine";
 		options.option.drm.clientId = this._drmClientId;
 	} else if (this._drmType == "playready") {
-		options.mediaTransportType = "URI";
 		options.option.drm.type = "playready";
 		options.option.drm.clientId = this._drmClientId;
 	}
@@ -140,17 +154,9 @@ Player.prototype.setDrmSource = function(source) {
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
 	sourceElement.setAttribute('src', source);
 
-	var extension = this._extension
-	var type = ""
-	if (extension === ".m3u8" || extension === ".m3u")
-		type = "application/x-mpegURL"
-	else if (extension === ".mpd")
-		type = "application/dash+xml"
-	else
-		type = "application/vnd.ms-sstr+xml"
-	sourceElement.setAttribute('type', type);
+	// sourceElement.setAttribute('type', type);
 	// mediaOption are needed according documentation but it doesnt work for some streams
-	// sourceElement.setAttribute('type', type + ';mediaOption=' + mediaOption);
+	sourceElement.setAttribute('type', type + ';mediaOption=' + mediaOption);
 
 	if (!this._sourceElement)
 		ui.element.append(sourceElement);
