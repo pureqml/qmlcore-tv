@@ -88,13 +88,15 @@ Player.prototype.parseManifest = function(data) {
 	var lines = data.target.responseText.split('\n');
 	var url = this.ui.source
 	this._videoTracks = []
+	this._totalTracks = {}
+	var idx = 0
 	for (var i = 0; i < lines.length - 1; ++i) {
 		var line = lines[i]
 		var nextLine = lines[i + 1]
 		if (line.indexOf('#EXT-X-STREAM-INF') == 0) {
 			var attributes = line.split(',');
 			var track = {
-				id: this._videoTracks.length,
+				id: idx++,
 				url: nextLine.indexOf("http") === 0 ? nextLine : (url.substring(0, url.lastIndexOf('/') + 1) + nextLine)
 			}
 			for (var j = 0; j < attributes.length; ++j) {
@@ -105,7 +107,7 @@ Player.prototype.parseManifest = function(data) {
 							track.bandwidth = param[1].trim()
 							break
 						case "audio":
-							track.audio = param[1].trim()
+							track.audio = param[1].trim().replace('"')
 							break
 						case "resolution":
 							var size = param[1].split("x")
@@ -115,9 +117,17 @@ Player.prototype.parseManifest = function(data) {
 					}
 				}
 			}
-			this._videoTracks.push(track)
+			var key = track.width + "x" + track.height
+			if (!this._totalTracks[key]) {
+				++idx
+				this._totalTracks[key] = []
+			}
+			this._totalTracks[key].push(track)
 		}
 	}
+
+	for (var i in this._totalTracks)
+		this._videoTracks.push(this._totalTracks[i][0])
 }
 
 Player.prototype.setDrmSource = function(source) {
