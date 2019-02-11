@@ -88,6 +88,7 @@ Player.prototype.parseManifest = function(data) {
 	var lines = data.target.responseText.split('\n');
 	var url = this.ui.source
 	this._videoTracks = []
+	this._audioTracks = []
 	this._totalTracks = {}
 	var idx = 0
 	for (var i = 0; i < lines.length - 1; ++i) {
@@ -107,7 +108,7 @@ Player.prototype.parseManifest = function(data) {
 							track.bandwidth = param[1].trim()
 							break
 						case "audio":
-							track.audio = param[1].trim().replace('"')
+							track.audio = param[1].trim().replace(/"/g, "")
 							break
 						case "resolution":
 							var size = param[1].split("x")
@@ -121,8 +122,33 @@ Player.prototype.parseManifest = function(data) {
 			if (!this._totalTracks[key]) {
 				++idx
 				this._totalTracks[key] = []
+			} else {
+
 			}
 			this._totalTracks[key].push(track)
+		} else if (line.indexOf('#EXT-X-MEDIA:TYPE=AUDIO') == 0) {
+			var attributes = line.split(',');
+			var audioTrack = {}
+			for (var j = 0; j < attributes.length; ++j) {
+				var param = attributes[j].split('=');
+				if (param.length > 1) {
+					switch (param[0].trim().toLowerCase()) {
+						case "group-ip":
+							audioTrack.id = param[1].trim()
+							break
+						case "name":
+							audioTrack.label = param[1].trim().replace(/"/g, "")
+							break
+						case "language":
+							audioTrack.language = param[1].trim().replace(/"/g, "")
+							break
+						case "uri":
+							audioTrack.url = param[1].trim()
+							break
+					}
+				}
+			}
+			this._audioTracks.push(audioTrack)
 		}
 	}
 
@@ -177,6 +203,10 @@ Player.prototype.setDrmSource = function(source) {
 
 Player.prototype.getVideoTracks = function() {
 	return this._videoTracks || []
+}
+
+Player.prototype.getAudioTracks = function() {
+	return this._audioTracks || []
 }
 
 Player.prototype.setVideoTrack = function(trackId) {
