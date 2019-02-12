@@ -87,18 +87,17 @@ Player.prototype = Object.create(_globals.video.html5.backend.Player.prototype)
 Player.prototype.parseManifest = function(data) {
 	var lines = data.target.responseText.split('\n');
 	var url = this.ui.source
+	var path = url.substring(0, url.lastIndexOf('/') + 1)
 	this._videoTracks = []
 	this._audioTracks = []
 	this._totalTracks = {}
-	var idx = 0
 	for (var i = 0; i < lines.length - 1; ++i) {
 		var line = lines[i]
 		var nextLine = lines[i + 1]
 		if (line.indexOf('#EXT-X-STREAM-INF') == 0) {
 			var attributes = line.split(',');
 			var track = {
-				id: idx++,
-				url: nextLine.indexOf("http") === 0 ? nextLine : (url.substring(0, url.lastIndexOf('/') + 1) + nextLine)
+				url: nextLine.indexOf("http") === 0 ? nextLine : (path + nextLine)
 			}
 			for (var j = 0; j < attributes.length; ++j) {
 				var param = attributes[j].split('=');
@@ -120,10 +119,7 @@ Player.prototype.parseManifest = function(data) {
 			}
 			var key = track.width + "x" + track.height
 			if (!this._totalTracks[key]) {
-				++idx
 				this._totalTracks[key] = []
-			} else {
-
 			}
 			this._totalTracks[key].push(track)
 		} else if (line.indexOf('#EXT-X-MEDIA:TYPE=AUDIO') == 0) {
@@ -133,8 +129,8 @@ Player.prototype.parseManifest = function(data) {
 				var param = attributes[j].split('=');
 				if (param.length > 1) {
 					switch (param[0].trim().toLowerCase()) {
-						case "group-ip":
-							audioTrack.id = param[1].trim()
+						case "group-id":
+							audioTrack.id = param[1].trim().replace(/"/g, "")
 							break
 						case "name":
 							audioTrack.label = param[1].trim().replace(/"/g, "")
@@ -143,7 +139,7 @@ Player.prototype.parseManifest = function(data) {
 							audioTrack.language = param[1].trim().replace(/"/g, "")
 							break
 						case "uri":
-							audioTrack.url = param[1].trim()
+							audioTrack.url = path + param[1].trim()
 							break
 					}
 				}
@@ -152,8 +148,12 @@ Player.prototype.parseManifest = function(data) {
 		}
 	}
 
-	for (var i in this._totalTracks)
-		this._videoTracks.push(this._totalTracks[i][0])
+	var idx = 0
+	for (var i in this._totalTracks) {
+		var tmpTrack = this._totalTracks[i][0]
+		tmpTrack.id = idx++
+		this._videoTracks.push(tmpTrack)
+	}
 }
 
 Player.prototype.setDrmSource = function(source) {
