@@ -126,6 +126,20 @@ Player.prototype.playImpl = function() {
 	log("playImpl setListener")
 	avplay.setListener(this._listener);
 	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
+	if (this._drm) {
+		log('Apply DRM:', this._drm);
+		var drm = this._drm
+		if (drm.widevine) {
+			var deviceId = window.webapis.drminfo.getEsn('WIDEVINE');
+			var licenseServer = drm.widevine.laServer;
+			var drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
+			avplay.setStreamingProperty("WIDEVINE", drmParam);
+			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
+		} else if (drm.playready) {
+			var drmParam = { LicenseServer: drm.playready.laServer };
+			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
+		}
+	}
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
@@ -170,16 +184,6 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 	var avplay = this.getAVPlay()
 	var drm = this._drm
 	log('Apply DRM:', this._drm);
-	if (drm.widevine) {
-		var deviceId = window.webapis.drminfo.getEsn('WIDEVINE');
-		var licenseServer = drm.widevine.laServer;
-		var drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
-		avplay.setStreamingProperty("WIDEVINE", drmParam);
-	} else if (drm.playready) {
-		var drmParam = { LicenseServer: drm.playready.laServer };
-		avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
-	}
-
 	if (callback)
 		callback()
 }
