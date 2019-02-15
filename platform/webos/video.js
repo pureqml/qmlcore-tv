@@ -7,13 +7,20 @@ var Player = function(ui) {
 	player.on('pause', function() { ui.paused = dom.paused }.bind(ui))
 	player.on('ended', function() { ui.finished() }.bind(ui))
 	player.on('seeked', function() { log("seeked"); ui.seeking = false; ui.waiting = false }.bind(ui))
-	player.on('canplay', function() { log("canplay", dom.readyState); ui.ready = dom.readyState }.bind(ui))
+	player.on('canplay', function() { log("canplay", dom.readyState); ui.ready = dom.readyState; ui.waiting = false }.bind(ui))
 	player.on('seeking', function() { log("seeking"); ui.seeking = true; ui.waiting = true }.bind(ui))
 	player.on('waiting', function() { log("waiting"); ui.waiting = true }.bind(ui))
-	player.on('stalled', function() { log("Was stalled", dom.networkState); if (!dom.paused) dom.play() }.bind(ui))
 	player.on('emptied', function() { log("Was emptied", dom.networkState); if (!dom.paused) dom.play()}.bind(ui))
 	player.on('volumechange', function() { ui.muted = dom.muted }.bind(ui))
 	player.on('canplaythrough', function() { log("ready to play"); ui.paused = dom.paused }.bind(ui))
+
+	player.on('stalled', function() {
+		log("Was stalled", dom.networkState)
+		if (!dom.paused) {
+			// dom.play()
+			ui.waiting = true
+		}
+	}.bind(ui))
 
 	player.on('error', function() {
 		log("Player error occured", dom.error, "src", ui.source)
@@ -206,7 +213,30 @@ Player.prototype.getVideoTracks = function() {
 }
 
 Player.prototype.getAudioTracks = function() {
-	return this._audioTracks || []
+	var audioTracks = this.element.dom.audioTracks
+	var result = []
+	for (var i = 0; i < audioTracks.length; ++i) {
+		result.push({
+			"id": i,
+			"name": audioTracks[i].language,
+			"language": audioTracks[i].language
+		})
+	}
+	log("getAudioTracks", result)
+	return result
+}
+
+Player.prototype.setAudioTrack = function(trackId) {
+	var audioTracks = this.element.dom.audioTracks
+	if (trackId < 0 || trackId >= audioTracks.length) {
+		log("Where is no track", trackId)
+		return
+	}
+	log("Set audio track", audioTracks[trackId])
+
+	var result = []
+	for (var i = 0; i < audioTracks.length; ++i)
+		audioTracks[i].enabled = i === trackId
 }
 
 Player.prototype.setVideoTrack = function(trackId) {
