@@ -95,8 +95,8 @@ Player.prototype.parseManifest = function(data) {
 	var lines = data.target.responseText.split('\n');
 	var url = this.ui.source
 	var path = url.substring(0, url.lastIndexOf('/') + 1)
-	this._videoTracks = []
-	this._audioTracks = []
+	var idx = 0
+	this._videoTracks = [ { "name": "auto", "url": this.ui.source, "id": idx } ]
 	this._totalTracks = {}
 	for (var i = 0; i < lines.length - 1; ++i) {
 		var line = lines[i]
@@ -129,33 +129,9 @@ Player.prototype.parseManifest = function(data) {
 				this._totalTracks[key] = []
 			}
 			this._totalTracks[key].push(track)
-		} else if (line.indexOf('#EXT-X-MEDIA:TYPE=AUDIO') == 0) {
-			var attributes = line.split(',');
-			var audioTrack = {}
-			for (var j = 0; j < attributes.length; ++j) {
-				var param = attributes[j].split('=');
-				if (param.length > 1) {
-					switch (param[0].trim().toLowerCase()) {
-						case "group-id":
-							audioTrack.id = param[1].trim().replace(/"/g, "")
-							break
-						case "name":
-							audioTrack.label = param[1].trim().replace(/"/g, "")
-							break
-						case "language":
-							audioTrack.language = param[1].trim().replace(/"/g, "")
-							break
-						case "uri":
-							audioTrack.url = path + param[1].trim()
-							break
-					}
-				}
-			}
-			this._audioTracks.push(audioTrack)
 		}
 	}
 
-	var idx = 0
 	for (var i in this._totalTracks) {
 		var tmpTrack = this._totalTracks[i][0]
 		tmpTrack.id = idx++
@@ -244,7 +220,7 @@ Player.prototype.setVideoTrack = function(trackId) {
 		log("There is no available video track", this._videoTracks)
 		return
 	}
-	if (trackId >= this._videoTracks.length) {
+	if (trackId < 0 || trackId >= this._videoTracks.length) {
 		log("Track with id", trackId, "not found")
 		return
 	}
