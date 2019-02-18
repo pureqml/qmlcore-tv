@@ -16,15 +16,11 @@ var Player = function(ui) {
 
 	player.on('stalled', function() {
 		log("Was stalled", dom.networkState)
-		if (!dom.paused) {
-			// dom.play()
-			ui.waiting = true
-		}
+		//TODO: trye to realod content if its really stuck
 	}.bind(ui))
 
 	player.on('error', function() {
 		log("Player error occured", dom.error, "src", ui.source)
-
 		if (!dom.error || !ui.source)
 			return
 
@@ -134,7 +130,7 @@ Player.prototype.parseManifest = function(data) {
 
 	for (var i in this._totalTracks) {
 		var tmpTrack = this._totalTracks[i][0]
-		tmpTrack.id = idx++
+		tmpTrack.id = ++idx
 		this._videoTracks.push(tmpTrack)
 	}
 }
@@ -257,6 +253,8 @@ Player.prototype.getFileExtension = function(filePath) {
 
 Player.prototype.setSource = function(url) {
 	this.ui.ready = false
+	this.ui.seeking = false
+	this.ui.waiting = false
 	this._extension = this.getFileExtension(url)
 	if (this._drmClientId) {
 		this.setDrmSource(url)
