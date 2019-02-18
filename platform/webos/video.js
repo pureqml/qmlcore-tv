@@ -220,6 +220,7 @@ Player.prototype.setVideoTrack = function(trackId) {
 		log("Track with id", trackId, "not found")
 		return
 	}
+	this.ui.waiting = true
 	var progress = this.ui.progress
 	log("Set video", this._videoTracks[trackId])
 	this.element.dom.src = this._videoTracks[trackId].url
