@@ -94,6 +94,7 @@ Player.prototype.parseManifest = function(data) {
 	var idx = 0
 	this._videoTracks = [ { "name": "auto", "url": this.ui.source, "id": idx } ]
 	this._totalTracks = {}
+	this._audioTracksInfo = []
 	for (var i = 0; i < lines.length - 1; ++i) {
 		var line = lines[i]
 		var nextLine = lines[i + 1]
@@ -125,6 +126,29 @@ Player.prototype.parseManifest = function(data) {
 				this._totalTracks[key] = []
 			}
 			this._totalTracks[key].push(track)
+		} else if (line.indexOf('#EXT-X-MEDIA:TYPE=AUDIO') == 0) {
+			var attributes = line.split(',');
+			var audioTrack = {}
+			for (var j = 0; j < attributes.length; ++j) {
+				var param = attributes[j].split('=');
+				if (param.length > 1) {
+					switch (param[0].trim().toLowerCase()) {
+						case "group-id":
+							audioTrack.id = param[1].trim().replace(/"/g, "")
+							break
+						case "name":
+							audioTrack.label = param[1].trim().replace(/"/g, "")
+							break
+						case "language":
+							audioTrack.language = param[1].trim().replace(/"/g, "")
+							break
+						case "uri":
+							audioTrack.url = param[1].trim()
+							break
+					}
+				}
+			}
+			this._audioTracksInfo.push(audioTrack)
 		}
 	}
 
@@ -188,10 +212,12 @@ Player.prototype.getAudioTracks = function() {
 	var audioTracks = this.element.dom.audioTracks
 	var result = []
 	for (var i = 0; i < audioTracks.length; ++i) {
+		var track = audioTracks[i]
+		var info = this._audioTracksInfo[i]
 		result.push({
 			"id": i,
-			"name": audioTracks[i].language,
-			"language": audioTracks[i].language
+			"name": track.label ? track.label : info.name,
+			"language": track.language ? track.language : info.language
 		})
 	}
 	log("getAudioTracks", result)
