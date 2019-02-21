@@ -37,41 +37,41 @@ if ('tizen' in window) {
 		log('"inputDevice" is undefined dont forget to add privilege: <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/> into the "config.xml"')
 	}
 
-	exports.core.keyCodes = {
-		48: '0',
-		49: '1',
-		50: '2',
-		51: '3',
-		52: '4',
-		53: '5',
-		54: '6',
-		55: '7',
-		56: '8',
-		57: '9',
-		37: 'Left',
-		38: 'Up',
-		39: 'Right',
-		40: 'Down',
-		13: 'Select',
-		19: 'SimplePause',
-		403: 'Red',
-		404: 'Green',
-		405: 'Yellow',
-		406: 'Blue',
-		427: 'ChannelUp',
-		428: 'ChannelDown',
-		457: 'Menu',
-		415: 'Play',
-		413: 'Stop',
-		412: 'Rewind',
-		417: 'FastForward',
-		10252: 'Pause',
-		10009: 'Back'
-	}
-
 	exports.closeApp = function() {
 		window.tizen.application.getCurrentApplication().exit();
 	}
 
 	log("tizen initialized")
+}
+
+exports.core.keyCodes = {
+	48: '0',
+	49: '1',
+	50: '2',
+	51: '3',
+	52: '4',
+	53: '5',
+	54: '6',
+	55: '7',
+	56: '8',
+	57: '9',
+	37: 'Left',
+	38: 'Up',
+	39: 'Right',
+	40: 'Down',
+	13: 'Select',
+	19: 'SimplePause',
+	403: 'Red',
+	404: 'Green',
+	405: 'Yellow',
+	406: 'Blue',
+	427: 'ChannelUp',
+	428: 'ChannelDown',
+	457: 'Menu',
+	415: 'Play',
+	413: 'Stop',
+	412: 'Rewind',
+	417: 'FastForward',
+	10252: 'Pause',
+	10009: 'Back'
 }
