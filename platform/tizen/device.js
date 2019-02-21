@@ -1,4 +1,8 @@
 var Device = function(ui) {
+	if (!window.tizen) {
+		log("'window.tizen' not defined")
+		return
+	}
 	this._ui = ui
 	var tizenDeviceId = window.tizen.systeminfo.getCapability("http://tizen.org/system/tizenid")
 	if (!tizenDeviceId)
