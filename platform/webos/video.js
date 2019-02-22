@@ -283,7 +283,10 @@ Player.prototype.setSource = function(url) {
 	this.ui.seeking = false
 	this.ui.waiting = false
 	this._extension = this.getFileExtension(url)
-	if (this._drmClientId) {
+
+	if (!url) {
+		this.element.dom.removeAttribute('src');
+	} else if (this._drmClientId) {
 		this.setDrmSource(url)
 	} else if (this._extension === ".mpd") {
 		this.playDashUrl(url)
