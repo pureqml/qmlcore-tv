@@ -189,7 +189,7 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 }
 
 Player.prototype.getVideoTracks = function() {
-	var video = []
+	var video = [ { "name": "auto", "id": "auto" } ]
 	var avplay = this.getAVPlay()
 	var tracks = avplay.getTotalTrackInfo()
 
@@ -246,18 +246,24 @@ Player.prototype.setVideoTrack = function(trackId) {
 	log("setVideoTrack for", trackId)
 	var avplay = this.getAVPlay()
 	var tracks = avplay.getTotalTrackInfo()
+	log("Total tracks", tracks)
 
-	var found = tracks.filter(function(element) {
-		return parseInt(element.index) === trackId
-	})
+	if (trackId === "auto") {
+		var bitRateString = 'BITRATES=5000~10000|STARTBITRATE=HIGHEST|SKIPBITRATE=LOWEST'
+		avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString)
+	} else {
+		var found = tracks.filter(function(element) {
+			return parseInt(element.index) === trackId
+		})
 
-	log("Found", found)
-	if (!found || !found.length)
-		return
-	var info = JSON.parse(found[0].extra_info)
-	var bitRateString = 'BITRATES=' + info.Bit_rate;
-	log("Found info", bitRateString, "INFO", info)
-	avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString);
+		log("Found", found)
+		if (!found || !found.length)
+			return
+		var info = JSON.parse(found[0].extra_info)
+		var bitRateString = 'BITRATES=' + info.Bit_rate;
+		log("Found info", bitRateString, "INFO", info)
+		avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString);
+	}
 	var prevProgress = this.ui.progress
 	avplay.close();
 	this.playImpl();
