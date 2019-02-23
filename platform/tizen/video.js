@@ -15,7 +15,6 @@ var Player = function(ui) {
 	ui.element = player
 	ui.parent.element.append(ui.element)
 
-	//old onCompleted:
 	var self = this
 	var context = ui._context
 	this._listener = {
@@ -134,7 +133,7 @@ Player.prototype.playImpl = function() {
 			var licenseServer = drm.widevine.laServer;
 			var drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
 			avplay.setStreamingProperty("WIDEVINE", drmParam);
-			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
+			avplay.setDrm("WIDEVINE", "SetProperties", JSON.stringify(drmParam));
 		} else if (drm.playready) {
 			var drmParam = { LicenseServer: drm.playready.laServer };
 			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
@@ -369,6 +368,7 @@ Player.prototype.setLoop = function(loop) {
 
 Player.prototype.closeVideo = function() {
 	var avplay = this.getAVPlay()
+	this._drm = null
 	if (!avplay) {
 		log("AVPlay was not initialized")
 		return
