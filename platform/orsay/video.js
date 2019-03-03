@@ -137,11 +137,30 @@ Player.prototype.setVisibility = function(visible) {
 		this.stop()
 }
 
+Player.prototype.getVideoTracks = function() {
+	return []
+}
+
+Player.prototype.getAudioTracks = function() {
+	return []
+}
+
+Player.prototype.setAudioTrack = function(trackId) {
+	log("setAudioTrack' not implemented")
+}
+
+Player.prototype.setVideoTrack = function(trackId) {
+	log("setVideoTrack' not implemented")
+}
+
+Player.prototype.setupDrm = function(type, options, callback, error) {
+	log("setupDrm' not implemented")
+	callback()
+}
 
 Player.prototype.setBackgroundColor = function(color) {
 	log('NOT IMPLEMENTED: setBackgroundColor')
 }
-
 
 exports.createPlayer = function(ui) {
 	return new Player(ui)
