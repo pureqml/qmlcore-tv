@@ -25,12 +25,22 @@ window.cordovaExecCall = function(name, args, callback, error) {
 };
 
 var fitToScreen = function() {
-	window.cordovaExecCall("ftiToScreen", [],
-		function() { log("Fit to screen") },
-		function(err) { log("Failed to fit screen") }
-	)
+	var width = window.$manifest$resolutionWidth
+	var height = window.$manifest$resolutionHeight
+
+	if (height) {
+		window.cordovaExecCall("setSize", [width, height],
+			function() { log("SetSize", width, height) },
+			function(err) { log("Failed to set size") }
+		)
+	} else {
+		window.cordovaExecCall("ftiToScreen", [],
+			function() { log("Fit to screen") },
+			function(err) { log("Failed to fit screen") }
+		)
+	}
 }
 
-setInterval(fitToScreen, 500)
+setTimeout(fitToScreen, 500)
 
 log("AndroidTV initialized")
