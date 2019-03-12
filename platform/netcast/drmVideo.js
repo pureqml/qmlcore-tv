@@ -54,7 +54,48 @@ Player.prototype.drmError = function(resultCode, resultMsg) {
 	log('DRM error', errorMsg, errorDetail);
 }
 
+Player.prototype.getFileExtension = function(filePath) {
+	if (!filePath)
+		return ""
+	var urlLower = filePath.toLowerCase()
+	var querryIndex = filePath.indexOf("?")
+	if (querryIndex >= 0)
+		urlLower = urlLower.substring(0, querryIndex)
+	var extIndex = urlLower.lastIndexOf(".")
+	return urlLower.substring(extIndex, urlLower.length)
+}
+
+Player.prototype.wrapCallback = function(callback) {
+	return this.ui._context.wrapNativeCallback(callback)
+}
+
 Player.prototype.setSource = function(url) {
+	log("SetSource", url)
+	var extension = this.getFileExtension(url)
+	var type = ""
+	this.ui.ready = false
+
+	switch(extension) {
+		case ".m3u8":
+		case ".m3u":
+		case ".mp4":
+		case ".mpd":
+			type =  "application/x-netcast-av"
+			break
+		default:
+			type =  "application/vnd.ms-sstr+xml"
+			break
+	}
+	log("Type", type)
+	this.player.dom.setAttribute("type", type)
+
+	var self = this
+	this.player.dom.onPlayStateChange = function() {
+		log("dom.onPlayStateChange"); log("STATE", self.player.dom.playState)
+		self.wrapCallback(self.stateChangedHandler(self.player.dom.playState).bind(self)).bind(self)
+	}
+	this.player.dom.onBuffering = function() { log("onBuffering") }
+
 	if (this._drm) {
 		var drm = this._drm
 		log("Use DRM", JSON.stringify(drm))
@@ -78,8 +119,7 @@ Player.prototype.setSource = function(url) {
 			log("ERROR DRM plugin not found")
 			return
 		}
-		var self = this
-		drmPlugin.onDRMMessageResult = function(msgId, resultMsg, resultCode) {
+		drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
 			log("onDRMMessageResult", resultCode)
 			if (resultCode == 0) {
 				log("Play with DRM", url)
@@ -89,7 +129,7 @@ Player.prototype.setSource = function(url) {
 				log("onDRMMessageResult failed. error:" + resultCode);
 				self.drmError(resultCode, resultMsg);
 			}
-		};
+		})
 		log("Send DRM message...")
 		drmPlugin.sendDRMMessage(msgType, msg, drmSystemID);
 	} else {
@@ -99,22 +139,66 @@ Player.prototype.setSource = function(url) {
 	}
 }
 
+Player.prototype.stateChangedHandler = function(state) {
+	log("stateChangedHandler", state)
+	if (state === 0) {
+		log("stopped")
+		this.ui.finished();
+		this.ui.ready = false
+		this.timeUpdater = null
+	} else if (state === 1) {
+		log("playing")
+		this.ui.ready = true
+		this.ui.paused = false
+		this.ui.waiting = false
+		this.ui.duration = this.player.dom.playTime * 1.0 / 1000
+		if (!this.timeUpdater) {
+			var self = this
+			this.timeUpdater = setInterval(function() { self.ui.progress = self.player.dom.playPosition * 1.0 / 1000;  }, 500)
+		}
+	} else if (state === 2) {
+		log("paused")
+		this.ui.paused = true
+	} else if (state === 3 || state === 4) {
+		log("connecting || buffering")
+		this.ui.waiting = true
+	} else if (state === 5) {
+		log("finished")
+		this.ui.finished();
+		this.ui.ready = false
+		this.timeUpdater = null
+	} else if (state === 6) {
+		log("error")
+		this.ui.error()
+		this.ui.ready = false
+		this.timeUpdater = null
+	}
+}
+
 Player.prototype.play = function() {
+	this.player.dom.play(1);
 }
 
 Player.prototype.stop = function() {
+	this.player.dom.stop();
 }
 
 Player.prototype.pause = function() {
+	this.player.dom.pause();
 }
 
 Player.prototype.seek = function(delta) {
+	log("Seek delta", delta, "pro", this.ui.progress)
+	this.seekTo(this.ui.progress + delta);
 }
 
 Player.prototype.seekTo = function(tp) {
+	log("seekTo", tp)
+	this.player.dom.seek((tp < 0 ? 0 : tp) * 1000);
 }
 
 Player.prototype.setVolume = function(volume) {
+	log('NOT IMPLEMENTED: volume', volume)
 }
 
 Player.prototype.setMute = function(muted) {
@@ -160,7 +244,7 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 	if (drmType) {
 		log("DRM type:", drmType)
 		this._drm = { "type": drmType, "options": options }
-		this.player.dom.setAttribute("drm_type", "wm-drm")
+		this.player.dom.setAttribute("drm_type", drmType)
 	} else {
 		this._drm = null
 		log("DRM type:", drmType, "not supported, try: playready|widevine|verimatrix")
