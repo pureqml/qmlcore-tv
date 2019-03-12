@@ -1,10 +1,8 @@
 if ('NetCastExit' in window) {
 	_globals.core.__deviceBackend = function() { return _globals.netcast.device }
+	_globals.core.__videoBackends.netcast = function() { return _globals.netcast.drmVideo }
 
-	log = function(dummy) {
-		COPY_ARGS(args, 0)
-		console.log("[QML] " + args.join(" "))
-	}
+	log = console.log.bind(console)
 
 	log("NetCast detected")
 	exports.core.vendor = "LG"
@@ -12,6 +10,7 @@ if ('NetCastExit' in window) {
 	exports.core.os = "netcast"
 
 	document.body.innerHTML = "<object id='device' type='application/x-netcast-info'></object>"
+	document.body.innerHTML += "<object id='drmplugin' type='application/oipfDrmAgent' style='visibility:hidden' width='0' height='0'></object>"
 
 	exports.core.keyCodes = {
 		37: 'Left',
