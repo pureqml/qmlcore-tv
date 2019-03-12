@@ -3,11 +3,22 @@ var Player = function(ui) {
 	player.dom.preload = "metadata"
 
 	var dom = player.dom
+	var self = this
 	player.on('play', function() { ui.waiting = false; ui.paused = dom.paused }.bind(ui))
 	player.on('pause', function() { ui.paused = dom.paused }.bind(ui))
 	player.on('ended', function() { ui.finished() }.bind(ui))
 	player.on('seeked', function() { log("seeked"); ui.seeking = false; ui.waiting = false }.bind(ui))
-	player.on('canplay', function() { log("canplay", dom.readyState); ui.ready = dom.readyState; ui.waiting = false }.bind(ui))
+
+	player.on('canplay', function() {
+		log("canplay", dom.readyState);
+		ui.ready = dom.readyState;
+		ui.waiting = false;
+		if (self._seekAfterSwitchProgress) {
+			self.seekTo(self._seekAfterSwitchProgress)
+			self._seekAfterSwitchProgress = undefined
+		}
+	}.bind(ui))
+
 	player.on('seeking', function() { log("seeking"); ui.seeking = true; ui.waiting = true }.bind(ui))
 	player.on('waiting', function() { log("waiting"); ui.waiting = true }.bind(ui))
 	player.on('emptied', function() { log("Was emptied", dom.networkState); if (!dom.paused) dom.play()}.bind(ui))
@@ -77,7 +88,6 @@ var Player = function(ui) {
 	this._xhr = new XMLHttpRequest()
 	this._xhr.addEventListener('load', this.parseManifest.bind(this))
 
-	var self = this
 	ui._context.document.on('visibilitychange', function() {
 		if (self._drmClientId && document.hidden) {
 			self.unloadDrmClient()
@@ -250,7 +260,7 @@ Player.prototype.setVideoTrack = function(trackId) {
 	var progress = this.ui.progress
 	log("Set video", this._videoTracks[trackId])
 	this.element.dom.src = this._videoTracks[trackId].url
-	this.seekTo(progress)
+	this._seekAfterSwitchProgress = progress
 }
 
 Player.prototype.playDashUrl = function(source) {
