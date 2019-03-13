@@ -50,7 +50,7 @@ var Player = function(ui) {
 		}),
 		ondrmevent : this.wrapCallback(function(drmEvent, drmData) {
 			log("DRM callback: " + drmEvent + ", data: " + JSON.stringify(drmData));
-			avplay.setDrm("PLAYREADY", "InstallLicense", JSON.stringify(drmParam));
+			avplay.setDrm("PLAYREADY", "InstallLicense", JSON.stringify(self._drmParam));
 		}),
 		onstreamcompleted : this.wrapCallback(function() {
 			if (self.ui.loop) {
@@ -125,18 +125,19 @@ Player.prototype.playImpl = function() {
 	log("playImpl setListener")
 	avplay.setListener(this._listener);
 	log("Init player, src:", ui.source, "width:", ui.width, "height:", ui.height)
+	log("DRM:", this._drm)
 	if (this._drm) {
 		log('Apply DRM:', this._drm);
 		var drm = this._drm
 		if (drm.widevine) {
 			var deviceId = window.webapis.drminfo.getEsn('WIDEVINE');
 			var licenseServer = drm.widevine.laServer;
-			var drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
-			avplay.setStreamingProperty("WIDEVINE", drmParam);
-			avplay.setDrm("WIDEVINE", "SetProperties", JSON.stringify(drmParam));
+			this._drmParam = "DEVICE_ID=" + deviceId + "|DEVICE_TYPE_ID=60|STREAM_ID=|IP_ADDR=|DRM_URL=" + licenseServer + "|PORTAL=OEM|I_SEEK=|CUR_TIME=|USER_DATA=";
+			avplay.setStreamingProperty("WIDEVINE", this._drmParam);
+			avplay.setDrm("WIDEVINE", "SetProperties", JSON.stringify(this._drmParam));
 		} else if (drm.playready) {
-			var drmParam = { LicenseServer: drm.playready.laServer };
-			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(drmParam));
+			this._drmParam = { LicenseServer: drm.playready.laServer };
+			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(this._drmParam));
 		}
 	}
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
@@ -248,7 +249,7 @@ Player.prototype.setVideoTrack = function(trackId) {
 	log("Total tracks", tracks)
 
 	if (trackId === "auto") {
-		var bitRateString = 'BITRATES=5000~10000|STARTBITRATE=HIGHEST|SKIPBITRATE=LOWEST'
+		var bitRateString = 'BITRATES=5000~50000|STARTBITRATE=HIGHEST|SKIPBITRATE=LOWEST'
 		avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString)
 	} else {
 		var found = tracks.filter(function(element) {
@@ -259,14 +260,15 @@ Player.prototype.setVideoTrack = function(trackId) {
 		if (!found || !found.length)
 			return
 		var info = JSON.parse(found[0].extra_info)
-		var bitRateString = 'BITRATES=' + info.Bit_rate;
+		var bitRateString = 'BITRATES=5000~' + info.Bit_rate + "|STARTBITRATE=HIGHEST|SKIPBITRATE=LOWEST";
 		log("Found info", bitRateString, "INFO", info)
 		avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString);
 	}
 	var prevProgress = this.ui.progress
 	avplay.close();
 	this.playImpl();
-	this.seekTo(prevProgress)
+	if (prevProgress > 12)
+		this.seekTo(prevProgress)
 }
 
 //fixme: move this logic to core?
