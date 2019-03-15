@@ -60,7 +60,7 @@ exports.core.keyCodes = {
 	39: 'Right',
 	40: 'Down',
 	13: 'Select',
-	19: 'SimplePause',
+	19: 'Pause',
 	403: 'Red',
 	404: 'Green',
 	405: 'Yellow',
