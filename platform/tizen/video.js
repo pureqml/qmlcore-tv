@@ -250,7 +250,12 @@ Player.prototype.setVideoTrack = function(trackId) {
 
 	if (trackId === "auto") {
 		var bitRateString = 'BITRATES=5000~50000|STARTBITRATE=HIGHEST|SKIPBITRATE=LOWEST'
-		avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString)
+		try {
+			avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString)
+		} catch(e) {
+			log("Failed to cahgne bitrate", e)
+		}
+
 	} else {
 		var found = tracks.filter(function(element) {
 			return parseInt(element.index) === trackId
@@ -262,7 +267,11 @@ Player.prototype.setVideoTrack = function(trackId) {
 		var info = JSON.parse(found[0].extra_info)
 		var bitRateString = 'BITRATES=5000~' + info.Bit_rate + "|STARTBITRATE=HIGHEST|SKIPBITRATE=LOWEST";
 		log("Found info", bitRateString, "INFO", info)
-		avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString);
+		try {
+			avplay.setStreamingProperty('ADAPTIVE_INFO', bitRateString)
+		} catch(e) {
+			log("Failed to cahgne bitrate", e)
+		}
 	}
 	var prevProgress = this.ui.progress
 	avplay.close();
