@@ -88,8 +88,31 @@ Player.prototype.play = function() {
 	}
 
 	log("calling initialize")
-	player.Execute("InitPlayer", this.source + "|COMPONENT=HLS")
-	//player.Execute("SetInitialBufferSize", 400*1024);
+
+
+	var component = "|COMPONENT=HLS"
+	if (this._drm) {
+		log("Init with DRM", this._drm)
+		var msg = '<?xml version="1.0" encoding="utf-8"?>' +
+			'<PlayReadyInitiator xmlns= "http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+			'<LicenseAcquisition>' +
+				'<Header>' +
+					'<WRMHEADER xmlns="http://schemas.microsoft.com/DRM/2007/03/PlayReadyHeader" version="4.0.0.0">' +
+						'<DATA>' +
+							'<LA_URL>' + (options.laServer || "") + '</LA_URL>' +
+							'<KID>' + (options.contentId || "") + '</KID>' +
+						'</DATA>' +
+					'</WRMHEADER>'
+				'</Header>' +
+			'<CustomData></CustomData>' +
+			'</LicenseAcquisition>' +
+			'</PlayReadyInitiator>'
+		player.Open("PlayReadyDrm", "1.000", "PlayReadyDrm")
+		player.Execute("ProcessInitiatorsFromXml",  msg, msg.length)
+		component = ""
+	}
+
+	player.Execute("InitPlayer", this.source + component)
 	ui.waiting = true
 	log("calling StartPlayback")
 	log("StartPlayback returns", player.Execute("StartPlayback"))
@@ -154,7 +177,13 @@ Player.prototype.setVideoTrack = function(trackId) {
 }
 
 Player.prototype.setupDrm = function(type, options, callback, error) {
-	log("setupDrm' not implemented")
+	if (type === "playready") {
+		log("DRM type:", type)
+		this._drm = { "type": type, "options": options }
+	} else {
+		this._drm = null
+		log("DRM type:", drmType, "not supported, try: playready")
+	}
 	callback()
 }
 
