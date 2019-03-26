@@ -168,6 +168,9 @@ Player.prototype.getAudioTracks = function() {
 	return []
 }
 
+Player.prototype.setAutoPlay = function(autoPlay) {
+}
+
 Player.prototype.setAudioTrack = function(trackId) {
 	log("setAudioTrack' not implemented")
 }
