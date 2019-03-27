@@ -89,10 +89,10 @@ Player.prototype.play = function() {
 
 	log("calling initialize")
 
-
 	var component = "|COMPONENT=HLS"
 	if (this._drm) {
 		log("Init with DRM", this._drm)
+		var options = this._drm.options
 		var msg = '<?xml version="1.0" encoding="utf-8"?>' +
 			'<PlayReadyInitiator xmlns= "http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
 			'<LicenseAcquisition>' +
