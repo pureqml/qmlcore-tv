@@ -263,11 +263,12 @@ Player.prototype.setVideoTrack = function(trackId) {
 	this._seekAfterSwitchProgress = progress
 }
 
-Player.prototype.playDashUrl = function(source) {
+Player.prototype.playOptionType = function(source, type) {
+	log("playOptionType", type, "Src", source)
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
 	sourceElement.setAttribute('src', source);
-	sourceElement.setAttribute('type', "application/dash+xml");
+	sourceElement.setAttribute('type', type);
 
 	if (!this._sourceElement)
 		ui.element.append(sourceElement);
@@ -275,6 +276,14 @@ Player.prototype.playDashUrl = function(source) {
 	this._sourceElement = sourceElement
 	this.element.dom.load()
 	this.element.dom.play()
+}
+
+Player.prototype.playDashUrl = function(source) {
+	this.playOptionType(source, "application/dash+xml");
+}
+
+Player.prototype.playSmoothStreamsingUrl = function(source) {
+	this.playOptionType(source, "application/vnd.ms-sstr+xml");
 }
 
 Player.prototype.getFileExtension = function(filePath) {
@@ -293,6 +302,7 @@ Player.prototype.setSource = function(url) {
 	this.ui.seeking = false
 	this.ui.waiting = false
 	this._extension = this.getFileExtension(url)
+	log("Set source", url, "ext", this._extension)
 
 	if (!url) {
 		this.element.dom.removeAttribute('src');
@@ -306,6 +316,8 @@ Player.prototype.setSource = function(url) {
 			this._xhr.send()
 		}
 		this.element.dom.src = url
+	} else if (this._extension.indexOf("manifest") >= 0) {
+		this.playSmoothStreamsingUrl(url)
 	} else {
 		this.element.dom.src = url
 	}
