@@ -61,9 +61,21 @@ Player.prototype.startTimer = function() {
 }
 
 Player.prototype.setSource = function(url) {
+	log("Set source", url)
 	this.ui.ready = false
 	this.ui.paused = false
 	this.source = url
+}
+
+Player.prototype.getFileExtension = function(filePath) {
+	if (!filePath)
+		return ""
+	var urlLower = filePath.toLowerCase()
+	var querryIndex = filePath.indexOf("?")
+	if (querryIndex >= 0)
+		urlLower = urlLower.substring(0, querryIndex)
+	var extIndex = urlLower.lastIndexOf(".")
+	return urlLower.substring(extIndex, urlLower.length)
 }
 
 Player.prototype.play = function() {
@@ -77,6 +89,7 @@ Player.prototype.play = function() {
 		return;
 	}
 
+	log("Player paused", ui.paused, "ready", ui.ready)
 	if (ui.paused) {
 		log("video play resume")
 		player.Execute("Resume")
@@ -87,9 +100,12 @@ Player.prototype.play = function() {
 		return
 	}
 
-	log("calling initialize")
-
 	var component = "|COMPONENT=HLS"
+	var extension = this.getFileExtension(this.source)
+	if (extension === ".m3u8" || extension === ".m3u") {
+		component = "|COMPONENT=HLS"
+	log("Ext", extension, "Component", component)
+
 	if (this._drm) {
 		log("Init with DRM", this._drm)
 		var options = this._drm.options
@@ -109,7 +125,6 @@ Player.prototype.play = function() {
 			'</PlayReadyInitiator>'
 		player.Open("PlayReadyDrm", "1.000", "PlayReadyDrm")
 		player.Execute("ProcessInitiatorsFromXml",  msg, msg.length)
-		component = ""
 	}
 
 	player.Execute("InitPlayer", this.source + component)
