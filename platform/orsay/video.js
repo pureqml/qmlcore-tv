@@ -62,6 +62,8 @@ Player.prototype.startTimer = function() {
 
 Player.prototype.setSource = function(url) {
 	log("Set source", url)
+	if (this.ui.ready && this.source)
+		this.stop()
 	this.ui.ready = false
 	this.ui.paused = false
 	this.source = url
@@ -100,9 +102,9 @@ Player.prototype.play = function() {
 		return
 	}
 
-	var component = "|COMPONENT=HLS"
+	var component = ""
 	var extension = this.getFileExtension(this.source)
-	if (extension === ".m3u8" || extension === ".m3u") {
+	if (extension === ".m3u8" || extension === ".m3u")
 		component = "|COMPONENT=HLS"
 	log("Ext", extension, "Component", component)
 
