@@ -18,7 +18,12 @@ var Device = function(ui) {
 		log('webapis is undefiined perhabs you forget to add <script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/webapi/1.0/webapis.js"></script>')
 	}
 	ui.deviceId = deviceId ? deviceId : "orsay_" + Math.random().toString(36).substr(2, 9)
-	webapis.tv.info
+
+	var network = document.getElementById("pluginObjectNetwork")
+	if (network)
+		ui.macAddess = network.GetMAC(0) || network.GetMAC(1)
+	else
+		log("Network plugin object not defined")
 }
 
 exports.createDevice = function(ui) {
