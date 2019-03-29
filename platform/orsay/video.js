@@ -106,33 +106,25 @@ Player.prototype.play = function() {
 	var extension = this.getFileExtension(this.source)
 	if (extension === ".m3u8" || extension === ".m3u")
 		component = "|COMPONENT=HLS"
-	log("Ext", extension, "Component", component)
+
+	if (this._drm)
+		component += '|COMPONENT=WMDRM';
+
+	log("Extension", extension, "Component", component)
+	player.Execute("InitPlayer", this.source + component)
 
 	if (this._drm) {
-		log("Init with DRM", this._drm)
 		var options = this._drm.options
-		var msg = '<?xml version="1.0" encoding="utf-8"?>' +
-			'<PlayReadyInitiator xmlns= "http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
-			'<LicenseAcquisition>' +
-				'<Header>' +
-					'<WRMHEADER xmlns="http://schemas.microsoft.com/DRM/2007/03/PlayReadyHeader" version="4.0.0.0">' +
-						'<DATA>' +
-							'<LA_URL>' + (options.laServer || "") + '</LA_URL>' +
-							'<KID>' + (options.contentId || "") + '</KID>' +
-						'</DATA>' +
-					'</WRMHEADER>'
-				'</Header>' +
-			'<CustomData></CustomData>' +
-			'</LicenseAcquisition>' +
-			'</PlayReadyInitiator>'
-		player.Open("PlayReadyDrm", "1.000", "PlayReadyDrm")
-		player.Execute("ProcessInitiatorsFromXml",  msg, msg.length)
+		log("DRM", JSON.stringify(options))
+		if (options.customData)
+			player.Execute('SetPlayerProperty', '3', options.customData, options.customData.length);
+		if (options.laServer)
+			player.Execute('SetPlayerProperty', '4', options.laServer, options.laServer.length);
 	}
 
-	player.Execute("InitPlayer", this.source + component)
 	ui.waiting = true
 	log("calling StartPlayback")
-	log("StartPlayback returns", player.Execute("StartPlayback"))
+	log("StartPlayback returns", player.Execute("StartPlayback")) // HINT: can be started from second via second argument: Execute('StartPlayback', secondInt);
 }
 
 Player.prototype.stop = function() {
