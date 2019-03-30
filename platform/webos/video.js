@@ -462,24 +462,25 @@ Player.prototype.setupDrm = function(type, options, callback) {
 			log("Message ID: " + msgId);
 			log("[" + resultCode + "] " + resultMsg);
 
-			self.subscribeLicensingError({ "clientId": clientId, "subscribe": true },
-				function(result) {
-					log("Subscrivelive", result)
-					var contentId = result.contentId;
-					if (contentId == msgId) {
-						if (0 == result.errorState) {
-							log("No license");
-						} else if ( 1 == result.errorState) {
-							log("Invalid license");
-						}
-						log("DRM System ID: " + result.drmSystemId);
-						log("License Server URL: " + result.rightIssueUrl);
-					}
-				},
-				function(result) {
-					log("Lisence[" + result.errorCode + "] " + result.errorText);
-				}
-			)
+			// FIXME: callback triggered from previous requests
+			// self.subscribeLicensingError({ "clientId": clientId, "subscribe": true },
+			// 	function(result) {
+			// 		log("Subscrivelive", result)
+			// 		var contentId = result.contentId;
+			// 		if (contentId == msgId) {
+			// 			if (0 == result.errorState) {
+			// 				log("No license");
+			// 			} else if ( 1 == result.errorState) {
+			// 				log("Invalid license");
+			// 			}
+			// 			log("DRM System ID: " + result.drmSystemId);
+			// 			log("License Server URL: " + result.rightIssueUrl);
+			// 		}
+			// 	},
+			// 	function(result) {
+			// 		log("Lisence[" + result.errorCode + "] " + result.errorText);
+			// 	}
+			// )
 
 			switch (resultCode) {
 				case 0:
