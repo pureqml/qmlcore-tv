@@ -1,4 +1,5 @@
 {
 	"strict": false,
+	"templates": ["*.html", "lgconfig.xml"],
 	"requires": ["video.html5"]
 }
