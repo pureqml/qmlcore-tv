@@ -72,21 +72,10 @@ Player.prototype.wrapCallback = function(callback) {
 Player.prototype.setSource = function(url) {
 	log("SetSource", url)
 	var extension = this.getFileExtension(url)
-	var type = ""
 	this.ui.ready = false
 
-	switch(extension) {
-		case ".m3u8":
-		case ".m3u":
-		case ".mp4":
-		case ".mpd":
-			type =  "application/x-netcast-av"
-			break
-		default:
-			type =  "application/vnd.ms-sstr+xml"
-			break
-	}
-	log("Type", type)
+	var type = extension.indexOf("manifest") >= 0 ? "application/vnd.ms-sstr+xml" : "application/x-netcast-av"
+	log("Type", type, "Extension", extension)
 	this.player.dom.setAttribute("type", type)
 
 	var self = this
@@ -99,39 +88,84 @@ Player.prototype.setSource = function(url) {
 	if (this._drm) {
 		var drm = this._drm
 		log("Use DRM", JSON.stringify(drm))
-		var laServer = drm.options.laServer ? drm.options.laServer : ""
-		var customData = drm.customData ? drm.customData : ""
-		var scope = this;
-		var msgType = "application/vnd.ms-playready.initiator+xml";
-		var drmSystemID = "urn:dvb:casystemid:19219";
-		var msg = '<?xml version="1.0" encoding="utf-8"?>' +
-			'<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
-			  '<LicenseServerUriOverride>' +
-			    '<LA_URL>' + laServer + '</LA_URL>' +
-			   '</LicenseServerUriOverride>' +
-			  '<SetCustomData>' +
-			    '<CustomData>'+ customData +'</CustomData>' +
-			  '</SetCustomData>' +
-			'</PlayReadyInitiator>'
+		if (drm.type === "wm-drm") {
+			log("Configure playready")
+			var laServer = drm.options.laServer ? drm.options.laServer : ""
+			var customData = drm.options.customData ? drm.options.customData : ""
+			var msgType = "application/vnd.ms-playready.initiator+xml";
+			var drmSystemID = "urn:dvb:casystemid:19219";
+			var msg = '<?xml version="1.0" encoding="utf-8"?>' +
+				'<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+				  '<LicenseServerUriOverride>' +
+					'<LA_URL>' + laServer + '</LA_URL>' +
+				   '</LicenseServerUriOverride>' +
+				  '<SetCustomData>' +
+					'<CustomData>'+ customData +'</CustomData>' +
+				  '</SetCustomData>' +
+				'</PlayReadyInitiator>'
 
-		var drmPlugin = this.getDrmPlugin()
-		if (!drmPlugin) {
-			log("ERROR DRM plugin not found")
-			return
-		}
-		drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
-			log("onDRMMessageResult", resultCode)
-			if (resultCode == 0) {
-				log("Play with DRM", url)
-				self.player.dom.setAttribute("data", url)
-				self.player.dom.play(1)
-			} else {
-				log("onDRMMessageResult failed. error:" + resultCode);
-				self.drmError(resultCode, resultMsg);
+			var drmPlugin = this.getDrmPlugin()
+			if (!drmPlugin) {
+				log("ERROR DRM plugin not found")
+				return
 			}
-		})
-		log("Send DRM message...")
-		drmPlugin.sendDRMMessage(msgType, msg, drmSystemID);
+			drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
+				log("onDRMMessageResult", resultCode)
+				if (resultCode == 0) {
+					log("Play with DRM", url)
+					self.player.dom.setAttribute("data", url)
+					self.player.dom.play(1)
+				} else {
+					log("onDRMMessageResult failed. error:" + resultCode);
+					self.drmError(resultCode, resultMsg);
+				}
+			})
+			log("Send DRM message...")
+			drmPlugin.sendDRMMessage(msgType, msg, drmSystemID);
+		} else if (drm.type === "widevine") {
+			log("Configure widevine")
+			var options = drm.options
+
+			var laServer = options.laServer || ""
+			log("setWidevineDrmURL: '" + laServer + "'")
+			this.player.dom.setWidevineDrmURL(laServer);
+
+			var userData = options.userData || ""
+			log("setWidevineUserData: '" + userData + "'")
+			this.player.dom.setWidevineUserData(userData);
+
+			var portal = options.portal || ""
+			log("setWidevineUserData", portal)
+			this.player.dom.setWidevinePortalID(portal);
+
+			var deviceID = options.deviceID || ""
+			log("setWidevineDeviceID", deviceID)
+			this.player.dom.setWidevineDeviceID(deviceID);
+
+			var clientIP = options.clientIP || ""
+			log("setWidevineClientIP", clientIP)
+			this.player.dom.setWidevineClientIP(clientIP);
+
+			var streamID = options.streamID || ""
+			log("setWidevineStreamID", streamID)
+			this.player.dom.setWidevineStreamID(streamID);
+
+			var drmAckServerURL = options.drmAckServerURL || ""
+			log("setWidevineDrmAckURL", drmAckServerURL)
+			this.player.dom.setWidevineDrmAckURL(drmAckServerURL);
+
+			var drmHeartBeatPeriod = options.drmHeartBeatPeriod || ""
+			log("setWidevineHeartbeatPeriod", drmHeartBeatPeriod)
+			this.player.dom.setWidevineHeartbeatPeriod(drmHeartBeatPeriod);
+			log("Widevine configured. Try to play...")
+
+			this.player.dom.setWidevineDeviceType("TV")
+			log("Type was set")
+			this.player.dom.data = url
+			this.player.dom.play(1)
+		} else {
+			log("DRM type", drm.type, "not supported")
+		}
 	} else {
 		log("Play", url)
 		this.player.dom.setAttribute("data", url)
@@ -237,9 +271,18 @@ Player.prototype.setVideoTrack = function(trackId) {
 Player.prototype.setupDrm = function(type, options, callback, error) {
 	var drmType = ""
 	switch (type) {
-		case "playready":  drmType = "wm-drm"; break;
-		case "widevine":   drmType = "widevine"; break;
-		case "verimatrix": drmType = "verimatrix"; break;
+		case "playready":
+			drmType = "wm-drm"
+			this.player.dom.setAttribute("drm_type", "wm-drm")
+			break
+		case "widevine":
+			drmType = "widevine"
+			this.player.dom.setAttribute("drm_type", "widevine")
+			break
+		case "verimatrix":
+			// TODO: impl
+			drmType = "verimatrix"
+			break
 	}
 	if (drmType) {
 		log("DRM type:", drmType)
