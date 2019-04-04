@@ -13,16 +13,40 @@ var Player = function(ui) {
 
 	window.Player = {}
 	window.Player.onEvent = this.ui._context.wrapNativeCallback(function(event, arg) {
-		log("VIDEO PLAYER EVENT" +  event + " ARG" + arg)
+		log("Video player event:", event, "arg:", arg)
 		if (isNaN(event))
 			return
 
 		switch (parseInt(event)) {
 		case -1: //Fired on error?
+			ui.error({ "message": "Unknown error", "code": -1 })
 			break;
-		case 6: //Was fired when the file as at the end... After 8 was fired
+		case 1: //Connection to the stream failed
+			ui.error(new Error("Connection to the stream failed"))
+			break;
+		case 2: //Authentication Failed
+			ui.error(new Error("Authentication Failed"))
+			break;
+		case 3: //Stream not found
+			ui.error({ "message": "Stream not found", "code": 3 })
+			break;
+		case 4: //Network disconnected
+			ui.error({ "message": "Network disconnected", "code": 4 })
+			break;
+		case 6: //Render error
+			var msg = ""
+			switch (arg) {
+			case 1: msg = 'Unsupported container'; break
+			case 2: msg = 'Unsupported video codec'; break
+			case 3: msg = 'Unsupported audio codec'; break
+			case 6: msg = 'Corrupted stream'; break
+			default: msg = 'Unknown error'; break
+			}
+			var err = new Error({ "message": msg, "code": arg })
+			ui.error(err)
 			break;
 		case 7: //Fired after play was pressed --> or when ready to play?
+			ui.finished()
 			log("Ready to play")
 			var duration = player.dom.Execute("GetDuration") / 1000
 			log("Duration: " + duration)
@@ -45,6 +69,9 @@ var Player = function(ui) {
 			break;
 		case 14: //Fired every 0.5 seconds with current playback time in val2
 			ui.progress = arg * 1.0 / 1000
+			break;
+		case 100: //DRM error
+			ui.error({ "message": "DRM error", "code": 100 })
 			break;
 		default:
 			break;
