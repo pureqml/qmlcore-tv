@@ -22,10 +22,10 @@ var Player = function(ui) {
 			ui.error({ "message": "Unknown error", "code": -1 })
 			break;
 		case 1: //Connection to the stream failed
-			ui.error(new Error("Connection to the stream failed"))
+			ui.error({ "message": "Connection to the stream failed", "code": 1 })
 			break;
 		case 2: //Authentication Failed
-			ui.error(new Error("Authentication Failed"))
+			ui.error({ "message": "Authentication Failed", "code": 2 })
 			break;
 		case 3: //Stream not found
 			ui.error({ "message": "Stream not found", "code": 3 })
@@ -42,8 +42,7 @@ var Player = function(ui) {
 			case 6: msg = 'Corrupted stream'; break
 			default: msg = 'Unknown error'; break
 			}
-			var err = new Error({ "message": msg, "code": arg })
-			ui.error(err)
+			ui.error({ "message": msg, "code": arg })
 			break;
 		case 7: //Fired after play was pressed --> or when ready to play?
 			ui.finished()
