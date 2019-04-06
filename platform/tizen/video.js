@@ -50,9 +50,16 @@ var Player = function(ui) {
 		}),
 		ondrmevent : this.wrapCallback(function(drmEvent, drmData) {
 			log("DRM callback: " + drmEvent + ", data: " + JSON.stringify(drmData));
+			var avplay = self.getAVPlay()
 			avplay.setDrm("PLAYREADY", "InstallLicense", JSON.stringify(self._drmParam));
 		}),
-		onstreamcompleted : this.wrapCallback(function() {
+		onstreamcompleted : this.wrapCallback(function(e) {
+			if (ui.progress < ui.duration - 1) {
+				log("Unexpected ending, seek forward then")
+				self.seekTo(ui.progress + 1)
+				return
+			}
+
 			if (self.ui.loop) {
 				log("Video is looped play it again")
 				var avplay = self.getAVPlay()
