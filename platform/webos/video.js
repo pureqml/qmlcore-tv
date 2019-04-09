@@ -163,11 +163,11 @@ Player.prototype.getAudioTracks = function() {
 	var result = []
 	for (var i = 0; i < audioTracks.length; ++i) {
 		var track = audioTracks[i]
-		var info = this._audioTracksInfo[i]
+		var info = this._audioTracksInfo ? this._audioTracksInfo[i] : null
 		result.push({
 			"id": i,
-			"name": track.label ? track.label : info.name,
-			"language": track.language ? track.language : info.language
+			"name": track.label ? track.label : (info ? info.name : "Unknown"),
+			"language": track.language ? track.language : (info ? info.language : "Unknown")
 		})
 	}
 	log("getAudioTracks", result)
