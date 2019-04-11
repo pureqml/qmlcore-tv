@@ -386,7 +386,6 @@ Player.prototype.setLoop = function(loop) {
 
 Player.prototype.closeVideo = function() {
 	var avplay = this.getAVPlay()
-	this._drm = null
 	if (!avplay) {
 		log("AVPlay was not initialized")
 		return
