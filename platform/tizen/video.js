@@ -156,14 +156,16 @@ Player.prototype.playImpl = function() {
 	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
 	log("playImpl prepare")
-	avplay.prepare();
-	log("Current state: " + avplay.getState());
-	log("prepare complete source", ui.source);
-	this.updateDuration()
-	ui.ready = avplay.getState() === "READY"
-	log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
-	if (ui.autoPlay)
-		this.play()
+	var self = this
+	avplay.prepareAsync(function() {
+		log("Current state: " + avplay.getState());
+		log("prepare complete source", ui.source);
+		self.updateDuration()
+		ui.ready = avplay.getState() === "READY"
+		log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
+		if (ui.autoPlay)
+			self.play()
+	})
 }
 
 Player.prototype.play = function() {
