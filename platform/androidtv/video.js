@@ -15,6 +15,32 @@ Player.prototype.setSource = function(value) {
 	log("set source", value)
 }
 
+Player.prototype.setAutoPlay = function(value) {
+	log("setAutoPlay not implemented yet")
+}
+
+Player.prototype.setAutoPlay = function(value) {
+	log("setAutoPlay not implemented yet")
+}
+
+Player.prototype.setAudioTrack = function(trackId) {
+	log("setAudioTrack not implemented yet")
+}
+
+Player.prototype.setVideoTrack = function(trackId) {
+	log("setVideoTrack not implemented yet")
+}
+
+Player.prototype.getAudioTracks = function() {
+	log("getAudioTracks not implemented yet")
+	return []
+}
+
+Player.prototype.getVideoTracks = function() {
+	log("getVideoTracks not implemented yet")
+	return []
+}
+
 Player.prototype.play = function() {
 	var ui = this._ui
 
