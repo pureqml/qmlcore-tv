@@ -32,8 +32,8 @@ window.cordovaExecCall = function(name, args, callback, error) {
 
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
+	console.log("androidtv device ready")
 	_globals._context.system.vendor = device.manufacturer
-	console.log("DEVICEREDA")
 	fitToScreen()
 }
 
