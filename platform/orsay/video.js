@@ -93,6 +93,8 @@ Player.prototype.setSource = function(url) {
 	this.ui.ready = false
 	this.ui.paused = false
 	this.source = url
+	if (this.ui.autoPlay)
+		this.play()
 }
 
 Player.prototype.getFileExtension = function(filePath) {
@@ -203,7 +205,7 @@ Player.prototype.getAudioTracks = function() {
 	return []
 }
 
-Player.prototype.setAutoPlay = function(autoPlay) {
+Player.prototype.setOption = function(name, value) {
 }
 
 Player.prototype.setAudioTrack = function(trackId) {

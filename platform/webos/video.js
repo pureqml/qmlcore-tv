@@ -23,8 +23,6 @@ var Player = function(ui) {
 	ui.element = player
 	ui.parent.element.append(ui.element)
 
-	this.setAutoPlay(ui.autoPlay)
-
 	this._xhr = new XMLHttpRequest()
 	this._xhr.addEventListener('load', this.parseManifest.bind(this))
 

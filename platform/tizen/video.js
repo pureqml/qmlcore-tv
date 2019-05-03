@@ -418,7 +418,7 @@ Player.prototype.updateDuration = function() {
 	log("Duration", this.ui.duration)
 }
 
-Player.prototype.setAutoPlay = function(autoPlay) {
+Player.prototype.setOption = function(name, value) {
 }
 
 Player.prototype.updateCurrentTime = function() {

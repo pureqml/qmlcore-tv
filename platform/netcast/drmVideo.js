@@ -79,6 +79,7 @@ Player.prototype.setSource = function(url) {
 	this.player.dom.setAttribute("type", type)
 
 	var self = this
+	var ui = this.ui
 	this.player.dom.onPlayStateChange = function() {
 		log("dom.onPlayStateChange"); log("STATE", self.player.dom.playState)
 		self.wrapCallback(self.stateChangedHandler(self.player.dom.playState).bind(self)).bind(self)
@@ -162,14 +163,16 @@ Player.prototype.setSource = function(url) {
 			this.player.dom.setWidevineDeviceType("TV")
 			log("Type was set")
 			this.player.dom.data = url
-			this.player.dom.play(1)
+			if (ui.autoPlay)
+				this.player.dom.play(1)
 		} else {
 			log("DRM type", drm.type, "not supported")
 		}
 	} else {
 		log("Play", url)
 		this.player.dom.setAttribute("data", url)
-		this.player.dom.play(1)
+		if (ui.autoPlay)
+			this.player.dom.play(1)
 	}
 }
 
@@ -266,6 +269,9 @@ Player.prototype.setAudioTrack = function(trackId) {
 
 Player.prototype.setVideoTrack = function(trackId) {
 	log("setVideoTrack' not implemented")
+}
+
+Player.prototype.setOption = function(name, value) {
 }
 
 Player.prototype.setupDrm = function(type, options, callback, error) {

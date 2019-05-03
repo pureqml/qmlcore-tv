@@ -15,12 +15,7 @@ Player.prototype.setSource = function(value) {
 	log("set source", value)
 }
 
-Player.prototype.setAutoPlay = function(value) {
-	log("setAutoPlay not implemented yet")
-}
-
-Player.prototype.setAutoPlay = function(value) {
-	log("setAutoPlay not implemented yet")
+Player.prototype.setOption = function(name, value) {
 }
 
 Player.prototype.setAudioTrack = function(trackId) {
