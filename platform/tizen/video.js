@@ -222,6 +222,28 @@ Player.prototype.getVideoTracks = function() {
 	return video
 }
 
+Player.prototype.getSubtitles = function() {
+	var subtitles = []
+	var avplay = this.getAVPlay()
+	var tracks = avplay.getTotalTrackInfo()
+	log("TR", tracks)
+
+	for (var i = 0; i < tracks.length; ++i) {
+		var track = tracks[i]
+		if (track.type !== "TEXT")
+			continue
+
+		var info = JSON.parse(track.extra_info)
+
+		subtitles.push({
+			id: parseInt(track.index),
+			language: info.track_lang
+		})
+	}
+	log("res subs", subtitles)
+	return subtitles
+}
+
 Player.prototype.getAudioTracks = function() {
 	var audio = []
 	var avplay = this.getAVPlay()
@@ -241,6 +263,19 @@ Player.prototype.getAudioTracks = function() {
 		})
 	}
 	return audio
+}
+
+Player.prototype.setSubtitles = function(trackId) {
+	var avplay = this.getAVPlay()
+	var tracks = avplay.getTotalTrackInfo()
+
+	var found = tracks.filter(function(element) {
+		return parseInt(element.index) === trackId
+	})
+
+	log("Try to set subtitles", found)
+	if (found && found.length)
+		avplay.setSelectTrack('TEXT', parseInt(found[0].index));
 }
 
 Player.prototype.setAudioTrack = function(trackId) {
