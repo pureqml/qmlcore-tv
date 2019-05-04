@@ -226,7 +226,6 @@ Player.prototype.getSubtitles = function() {
 	var subtitles = []
 	var avplay = this.getAVPlay()
 	var tracks = avplay.getTotalTrackInfo()
-	log("TR", tracks)
 
 	for (var i = 0; i < tracks.length; ++i) {
 		var track = tracks[i]
@@ -240,7 +239,7 @@ Player.prototype.getSubtitles = function() {
 			language: info.track_lang
 		})
 	}
-	log("res subs", subtitles)
+	log("Got subtitles", subtitles)
 	return subtitles
 }
 
