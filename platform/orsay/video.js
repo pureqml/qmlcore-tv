@@ -39,6 +39,7 @@ var Player = function(ui) {
 			case 1: msg = 'Unsupported container'; break
 			case 2: msg = 'Unsupported video codec'; break
 			case 3: msg = 'Unsupported audio codec'; break
+			case 4: msg = 'Unsupported video resolution'; break
 			case 6: msg = 'Corrupted stream'; break
 			default: msg = 'Unknown error'; break
 			}
