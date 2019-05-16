@@ -13,7 +13,6 @@ var Player = function(ui) {
 
 	window.Player = {}
 	window.Player.onEvent = this.ui._context.wrapNativeCallback(function(event, arg) {
-		log("Video player event:", event, "arg:", arg)
 		if (isNaN(event))
 			return
 
@@ -43,6 +42,7 @@ var Player = function(ui) {
 			case 6: msg = 'Corrupted stream'; break
 			default: msg = 'Unknown error'; break
 			}
+			log("Render error message:", msg, "code:", arg)
 			ui.error({ "message": msg, "code": arg })
 			break;
 		case 7: //Fired after play was pressed --> or when ready to play?

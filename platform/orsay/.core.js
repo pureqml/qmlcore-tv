@@ -55,6 +55,8 @@ if ('Common' in window) {
 		22: 'Blue',
 		68: 'PageUp',
 		65: 'PageDown',
+		68: 'ChannelUp',
+		65: 'ChannelDown',
 		69: 'Rewind',
 		70: 'Stop',
 		71: 'Play',
