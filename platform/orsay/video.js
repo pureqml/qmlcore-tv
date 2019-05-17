@@ -157,8 +157,12 @@ Player.prototype.play = function() {
 }
 
 Player.prototype.stop = function() {
-	log("video stop")
-	this.player.dom.Execute("Stop")
+	log("video stop and close", this.player.dom.Execute)
+	if (this.player.dom.Execute) {
+		this.player.dom.Execute("Stop")
+		this.player.dom.Execute("Close")
+	}
+	this.ui.ready = false
 }
 
 Player.prototype.pause = function() {
