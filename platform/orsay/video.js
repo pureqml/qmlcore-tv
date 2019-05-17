@@ -88,9 +88,14 @@ Player.prototype.startTimer = function() {
 }
 
 Player.prototype.setSource = function(url) {
+	if (url == "" || !this.visible) {
+		return
+	}
 	log("Set source", url)
-	if (this.ui.ready && this.source)
-		this.stop()
+	this.player.dom.Open('Player', '1.000', 'Player')
+	this.player.dom.OnEvent = 'Player.onEvent'
+
+	this.player.dom.Execute("Stop")
 	this.ui.ready = false
 	this.ui.paused = false
 	this.source = url
@@ -197,9 +202,14 @@ Player.prototype.setRect = function(l, t, r, b) {
 }
 
 Player.prototype.setVisibility = function(visible) {
-	log('videoplayer setVisibility', visible)
-	if (!visible)
+	log('videoplayer setVisibility', visible, "exec", this.player.dom.Execute)
+	this.visible = visible
+	if (visible) {
+		if (this.source != this.ui.source)
+			this.setSource(this.ui.source)
+	} else {
 		this.stop()
+	}
 }
 
 Player.prototype.getVideoTracks = function() {
