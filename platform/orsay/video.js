@@ -46,7 +46,6 @@ var Player = function(ui) {
 			ui.error({ "message": msg, "code": arg })
 			break;
 		case 7: //Fired after play was pressed --> or when ready to play?
-			ui.finished()
 			log("Ready to play")
 			var duration = player.dom.Execute("GetDuration") / 1000
 			log("Duration: " + duration)
