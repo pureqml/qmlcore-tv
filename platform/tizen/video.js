@@ -162,10 +162,11 @@ Player.prototype.playImpl = function() {
 		log("Current state: " + avplay.getState());
 		log("prepare complete source", ui.source);
 		self.updateDuration()
-		ui.ready = avplay.getState() === "READY"
-		log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
+		var ready = avplay.getState() === "READY"
 		if (ui.autoPlay)
 			self.play()
+		log("prepare complete", ui.ready, "autoplay", ui.autoPlay);
+		ui.ready = ready
 	})
 }
 
