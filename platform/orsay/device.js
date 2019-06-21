@@ -1,7 +1,7 @@
 var Device = function(ui) {
 	var deviceId
-	if (webapis && webapis.tv) {
-		var info = webapis.tv.info
+	if (window.webapis && window.webapis.tv) {
+		var info = window.webapis.tv.info
 		if (info) {
 			deviceId = info.getDeviceID()
 			ui.modelName = info.getModel()
