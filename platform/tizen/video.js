@@ -16,6 +16,7 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	var self = this
+	this.ui.setStartPosition = function(pos) { self._startPosition = pos * 1000 }.bind(this)
 	var context = ui._context
 	this._listener = {
 		onbufferingstart : this.wrapCallback(function() {
@@ -154,8 +155,14 @@ Player.prototype.playImpl = function() {
 		}
 	}
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
-	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying)
+	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying, "startPos", this._startPosition)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
+
+	if (this._startPosition) {
+		avplay.seekTo(this._startPosition, function(res) {log("seeked on start")},function(err){log("failed to seek on start",e)});
+		this._startPosition = 0
+	}
+
 	log("playImpl prepare")
 	var self = this
 	avplay.prepareAsync(function() {
