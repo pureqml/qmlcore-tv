@@ -295,8 +295,11 @@ Player.prototype.setAudioTrack = function(trackId) {
 	})
 
 	log("Try to set audio track", found)
-	if (found && found.length)
+	if (found && found.length) {
+		log("Seek after audio state", avplay.getState())
 		avplay.setSelectTrack('AUDIO', parseInt(found[0].index));
+		this.seek(1)
+	}
 }
 
 Player.prototype.setVideoTrack = function(trackId) {
