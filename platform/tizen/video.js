@@ -22,6 +22,7 @@ var Player = function(ui) {
 		onbufferingstart : this.wrapCallback(function() {
 			log("onbufferingstart")
 			self.ui.waiting = true
+			self.ui.seeking = true
 		}),
 		onbufferingprogress : this.wrapCallback(function(percent) {
 			log("onbufferingprogress")
@@ -33,7 +34,6 @@ var Player = function(ui) {
 			self.ui.waiting = false
 		}),
 		oncurrentplaytime : this.wrapCallback(function(currentTime) {
-			self.ui.seeking = false
 			if (currentTime)
 				self.ui.waiting = false
 			self.updateCurrentTime(currentTime);
