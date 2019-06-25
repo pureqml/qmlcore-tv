@@ -139,10 +139,7 @@ Player.prototype.setDrmSource = function(source) {
 	var mediaOption = encodeURIComponent(JSON.stringify(options));
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
-	sourceElement.setAttribute('src', source);
-
-	// sourceElement.setAttribute('type', type);
-	// mediaOption are needed according documentation but it doesnt work for some streams
+	sourceElement.setAttribute('src', source + (ui.startPosition ? "#t=" + ui.startPosition : ""));
 	sourceElement.setAttribute('type', type + ';mediaOption=' + mediaOption);
 
 	if (!this._sourceElement)
@@ -194,10 +191,11 @@ Player.prototype.setVideoTrack = function(trackId) {
 		log("Track with id", trackId, "not found")
 		return
 	}
-	this.ui.waiting = true
+	var ui = this.ui
+	ui.waiting = true
 	var progress = this.ui.progress
 	log("Set video", this._videoTracks[trackId])
-	this.element.dom.src = this._videoTracks[trackId].url
+	this.element.dom.src = this._videoTracks[trackId].url + (ui.startPosition ? "#t=" + ui.startPosition : "")
 	this._seekAfterSwitchProgress = progress
 }
 
@@ -205,7 +203,7 @@ Player.prototype.playOptionType = function(source, type) {
 	log("playOptionType", type, "Src", source)
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
-	sourceElement.setAttribute('src', source);
+	sourceElement.setAttribute('src', source + (ui.startPosition ? "#t=" + ui.startPosition : ""));
 	sourceElement.setAttribute('type', type);
 
 	if (!this._sourceElement)
@@ -236,10 +234,11 @@ Player.prototype.getFileExtension = function(filePath) {
 }
 
 Player.prototype.setSource = function(url) {
-	this.ui.ready = false
-	this.ui.seeking = false
-	this.ui.waiting = false
-	this.ui.duration = 0
+	var ui = this.ui
+	ui.ready = false
+	ui.seeking = false
+	ui.waiting = false
+	ui.duration = 0
 	this._extension = this.getFileExtension(url)
 	log("Set source", url, "ext", this._extension)
 
@@ -254,11 +253,11 @@ Player.prototype.setSource = function(url) {
 			this._xhr.open('GET', url);
 			this._xhr.send()
 		}
-		this.element.dom.src = url
+		this.element.dom.src = url + (ui.startPosition ? "#t=" + ui.startPosition : "")
 	} else if (this._extension.indexOf("manifest") >= 0) {
 		this.playSmoothStreamsingUrl(url)
 	} else {
-		this.element.dom.src = url
+		this.element.dom.src = url + (ui.startPosition ? "#t=" + ui.startPosition : "")
 	}
 }
 
