@@ -239,6 +239,7 @@ Player.prototype.setSource = function(url) {
 	this.ui.ready = false
 	this.ui.seeking = false
 	this.ui.waiting = false
+	this.ui.duration = 0
 	this._extension = this.getFileExtension(url)
 	log("Set source", url, "ext", this._extension)
 
