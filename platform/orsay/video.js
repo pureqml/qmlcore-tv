@@ -157,7 +157,7 @@ Player.prototype.play = function() {
 
 	ui.waiting = true
 	log("calling StartPlayback")
-	log("StartPlayback returns", player.Execute("StartPlayback")) // HINT: can be started from second via second argument: Execute('StartPlayback', secondInt);
+	log("StartPlayback returns", player.Execute("StartPlayback", ui.startPosition))
 }
 
 Player.prototype.stop = function() {
