@@ -185,6 +185,8 @@ Player.prototype.stateChangedHandler = function(state) {
 		this.timeUpdater = null
 	} else if (state === 1) {
 		log("playing")
+		if (this.ui.startPosition)
+			this.seek(this.ui.startPosition)
 		this.ui.ready = true
 		this.ui.paused = false
 		this.ui.waiting = false
