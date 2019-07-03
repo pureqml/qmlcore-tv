@@ -9,6 +9,9 @@ var Player = function(ui) {
 	this.ui = ui
 	this.setEventListeners()
 
+	this._startBitrate = 0
+	ui.setStartBitrate = function(bitrate) { self._startBitrate = bitrate }.bind(this)
+
 	player.on('canplay', function() {
 		log("canplay", dom.readyState);
 		ui.ready = dom.readyState;
@@ -136,6 +139,12 @@ Player.prototype.setDrmSource = function(source) {
 		options.option.drm.clientId = this._drmClientId;
 	}
 
+	if (this._startBitrate) {
+		options.option.adaptiveStreaming = { }
+		options.option.adaptiveStreaming.bps = { }
+		options.option.adaptiveStreaming.bps.start = this._startBitrate
+	}
+
 	var mediaOption = encodeURIComponent(JSON.stringify(options));
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
@@ -203,8 +212,20 @@ Player.prototype.playOptionType = function(source, type) {
 	log("playOptionType", type, "Src", source)
 	var ui = this.ui
 	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
+
+	var mediaOption = ""
+	if (this._startBitrate) {
+		var options = {};
+		options.option = {};
+		options.option.drm = {};
+		options.option.adaptiveStreaming = { }
+		options.option.adaptiveStreaming.bps = { }
+		options.option.adaptiveStreaming.bps.start = this._startBitrate
+		mediaOption = encodeURIComponent(JSON.stringify(options));
+	}
+
 	sourceElement.setAttribute('src', source + (ui.startPosition ? "#t=" + ui.startPosition : ""));
-	sourceElement.setAttribute('type', type);
+	sourceElement.setAttribute('type', type + (mediaOption ? ';mediaOption=' + mediaOption : ""));
 
 	if (!this._sourceElement)
 		ui.element.append(sourceElement);
