@@ -80,11 +80,11 @@ Player.prototype.setSource = function(url) {
 
 	var self = this
 	var ui = this.ui
-	this.player.dom.onPlayStateChange = function() {
-		log("dom.onPlayStateChange"); log("STATE", self.player.dom.playState)
+	this.player.dom.onPlayStateChange = this.wrapCallback(function() {
+		log("dom.onPlayStateChange", self.player.dom.playState)
 		self.wrapCallback(self.stateChangedHandler(self.player.dom.playState).bind(self)).bind(self)
-	}
-	this.player.dom.onBuffering = function() { log("onBuffering") }
+	})
+	this.player.dom.onBuffering = this.wrapCallback(function() { log("onBuffering") })
 
 	if (this._drm) {
 		var drm = this._drm
@@ -193,7 +193,7 @@ Player.prototype.stateChangedHandler = function(state) {
 		this.ui.duration = this.player.dom.playTime * 1.0 / 1000
 		if (!this.timeUpdater) {
 			var self = this
-			this.timeUpdater = setInterval(function() { self.ui.progress = self.player.dom.playPosition * 1.0 / 1000;  }, 500)
+			this.timeUpdater = setInterval(this.wrapCallback(function() { self.ui.progress = self.player.dom.playPosition * 1.0 / 1000;  }), 500)
 		}
 	} else if (state === 2) {
 		log("paused")
