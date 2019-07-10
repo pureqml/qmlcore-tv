@@ -73,6 +73,7 @@ Player.prototype.setSource = function(url) {
 	log("SetSource", url)
 	var extension = this.getFileExtension(url)
 	this.ui.ready = false
+	this._startPosition = this.ui.startPosition
 
 	var type = extension.indexOf("manifest") >= 0 ? "application/vnd.ms-sstr+xml" : "application/x-netcast-av"
 	log("Type", type, "Extension", extension)
@@ -169,8 +170,8 @@ Player.prototype.setSource = function(url) {
 			log("DRM type", drm.type, "not supported")
 		}
 	} else {
-		log("Play", url)
-		this.player.dom.setAttribute("data", url)
+		log("Play", url, "Auto", ui.autoPlay)
+		this.player.dom.data = url
 		if (ui.autoPlay)
 			this.player.dom.play(1)
 	}
@@ -180,13 +181,15 @@ Player.prototype.stateChangedHandler = function(state) {
 	log("stateChangedHandler", state)
 	if (state === 0) {
 		log("stopped")
-		this.ui.finished();
 		this.ui.ready = false
 		this.timeUpdater = null
 	} else if (state === 1) {
 		log("playing")
-		if (this.ui.startPosition)
-			this.seek(this.ui.startPosition)
+		if (this._startPosition) {
+			log("Seek to start pos", this._startPosition)
+			this.seekTo(this._startPosition)
+			this._startPosition = 0
+		}
 		this.ui.ready = true
 		this.ui.paused = false
 		this.ui.waiting = false
