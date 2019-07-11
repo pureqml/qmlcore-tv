@@ -75,7 +75,7 @@ Player.prototype.setSource = function(url) {
 	this.ui.ready = false
 	this._startPosition = this.ui.startPosition
 
-	var type = extension.indexOf("manifest") >= 0 ? "application/vnd.ms-sstr+xml" : "application/x-netcast-av"
+	var type = extension.indexOf(".ism/manifest") >= 0 || extension.indexOf(".isml/manifest") >= 0 ? "application/vnd.ms-sstr+xml" : "application/x-netcast-av"
 	log("Type", type, "Extension", extension)
 	this.player.dom.setAttribute("type", type)
 
