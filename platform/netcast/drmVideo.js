@@ -111,12 +111,14 @@ Player.prototype.setSource = function(url) {
 				log("ERROR DRM plugin not found")
 				return
 			}
+			drmPlugin.onDRMRightsError = this.wrapCallback(function(err) { log("onDRMRightsError", err) })
 			drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
 				log("onDRMMessageResult", resultCode)
 				if (resultCode == 0) {
-					log("Play with DRM", url)
-					self.player.dom.setAttribute("data", url)
-					self.player.dom.play(1)
+					log("Play with Playready DRM", url)
+					self.player.dom.data = url
+					if (ui.autoPlay)
+						self.player.dom.play(1)
 				} else {
 					log("onDRMMessageResult failed. error:" + resultCode);
 					self.drmError(resultCode, resultMsg);
