@@ -158,7 +158,7 @@ Player.prototype.playImpl = function() {
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
 
 	if (ui.startPosition)
-		avplay.seekTo(ui.startPosition, function(res) {log("seeked on start")},function(err){log("failed to seek on start",e)});
+		avplay.seekTo(ui.startPosition * 1000, function() { log("seeked on start") }, function(err) { log("failed to seek on start",err) });
 
 	log("playImpl prepare")
 	var self = this
