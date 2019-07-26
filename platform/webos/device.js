@@ -93,6 +93,16 @@ Device.prototype.fillSystemInfo = function(info) {
 	this._ui.firmware = info.firmwareVersion
 	this._ui.modelName = info.modelName
 	this._ui.sdk = info.sdkVersion
+
+	if (window.PalmSystem) {
+		this._ui.language = window.PalmSystem.locale
+		if (window.PalmSystem.country) {
+			try {
+				var country = JSON.parse(window.PalmSystem.country)
+				this._ui.country = country.country
+			} catch(e) { }
+		}
+	}
 }
 
 exports.createDevice = function(ui) {
