@@ -404,6 +404,7 @@ Player.prototype.seekTo = function(tp) {
 	}
 	log("Seek to", tp, this.ui.progress)
 	this.ui.seeking = true
+	this.ui.progress = tp
 	avplay.seekTo(tp * 1000)
 }
 
