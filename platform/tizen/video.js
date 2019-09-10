@@ -44,7 +44,7 @@ var Player = function(ui) {
 		onerror : this.wrapCallback(function(eventType) {
 			log("error type: " + eventType);
 			self.ui.ready = false
-			self.ui.error(eventType)
+			self.ui.error({ "type": eventType, "message": eventType })
 		}),
 		onsubtitlechange : this.wrapCallback(function(duration, text, data3, data4) {
 			log("Subtitle Changed.");
@@ -58,7 +58,10 @@ var Player = function(ui) {
 		onstreamcompleted : this.wrapCallback(function(e) {
 			if (ui.progress < ui.duration - 1) {
 				log("Unexpected ending, seek forward then")
-				self.seekTo(ui.progress + 1)
+				self.ui.error({
+					"type": "PLAYER_ERROR_UNEXPECTED_ENDING",
+					"message": "Unexpected ending. Progress is " + ui.progress + " but duration is " + ui.duration
+				})
 				return
 			}
 
