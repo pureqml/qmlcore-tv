@@ -57,7 +57,7 @@ var Player = function(ui) {
 		}),
 		onstreamcompleted : this.wrapCallback(function(e) {
 			if (ui.progress < ui.duration - 1) {
-				log("Unexpected ending, seek forward then")
+				log("Unexpected ending error occured")
 				self.ui.error({
 					"type": "PLAYER_ERROR_UNEXPECTED_ENDING",
 					"message": "Unexpected ending. Progress is " + ui.progress + " but duration is " + ui.duration
