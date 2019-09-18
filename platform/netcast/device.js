@@ -9,6 +9,12 @@ var Device = function(ui) {
 	ui.sdk = this.getDeviceProperty("SDKVersion")
 	ui.language = this.getDeviceProperty("tvLanguage2")
 	ui.country = this.getDeviceProperty("tvCountry2")
+
+	var self = this
+	ui.isConnected = function() { return self.getDeviceProperty("net_isConnected") }
+	ui.hasIP = function() { return self.getDeviceProperty("net_hasIP") }
+	ui.netIpAddress = function() { return self.getDeviceProperty("net_ipAddress") }
+	ui.networkType = function() { return self.getDeviceProperty("networkType") }
 }
 
 //Supported properties:
