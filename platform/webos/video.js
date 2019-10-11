@@ -470,5 +470,5 @@ exports.createPlayer = function(ui) {
 }
 
 exports.probeUrl = function(url) {
-	return 75
+	return 175
 }
