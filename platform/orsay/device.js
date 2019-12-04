@@ -21,7 +21,7 @@ var Device = function(ui) {
 
 	var network = document.getElementById("pluginObjectNetwork")
 	if (network)
-		ui.macAddess = network.GetMAC(0) || network.GetMAC(1)
+		ui.macAddress = network.GetMAC(0) || network.GetMAC(1)
 	else
 		log("Network plugin object not defined")
 }
