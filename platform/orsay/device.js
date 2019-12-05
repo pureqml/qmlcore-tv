@@ -15,12 +15,12 @@ var Device = function(ui) {
 		for (var i in info)
 			log(i + " = " + info[i])
 	} else {
-		log('webapis is undefiined perhabs you forget to add <script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/webapi/1.0/webapis.js"></script>')
+		log('window.webapis is undefined, perhaps you missed <script type="text/javascript" language="javascript" src="$MANAGER_WIDGET/Common/webapi/1.0/webapis.js"></script>')
 	}
 	ui.deviceId = deviceId ? deviceId : "orsay_" + Math.random().toString(36).substr(2, 9)
 
 	var network = document.getElementById("pluginObjectNetwork")
-	if (network)
+	if (network && network.GetMAC)
 		ui.macAddress = network.GetMAC(0) || network.GetMAC(1)
 	else
 		log("Network plugin object not defined")
