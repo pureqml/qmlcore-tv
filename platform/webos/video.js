@@ -31,7 +31,11 @@ var Player = function(ui) {
 
 	ui._context.document.on('visibilitychange', function() {
 		if (self._drmClientId && document.hidden) {
-			self.unloadDrmClient()
+			self.unloadDrmClient(
+				self._drmClientId,
+				function() { log("DRM client unloaded") },
+				function(e) { log("Failed to unload DRM client", e) }
+			)
 		}
 	})
 }
