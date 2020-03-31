@@ -32,7 +32,7 @@ def build(app, title, release):
 
 	os.system('cordova plugin add https://github.com/comrat/Cordova-Android-TV-Plugin')
 	os.system('cordova plugin add cordova-plugin-device')
-	os.system('cordova plugin add cordova-plugin-exoplayer')
+	os.system('cordova plugin add https://github.com/comrat/cordova-plugin-exoplayer')
 	{% block plugins %}{% endblock %}
 
 	if release:
