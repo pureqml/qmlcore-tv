@@ -13,6 +13,8 @@ var Player = function(ui) {
 
 Player.prototype.setSource = function(value) {
 	log("set source", value)
+	if (this._ui.autoPlay)
+		this.play()
 }
 
 Player.prototype.setOption = function(name, value) {
