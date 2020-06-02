@@ -1,5 +1,6 @@
 {
 	"strict": false,
 	"templates": ["*.html", "lgconfig.xml"],
+	"templater": "jinja2",
 	"requires": ["video.html5"]
 }
