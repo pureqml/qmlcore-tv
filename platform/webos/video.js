@@ -27,7 +27,7 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	this._xhr = new XMLHttpRequest()
-	this._xhr.addEventListener('load', this.parseManifest.bind(this))
+	this._xhr.addEventListener('load', ui._context.wrapNativeCallback(this.parseManifest.bind(this)))
 
 	ui._context.document.on('visibilitychange', function() {
 		if (self._drmClientId && document.hidden) {
