@@ -33,6 +33,8 @@ var Player = function(ui) {
 			self.ui.waiting = false
 		}),
 		oncurrentplaytime : this.wrapCallback(function(currentTime) {
+			if (currentTime)
+				self.ui.waiting = false
 			self.ui.ready = true
 			self.updateCurrentTime(currentTime);
 		}),
@@ -348,8 +350,23 @@ Player.prototype.setVisibility = function(visible) {
 	}
 
 	log("setVisibility", visible, "state", avplay.getState())
-	if (!visible) {
+	if (visible) {
+		log("Check suspend state", this._suspendState)
+		if (this._suspendState) {
+			var state = this._suspendState
+			try {
+				avplay.restore(state.url, state.progress)
+			} catch (e) {
+				log("Failed to restore")
+			}
+		}
+		this._suspendState = null
+	} else {
 		try {
+			this._suspendState = {
+				progress: this.ui.progress,
+				url: this.ui.source
+			}
 			avplay.suspend()
 		} catch (e) {
 			log("Failed to suspend avplay", e)
