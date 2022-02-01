@@ -355,7 +355,7 @@ Player.prototype.setVisibility = function(visible) {
 		if (this._suspendState) {
 			var state = this._suspendState
 			try {
-				avplay.restore(state.url, state.progress)
+				avplay.restore(state.url, state.progress * 1000)
 			} catch (e) {
 				log("Failed to restore")
 			}
