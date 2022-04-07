@@ -117,6 +117,11 @@ Player.prototype.setSource = function(value) {
 		this._drmRequired = false
 	else
 		this._drm = null
+
+	if (this._suspendState) {
+		this._suspendState.url = value
+		this._suspendState.progress = ui.startPosition
+	}
 	this.playImpl()
 }
 
@@ -341,7 +346,6 @@ Player.prototype.setVideoTrack = function(trackId) {
 		this.seekTo(prevProgress)
 }
 
-//fixme: move this logic to core?
 Player.prototype.setVisibility = function(visible) {
 	var avplay = this.getAVPlay()
 	if (!avplay) {
