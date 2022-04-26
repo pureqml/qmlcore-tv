@@ -120,7 +120,7 @@ Player.prototype.setSource = function(value) {
 
 	if (this._suspendState) {
 		this._suspendState.url = value
-		this._suspendState.progress = ui.startPosition
+		this._suspendState.progress = this.ui.startPosition
 	}
 	this.playImpl()
 }
