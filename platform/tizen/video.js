@@ -431,11 +431,12 @@ Player.prototype.seekTo = function(tp) {
 }
 
 Player.prototype.setVolume = function(volume) {
-	log("Not implemented")
+	window.tizen.tvaudiocontrol.setVolume(100 * volume)
 }
 
 Player.prototype.setMute = function(muted) {
-	log("Not implemented")
+	window.tizen.tvaudiocontrol.setMute(muted)
+	this.ui.muted = muted
 }
 
 Player.prototype.setRect = function(l, t, r, b) {
