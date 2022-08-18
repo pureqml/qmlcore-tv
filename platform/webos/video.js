@@ -243,6 +243,10 @@ Player.prototype.playDashUrl = function(source) {
 	this.playOptionType(source, "application/dash+xml");
 }
 
+Player.prototype.playMp4 = function(source) {
+	this.playOptionType(source, "video/mp4");
+}
+
 Player.prototype.playSmoothStreamsingUrl = function(source) {
 	this.playOptionType(source, "application/vnd.ms-sstr+xml");
 }
@@ -273,6 +277,8 @@ Player.prototype.setSource = function(url) {
 		this.setDrmSource(url)
 	} else if (this._extension === ".mpd") {
 		this.playDashUrl(url)
+	} else if (this._extension === ".mp4") {
+		this.playMp4(url)
 	} else if (this._extension === ".m3u8" || this._extension === ".m3u") {
 		if (url) {
 			this._xhr.open('GET', url);
