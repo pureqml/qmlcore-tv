@@ -16,6 +16,7 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	var self = this
+	ui.setNotSuspendFlag = function(value) { self._notSuspend = value }.bind(this)
 	var context = ui._context
 	this._listener = {
 		onbufferingstart : this.wrapCallback(function() {
@@ -353,7 +354,10 @@ Player.prototype.setVisibility = function(visible) {
 		return
 	}
 
-	log("setVisibility", visible, "state", avplay.getState())
+	log("setVisibility", visible, "state", avplay.getState(), "notsuspend", this._notSuspend)
+	if (this._notSuspend)
+		return
+
 	if (visible) {
 		log("Check suspend state", this._suspendState)
 		if (this._suspendState) {
