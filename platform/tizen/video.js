@@ -435,7 +435,8 @@ Player.prototype.seekTo = function(tp) {
 }
 
 Player.prototype.setVolume = function(volume) {
-	window.tizen.tvaudiocontrol.setVolume(100 * volume)
+	// TODO: its set to max the system volume
+	// window.tizen.tvaudiocontrol.setVolume(volume)
 }
 
 Player.prototype.setMute = function(muted) {
