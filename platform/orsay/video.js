@@ -201,14 +201,12 @@ Player.prototype.setRect = function(l, t, r, b) {
 }
 
 Player.prototype.setVisibility = function(visible) {
-	log('videoplayer setVisibility', visible, "exec", this.player.dom.Execute)
+	log('videoplayer setVisibility', visible)
 	this.visible = visible
-	if (visible) {
-		if (this.source != this.ui.source)
-			this.setSource(this.ui.source)
-	} else {
+	if (visible)
+		this.setSource(this.ui.source)
+	else
 		this.stop()
-	}
 }
 
 Player.prototype.getVideoTracks = function() {
