@@ -1,8 +1,12 @@
 _globals.core.__deviceBackend = function() { return _globals.netcast.device }
 _globals.core.__videoBackends.netcast = function() { return _globals.netcast.drmVideo }
 
-// log = console.log.bind(console)
-log = function(args) { console.log(args) }
+log = function(dummy) {
+	COPY_ARGS(args, 0)
+	logger = document.getElementById("logger") || undefined
+	if (logger)
+		logger.innerHTML += args.join(" ") + "<br>"
+}
 
 log("NetCast detected")
 exports.core.vendor = "LG"

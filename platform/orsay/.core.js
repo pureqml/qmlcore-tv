@@ -7,7 +7,9 @@ var pluginAPI
 
 log = function(dummy) {
 	COPY_ARGS(args, 0)
-	alert("[QML] " + args.join(" "))
+	logger = document.getElementById("logger") || undefined
+	if (logger)
+		logger.innerHTML += args.join(" ") + "<br>"
 }
 
 if ('Common' in window) {
