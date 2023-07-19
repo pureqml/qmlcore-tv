@@ -35,6 +35,8 @@ if ('Common' in window) {
 		pluginAPI.unregistKey(tvKey.KEY_VOL_UP);
 		pluginAPI.unregistKey(tvKey.KEY_VOL_DOWN);
 		pluginAPI.unregistKey(tvKey.KEY_MUTE);
+		pluginAPI.unregistKey(tvKey.KEY_CH_UP);
+		pluginAPI.unregistKey(tvKey.KEY_CH_DOWN);
 		log("plugin ok, sending ready", context)
 		context._processActions();
 	}
