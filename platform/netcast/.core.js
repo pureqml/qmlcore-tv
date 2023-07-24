@@ -9,7 +9,8 @@ exports.core.vendor = "LG"
 exports.core.device = 1
 exports.core.os = "netcast"
 
-document.body.innerHTML = "<object id='device' type='application/x-netcast-info'></object>"
+var body = document.body.innerHTML
+document.body.innerHTML += body + "<object id='device' type='application/x-netcast-info'></object>"
 document.body.innerHTML += "<object id='drmplugin' type='application/oipfDrmAgent' style='visibility:hidden' width='0' height='0'></object>"
 
 exports.core.keyCodes = {
