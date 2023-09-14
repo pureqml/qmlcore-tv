@@ -1,10 +1,13 @@
 _globals.core.__deviceBackend = function() { return _globals.hisense.device }
+_globals.core.__videoBackends.hisense = function() { return _globals.hisense.video }
 
 log = console.log.bind(console)
 log("Hisense detected")
 exports.core.os = "hisense"
 exports.core.vendor = "Hisense"
 exports.core.device = 1
+
+document.body.innerHTML += "<object id='drmplugin' type='application/oipfDrmAgent' style='visibility:hidden' width='0' height='0'></object>"
 
 exports.core.keyCodes = {
 	8: 'Back',
