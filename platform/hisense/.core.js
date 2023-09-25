@@ -75,10 +75,10 @@ exports.closeApp = function() {
 	window.close()
 }
 
-document.addEventListener("click", handler, true);
-function handler(e){
-	e.stopPropagation();
-	e.preventDefault();
-}
+// document.addEventListener("click", handler, true);
+// function handler(e){
+// 	e.stopPropagation();
+// 	e.preventDefault();
+// }
 
 log("Hisense initialized")
