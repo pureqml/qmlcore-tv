@@ -54,6 +54,11 @@ Player.prototype.wrapCallback = function(callback) {
 	return this.ui._context.wrapNativeCallback(callback)
 }
 
+Player.prototype.setSourceImpl = function(url) {
+	var ui = this.ui
+	this.player.dom.src = url + (ui.startPosition ? "#t=" + ui.startPosition : "")
+}
+
 Player.prototype.setSource = function(url) {
 	log("SetSource", url)
 	var extension = this.getFileExtension(url)
@@ -105,7 +110,7 @@ Player.prototype.setSource = function(url) {
 				log("onDRMMessageResult", resultCode)
 				if (resultCode == 0) {
 					log("Play with Playready DRM", url)
-					self.player.dom.src = url
+					self.setSourceImpl(url)
 					if (ui.autoPlay)
 						self.player.dom.play()
 				} else {
@@ -117,13 +122,13 @@ Player.prototype.setSource = function(url) {
 			var result = drmPlugin.sendDRMMessage(msgType, msg, drmSystemID);
 			log("DRM message result: ", result)
 			log("Play with Playready DRM", url)
-			self.player.dom.src = url
+			self.setSourceImpl(url)
 		} else {
 			log("DRM type", drm.type, "not supported")
 		}
 	} else {
 		log("Play", url, "Auto", ui.autoPlay)
-		this.player.dom.src = url
+		this.setSourceImpl(url)
 		if (ui.autoPlay)
 			this.player.dom.play()
 	}
