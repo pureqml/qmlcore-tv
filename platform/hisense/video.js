@@ -56,14 +56,16 @@ Player.prototype.wrapCallback = function(callback) {
 
 Player.prototype.setSourceImpl = function(url) {
 	var ui = this.ui
-	this.player.dom.src = url + (ui.startPosition ? "#t=" + ui.startPosition : "")
+	this.player.dom.src = url
+	log("setSourceImpl startPostion", ui.startPosition)
+	if (ui.startPosition)
+		this.seekTo(ui.startPosition)
 }
 
 Player.prototype.setSource = function(url) {
 	log("SetSource", url)
 	var extension = this.getFileExtension(url)
 	this.ui.ready = false
-	this._startPosition = this.ui.startPosition
 
 	var type = ""
 	if (extension.indexOf(".ism/manifest") >= 0 || extension.indexOf(".isml/manifest") >= 0) {
