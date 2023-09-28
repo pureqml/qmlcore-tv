@@ -7,18 +7,6 @@ var Player = function(ui) {
 	this.ui = ui
 	this.setEventListeners()
 
-	var player = this.element
-	var self = this
-	player.on('canplay', function() {
-		log("hisense canplay", dom.readyState);
-		ui.ready = true
-		log("startPostion", ui.startPosition, "ready", ui.ready)
-		if (ui.ready && ui.startPosition) {
-			log("seekto startPostion", ui.startPosition)
-			self.seekTo(ui.startPosition)
-		}
-	}.bind(ui))
-
 	ui.element.remove()
 	ui.element = player
 	ui.parent.element.append(ui.element)
@@ -69,6 +57,9 @@ Player.prototype.wrapCallback = function(callback) {
 Player.prototype.setSourceImpl = function(url) {
 	var ui = this.ui
 	this.player.dom.src = url
+	log("setSourceImpl url", url, "startPostion", ui.startPosition)
+	if (url && ui.startPosition)
+		this.seekTo(ui.startPosition)
 }
 
 Player.prototype.setSource = function(url) {
