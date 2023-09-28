@@ -56,30 +56,29 @@ Player.prototype.wrapCallback = function(callback) {
 
 Player.prototype.setSourceImpl = function(url) {
 	var ui = this.ui
-	var type = ""
-	if (extension.indexOf(".ism/manifest") >= 0 || extension.indexOf(".isml/manifest") >= 0)
-		type = "application/vnd.ms-sstr+xml"
-	else if (extension.indexOf(".mpd") >= 0)
-		type = "application/dash+xml"
-	else
-		type = "application/vnd.apple.mpegurl"
-
-	log("Type", type, "Extension", extension)
-	var urlWithStart = url + (ui.startPosition ? "#t=" + ui.startPosition : "")
-	var sourceElement = this._sourceElement ? this._sourceElement : ui._context.createElement('source')
-	sourceElement.setAttribute('src', urlWithStart)
-	sourceElement.setAttribute('type', type)
-	log("Source src: ", urlWithStart)
-
-	if (!this._sourceElement)
-		ui.element.append(sourceElement);
-	this._sourceElement = sourceElement
+	this.player.dom.src = url
+	log("setSourceImpl startPostion", ui.startPosition)
+	if (ui.startPosition)
+		this.seekTo(ui.startPosition)
 }
 
 Player.prototype.setSource = function(url) {
 	log("SetSource", url)
 	var extension = this.getFileExtension(url)
 	this.ui.ready = false
+
+	var type = ""
+	if (extension.indexOf(".ism/manifest") >= 0 || extension.indexOf(".isml/manifest") >= 0) {
+		type = "application/vnd.ms-sstr+xml"
+	} else if (extension.indexOf(".mpd") >= 0) {
+		type = "application/dash+xml"
+	} else {
+		type = "application/vnd.apple.mpegurl"
+	}
+
+	log("Type", type, "Extension", extension)
+	this.player.dom.setAttribute("type", type)
+
 	var self = this
 	var ui = this.ui
 
@@ -114,10 +113,8 @@ Player.prototype.setSource = function(url) {
 				if (resultCode == 0) {
 					log("Play with Playready DRM", url)
 					self.setSourceImpl(url)
-					if (ui.autoPlay) {
-						self.element.dom.load()
-						self.element.dom.play()
-					}
+					if (ui.autoPlay)
+						self.player.dom.play()
 				} else {
 					log("onDRMMessageResult failed. error:" + resultCode);
 					self.drmError(resultCode, resultMsg);
@@ -134,10 +131,8 @@ Player.prototype.setSource = function(url) {
 	} else {
 		log("Play", url, "Auto", ui.autoPlay)
 		this.setSourceImpl(url)
-		if (ui.autoPlay) {
-			this.element.dom.load()
-			this.element.dom.play()
-		}
+		if (ui.autoPlay)
+			this.player.dom.play()
 	}
 }
 
