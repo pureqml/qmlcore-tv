@@ -57,6 +57,7 @@ Player.prototype.wrapCallback = function(callback) {
 Player.prototype.setSourceImpl = function(url) {
 	var ui = this.ui
 	var type = ""
+	var extension = this.getFileExtension(url)
 	if (extension.indexOf(".ism/manifest") >= 0 || extension.indexOf(".isml/manifest") >= 0)
 		type = "application/vnd.ms-sstr+xml"
 	else if (extension.indexOf(".mpd") >= 0)
@@ -78,7 +79,6 @@ Player.prototype.setSourceImpl = function(url) {
 
 Player.prototype.setSource = function(url) {
 	log("SetSource", url)
-	var extension = this.getFileExtension(url)
 	this.ui.ready = false
 	var self = this
 	var ui = this.ui
