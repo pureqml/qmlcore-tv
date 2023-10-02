@@ -106,23 +106,25 @@ Player.prototype.setSource = function(url) {
 				return
 			}
 			drmPlugin.onDRMRightsError = this.wrapCallback(function(err) { log("onDRMRightsError", err) })
-			drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
-				log("onDRMMessageResult", resultCode)
-				if (resultCode == 0) {
-					log("Play with Playready DRM", url)
-					self.setSourceImpl(url)
-					if (ui.autoPlay)
-						self.player.dom.play()
-				} else {
-					log("onDRMMessageResult failed. error:" + resultCode);
-					self.drmError(resultCode, resultMsg);
-				}
-			})
+			// drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
+			// 	log("onDRMMessageResult", resultCode)
+			// 	if (resultCode == 0) {
+			// 		log("Play with Playready DRM", url)
+			// 		self.setSourceImpl(url)
+			// 		if (ui.autoPlay)
+			// 			self.player.dom.play()
+			// 	} else {
+			// 		log("onDRMMessageResult failed. error:" + resultCode);
+			// 		self.drmError(resultCode, resultMsg);
+			// 	}
+			// })
 			log("Send DRM message...")
 			var result = drmPlugin.sendDRMMessage(msgType, msg, drmSystemID);
 			log("DRM message result: ", result)
 			log("Play with Playready DRM", url)
 			self.setSourceImpl(url)
+			if (ui.autoPlay)
+				self.player.dom.play()
 		} else {
 			log("DRM type", drm.type, "not supported")
 		}
