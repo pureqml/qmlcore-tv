@@ -10,7 +10,7 @@ var Player = function(ui) {
 	var self = this
 	player.on('loadedmetadata', function() {
 		log("loadedmetadata startPostion", ui.startPosition, "curr", self.element.dom.currentTime)
-		self.element.dom.currentTime = ui.startPositionp
+		self.element.dom.currentTime = ui.startPosition
 		ui.progress = ui.startPositionp
 	}.bind(ui))
 
