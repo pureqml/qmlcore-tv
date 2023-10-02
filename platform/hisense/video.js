@@ -7,13 +7,6 @@ var Player = function(ui) {
 	this.ui = ui
 	this.setEventListeners()
 
-	var self = this
-	player.on('loadedmetadata', function() {
-		log("loadedmetadata startPostion", ui.startPosition, "curr", self.element.dom.currentTime)
-		self.element.dom.currentTime = ui.startPosition
-		ui.progress = ui.startPositionp
-	}.bind(ui))
-
 	ui.element.remove()
 	ui.element = player
 	ui.parent.element.append(ui.element)
