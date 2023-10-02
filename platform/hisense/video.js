@@ -55,7 +55,6 @@ Player.prototype.wrapCallback = function(callback) {
 }
 
 Player.prototype.setSourceImpl = function(url) {
-	var ui = this.ui
 	this.player.dom.src = url
 	log("setSourceImpl url", url)
 }
@@ -79,61 +78,10 @@ Player.prototype.setSource = function(url) {
 
 	var self = this
 	var ui = this.ui
-
-	log("DRM", this._drm)
-	if (this._drm) {
-		var drm = this._drm
-		log("Use DRM", JSON.stringify(drm))
-		if (drm.type === "playready") {
-			log("Configure playready")
-			var laServer = drm.options.laServer ? drm.options.laServer : ""
-			var customData = drm.options.customData ? drm.options.customData : ""
-			var msgType = "application/vnd.ms-playready.initiator+xml"
-			var drmSystemID = "urn:dvb:casystemid:19219"
-			var msg = '<?xml version="1.0" encoding="utf-8"?>' +
-				'<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
-					'<LicenseServerUriOverride>' +
-						'<LA_URL>' + laServer + '</LA_URL>' +
-					'</LicenseServerUriOverride>' +
-					'<SetCustomData>' +
-						'<CustomData>'+ customData +'</CustomData>' +
-					'</SetCustomData>' +
-				'</PlayReadyInitiator>'
-
-			var drmPlugin = this.getDrmPlugin()
-			if (!drmPlugin) {
-				log("ERROR DRM plugin not found")
-				return
-			}
-			drmPlugin.onDRMRightsError = this.wrapCallback(function(err) { log("onDRMRightsError", err) })
-			// drmPlugin.onDRMMessageResult = this.wrapCallback(function(msgId, resultMsg, resultCode) {
-			// 	log("onDRMMessageResult", resultCode)
-			// 	if (resultCode == 0) {
-			// 		log("Play with Playready DRM", url)
-			// 		self.setSourceImpl(url)
-			// 		if (ui.autoPlay)
-			// 			self.player.dom.play()
-			// 	} else {
-			// 		log("onDRMMessageResult failed. error:" + resultCode);
-			// 		self.drmError(resultCode, resultMsg);
-			// 	}
-			// })
-			log("Send DRM message...")
-			var result = drmPlugin.sendDRMMessage(msgType, msg, drmSystemID);
-			log("DRM message result: ", result)
-			log("Play with Playready DRM", url)
-			self.setSourceImpl(url)
-			if (ui.autoPlay)
-				self.player.dom.play()
-		} else {
-			log("DRM type", drm.type, "not supported")
-		}
-	} else {
-		log("Play", url, "Auto", ui.autoPlay)
-		this.setSourceImpl(url)
-		if (ui.autoPlay)
-			this.player.dom.play()
-	}
+	log("Play", url, "Auto", ui.autoPlay)
+	this.setSourceImpl(url)
+	if (ui.autoPlay)
+		this.player.dom.play()
 }
 
 Player.prototype.setupDrm = function(type, options, callback, error) {
@@ -144,6 +92,47 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 		this._drm = null
 		log("DRM type:", type, "not supported, try: playready|widevine|verimatrix")
 	}
+
+	var drm = this._drm
+	if (!drm) {
+		error()
+		return
+	}
+
+	log("Use DRM", JSON.stringify(drm))
+	if (drm.type === "playready") {
+		log("Configure playready")
+		var laServer = drm.options.laServer ? drm.options.laServer : ""
+		var customData = drm.options.customData ? drm.options.customData : ""
+		var msgType = "application/vnd.ms-playready.initiator+xml"
+		var drmSystemID = "urn:dvb:casystemid:19219"
+		var msg = '<?xml version="1.0" encoding="utf-8"?>' +
+			'<PlayReadyInitiator xmlns="http://schemas.microsoft.com/DRM/2007/03/protocols/">' +
+				'<LicenseServerUriOverride>' +
+					'<LA_URL>' + laServer + '</LA_URL>' +
+				'</LicenseServerUriOverride>' +
+				'<SetCustomData>' +
+					'<CustomData>'+ customData +'</CustomData>' +
+				'</SetCustomData>' +
+			'</PlayReadyInitiator>'
+
+		var drmPlugin = this.getDrmPlugin()
+		if (!drmPlugin) {
+			log("ERROR DRM plugin not found")
+			error()
+			return
+		}
+		log("Send DRM message...")
+		var result = drmPlugin.sendDRMMessage(msgType, msg, drmSystemID)
+		log("DRM message result: ", result)
+		if (result != 0) {
+			log("onDRMMessageResult failed. error:" + result)
+			this.drmError(result)
+		}
+	} else {
+		log("DRM type", drm.type, "not supported")
+	}
+
 	callback()
 }
 
