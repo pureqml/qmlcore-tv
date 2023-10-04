@@ -56,9 +56,7 @@ Player.prototype.wrapCallback = function(callback) {
 
 Player.prototype.setSourceImpl = function(url) {
 	this.player.dom.src = url
-	log("setSourceImpl url", url, "start", this.ui.startPosition)
-	if (this.ui.startPosition)
-		this.seekTo(this.ui.startPosition)
+	log("setSourceImpl url", url)
 }
 
 Player.prototype.setSource = function(url) {
