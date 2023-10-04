@@ -11,6 +11,7 @@ var Player = function(ui) {
 	ui.element = player
 	ui.parent.element.append(ui.element)
 
+	var self = this
 	player.on('loadedmetadata', function() {
 		log("loadedmetadata startPostion", ui.startPosition, "curr", self.element.dom.currentTime)
 		if (ui.startPosition) {
