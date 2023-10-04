@@ -10,6 +10,14 @@ var Player = function(ui) {
 	ui.element.remove()
 	ui.element = player
 	ui.parent.element.append(ui.element)
+
+	player.on('loadedmetadata', function() {
+		log("loadedmetadata startPostion", ui.startPosition, "curr", self.element.dom.currentTime)
+		if (ui.startPosition) {
+			self.element.dom.currentTime = ui.startPosition
+			ui.progress = ui.startPosition
+		}
+	}.bind(ui))
 }
 
 Player.prototype = Object.create(_globals.video.html5.backend.Player.prototype)
@@ -55,8 +63,8 @@ Player.prototype.wrapCallback = function(callback) {
 }
 
 Player.prototype.setSourceImpl = function(url) {
-	this.player.dom.src = url
 	log("setSourceImpl url", url)
+	this.player.dom.src = url
 }
 
 Player.prototype.setSource = function(url) {
