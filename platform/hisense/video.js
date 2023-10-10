@@ -87,10 +87,10 @@ Player.prototype.setSource = function(url) {
 
 	var self = this
 	var ui = this.ui
-	log("Play", url, "Auto", ui.autoPlay)
+	log("Play", url)
 	this.setSourceImpl(url)
-	if (ui.autoPlay)
-		this.player.dom.play()
+	// if (ui.autoPlay)
+	// 	this.player.dom.play()
 }
 
 Player.prototype.setupDrm = function(type, options, callback, error) {
