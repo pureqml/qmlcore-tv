@@ -3,7 +3,7 @@ _globals.core.__videoBackends.hisense = function() { return _globals.hisense.vid
 
 log = console.log.bind(console)
 log("Hisense detected")
-exports.core.os = "VIDAA"
+exports.core.os = "vidaa"
 exports.core.vendor = "Hisense"
 exports.core.device = 1
 
