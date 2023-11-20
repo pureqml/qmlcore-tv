@@ -444,13 +444,13 @@ Player.prototype.setMute = function(muted) {
 	this.ui.muted = muted
 }
 
-Player.prototype.setRect = function(l, t, r, b) {
+Player.prototype.setRect = function(l, t, w, h) {
 	var avplay = this.getAVPlay()
 	if (!avplay) {
 		log("AVPlay was not initialized")
 		return
 	}
-	avplay.setDisplayRect(l, t, r - l, b - t)
+	avplay.setDisplayRect(l, t, w, h)
 }
 
 Player.prototype.setBackgroundColor = function(color) {
