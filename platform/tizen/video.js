@@ -163,7 +163,12 @@ Player.prototype.playImpl = function() {
 			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(this._drmParam));
 		}
 	}
-	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
+
+	if (ui.playerPosX || ui.playerPosY) {
+		avplay.setDisplayRect(ui.playerPosX, ui.playerPosY, ui.width, ui.height);
+	} else {
+		avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
+	}
 	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying, "startPos", ui.startPosition)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
 
