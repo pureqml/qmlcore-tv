@@ -113,11 +113,7 @@ Player.prototype.getAVPlay = function() {
 Player.prototype.setSource = function(value) {
 	log("src", value)
 	this.ui.ready = false
-	log("drmRequired", this._drmRequired)
-	if (this._drmRequired && this._drm)
-		this._drmRequired = false
-	else
-		this._drm = null
+	log("drmRequired", this._drm)
 
 	if (this._suspendState) {
 		this._suspendState.url = value
