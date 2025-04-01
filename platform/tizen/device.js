@@ -3,15 +3,21 @@ var Device = function(ui) {
 		log("'window.tizen' not defined")
 		return
 	}
+
+	var webapis = window.webapis
 	this._ui = ui
 	var tizenDeviceId = window.tizen.systeminfo.getCapability("http://tizen.org/system/tizenid")
-	if (!tizenDeviceId)
-		tizenDeviceId = "tizen_" + Math.random().toString(36).substr(2, 9)
+
+	if (!tizenDeviceId) {
+		if (webapis && webapis.productinfo && webapis.productinfo.getDuid)
+			tizenDeviceId = webapis.productinfo.getDuid()
+		else
+			tizenDeviceId = "tizen_" + Math.random().toString(36).substr(2, 9)
+	}
 	ui.deviceId = tizenDeviceId
 
 	window.tizen.systeminfo.getPropertyValue("BUILD", this.fillDeviceInfo.bind(this), function(error) { log("Failed to get devceinfo", error) });
 
-	var webapis = window.webapis
 	if (webapis && webapis.avinfo)
 		ui.supportingHdr = webapis.avinfo.isHdrTvSupport()
 	else
