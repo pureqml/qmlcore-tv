@@ -1,6 +1,5 @@
 {
 	"requires": ["video.html5"],
 	"templates": ["*.html", "appinfo.json"],
-	"templater": "jinja2",
 	"strict": false
 }

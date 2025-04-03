@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns:tizen="http://tizen.org/ns/widgets"
+  xmlns="http://www.w3.org/ns/widgets" id="com.{{ title }}.app" version="1.0.0" viewmodes="maximized">
+  <access origin="*" subdomains="true"></access>
+  <tizen:application id="aG5DHG5Yku.tvigle.{{ title }}" package="aG5DHG5Yku" required_version="2.3"/>
+  <content src="index.html"/>
+  <feature name="http://tizen.org/feature/screen.size.normal.{{ resolutionHeight | default(1080) }}.{{ resolutionWidth | default(1920) }}"/>
+  <feature name="http://tizen.org/feature/network"/>
+    {% block feature %}{% endblock %}
+            <!-- <icon src="icon_{{title}}.png"/> -->
+  <icon src="icon.png"/>
+  <name>{{ title }}</name>
+    {% block privilege %}{% endblock %}
+</widget>

@@ -1,9 +1,9 @@
-_globals.core.__deviceBackend = function() { return _globals.hisense.device }
+_globals.core.__deviceBackend = function() { return _globals.amino.device }
 
 log = console.log.bind(console)
-log("Hisense detected")
-exports.core.os = "hisense"
-exports.core.vendor = "Hisense"
+log("Amino detected")
+exports.core.os = "amino"
+exports.core.vendor = "amino"
 exports.core.device = 1
 
 exports.core.keyCodes = {
@@ -65,17 +65,19 @@ exports.core.keyCodes = {
 	413: 'Stop',
 	415: 'Play',
 	412: 'Rewind',
-	417: 'FastForward'
+	417: 'FastForward',
+	459: "Teletext",
+	457: "Info",
+	462: "Menu",
+	57457: "Menu",
+	57471: "Teletext",
+	57517: "Audio",
+	57521: "Stop",
+	57525: "Record"
 }
 
 exports.closeApp = function() {
 	window.close()
 }
 
-document.addEventListener("click", handler, true);
-function handler(e){
-	e.stopPropagation();
-	e.preventDefault();
-}
-
-log("Hisense initialized")
+log("Amino initialized")

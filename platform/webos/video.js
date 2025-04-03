@@ -27,15 +27,11 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	this._xhr = new XMLHttpRequest()
-	this._xhr.addEventListener('load', ui._context.wrapNativeCallback(this.parseManifest.bind(this)))
+	this._xhr.addEventListener('load', this.parseManifest.bind(this))
 
 	ui._context.document.on('visibilitychange', function() {
 		if (self._drmClientId && document.hidden) {
-			self.unloadDrmClient(
-				self._drmClientId,
-				function() { log("DRM client unloaded") },
-				function(e) { log("Failed to unload DRM client", e) }
-			)
+			self.unloadDrmClient()
 		}
 	})
 }
@@ -243,10 +239,6 @@ Player.prototype.playDashUrl = function(source) {
 	this.playOptionType(source, "application/dash+xml");
 }
 
-Player.prototype.playMp4 = function(source) {
-	this.playOptionType(source, "video/mp4");
-}
-
 Player.prototype.playSmoothStreamsingUrl = function(source) {
 	this.playOptionType(source, "application/vnd.ms-sstr+xml");
 }
@@ -277,8 +269,6 @@ Player.prototype.setSource = function(url) {
 		this.setDrmSource(url)
 	} else if (this._extension === ".mpd") {
 		this.playDashUrl(url)
-	} else if (this._extension === ".mp4") {
-		this.playMp4(url)
 	} else if (this._extension === ".m3u8" || this._extension === ".m3u") {
 		if (url) {
 			this._xhr.open('GET', url);
@@ -480,5 +470,5 @@ exports.createPlayer = function(ui) {
 }
 
 exports.probeUrl = function(url) {
-	return 175
+	return 75
 }

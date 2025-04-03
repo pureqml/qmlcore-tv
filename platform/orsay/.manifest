@@ -1,6 +1,5 @@
 {
 	"strict": false,
 	"templates": ["*.html", "config.xml"],
-	"templater": "jinja2",
 	"requires": ["html5"]
 }

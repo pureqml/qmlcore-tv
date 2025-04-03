@@ -18,6 +18,7 @@ if ('webOS' in window || 'webos' in window) {
 		33: 'ChannelUp',
 		34: 'ChannelDown',
 		27: 'Back',
+        8: 'Back',
 		19: 'Pause',
 		48: '0',
 		49: '1',

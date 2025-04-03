@@ -12,18 +12,6 @@ var Device = function(ui) {
 
 	if (window.Hisense_GetCountryCode)
 		ui.country = window.Hisense_GetCountryCode()
-
-	if (window.Hisense_GetOSVersion)
-		ui.sdk = window.Hisense_GetOSVersion()
-
-	if (window.Hisense_Get4KSupportState)
-		ui.supportingUhd = window.Hisense_Get4KSupportState()
-
-	if (window.Hisense_GetSupportForHDR)
-		ui.supportingHdr = window.Hisense_GetSupportForHDR()
-
-	if (window.Hisense_GetMenuLanguageCode)
-		ui.language = window.Hisense_GetMenuLanguageCode()
 }
 
 exports.createDevice = function(ui) {

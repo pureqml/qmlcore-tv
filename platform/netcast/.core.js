@@ -9,8 +9,7 @@ exports.core.vendor = "LG"
 exports.core.device = 1
 exports.core.os = "netcast"
 
-var body = document.body.innerHTML
-document.body.innerHTML += body + "<object id='device' type='application/x-netcast-info'></object>"
+document.body.innerHTML = "<object id='device' type='application/x-netcast-info'></object>"
 document.body.innerHTML += "<object id='drmplugin' type='application/oipfDrmAgent' style='visibility:hidden' width='0' height='0'></object>"
 
 exports.core.keyCodes = {
@@ -22,6 +21,7 @@ exports.core.keyCodes = {
 	33: 'ChannelUp',
 	34: 'ChannelDown',
 	27: 'Back',
+    8: 'Back',
 	19: 'Pause',
 	48: '0',
 	49: '1',

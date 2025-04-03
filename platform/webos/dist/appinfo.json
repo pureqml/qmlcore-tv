@@ -1,5 +1,5 @@
 {
-	"id": "com.{{ title | default('pureqml') }}.app",
+	"id": "{{ title | default('pureqml') }}.tvigle.app",
 	"version": "{{ version | default('1.0.0') }}",
 	"vendor": "{{ author.name | default('Jhon Doe') if author is defined else 'Jhon Doe' }}",
 	"type": "web",

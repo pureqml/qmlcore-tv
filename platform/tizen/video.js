@@ -16,7 +16,6 @@ var Player = function(ui) {
 	ui.parent.element.append(ui.element)
 
 	var self = this
-	ui.setNotSuspendFlag = function(value) { self._notSuspend = value }.bind(this)
 	var context = ui._context
 	this._listener = {
 		onbufferingstart : this.wrapCallback(function() {
@@ -118,11 +117,6 @@ Player.prototype.setSource = function(value) {
 		this._drmRequired = false
 	else
 		this._drm = null
-
-	if (this._suspendState) {
-		this._suspendState.url = value
-		this._suspendState.progress = this.ui.startPosition
-	}
 	this.playImpl()
 }
 
@@ -166,7 +160,6 @@ Player.prototype.playImpl = function() {
 	avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying, "startPos", ui.startPosition)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
-	avplay.setDisplayMethod("PLAYER_DISPLAY_MODE_FULL_SCREEN");
 
 	if (ui.startPosition)
 		avplay.seekTo(ui.startPosition * 1000, function() { log("seeked on start") }, function(err) { log("failed to seek on start",err) });
@@ -348,6 +341,7 @@ Player.prototype.setVideoTrack = function(trackId) {
 		this.seekTo(prevProgress)
 }
 
+//fixme: move this logic to core?
 Player.prototype.setVisibility = function(visible) {
 	var avplay = this.getAVPlay()
 	if (!avplay) {
@@ -355,27 +349,9 @@ Player.prototype.setVisibility = function(visible) {
 		return
 	}
 
-	log("setVisibility", visible, "state", avplay.getState(), "notsuspend", this._notSuspend)
-	if (this._notSuspend)
-		return
-
-	if (visible) {
-		log("Check suspend state", this._suspendState)
-		if (this._suspendState) {
-			var state = this._suspendState
-			try {
-				avplay.restore(state.url, state.progress * 1000)
-			} catch (e) {
-				log("Failed to restore")
-			}
-		}
-		this._suspendState = null
-	} else {
+	log("setVisibility", visible, "state", avplay.getState())
+	if (!visible) {
 		try {
-			this._suspendState = {
-				progress: this.ui.progress,
-				url: this.ui.source
-			}
 			avplay.suspend()
 		} catch (e) {
 			log("Failed to suspend avplay", e)
@@ -436,13 +412,11 @@ Player.prototype.seekTo = function(tp) {
 }
 
 Player.prototype.setVolume = function(volume) {
-	// TODO: its set to max the system volume
-	// window.tizen.tvaudiocontrol.setVolume(volume)
+	log("Not implemented")
 }
 
 Player.prototype.setMute = function(muted) {
-	window.tizen.tvaudiocontrol.setMute(muted)
-	this.ui.muted = muted
+	log("Not implemented")
 }
 
 Player.prototype.setRect = function(l, t, r, b) {
