@@ -42,9 +42,9 @@ var Player = function(ui) {
 				self.ui.waiting = false
 			self.ui.ready = true
 			self.updateCurrentTime(currentTime);
-			// if (self._plugin && self._plugin.getAdapter) {
-			// 	self._plugin.getAdapter().playtimeHandler();
-			// }
+			if (self._plugin && self._plugin.getAdapter) {
+				self._plugin.getAdapter().playtimeHandler();
+			}
 		}),
 		onevent : this.wrapCallback(function(eventType, eventData) {
 			log("event type: " + eventType + ", data: " + eventData);
