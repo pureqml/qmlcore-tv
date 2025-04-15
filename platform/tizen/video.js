@@ -33,18 +33,18 @@ var Player = function(ui) {
 			log("onbufferingcomplete")
 			self.ui.seeking = false
 			self.ui.waiting = false
-			// if (self._plugin && self._plugin.getAdapter) {
-			// 	self._plugin.getAdapter().onbufferingcomplete();
-			// }
+			if (self._plugin && self._plugin.getAdapter) {
+				self._plugin.getAdapter().fireBufferEnd();
+			}
 		}),
 		oncurrentplaytime : this.wrapCallback(function(currentTime) {
 			if (currentTime)
 				self.ui.waiting = false
 			self.ui.ready = true
 			self.updateCurrentTime(currentTime);
-			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().playtimeHandler();
-			}
+			// if (self._plugin && self._plugin.getAdapter) {
+			// 	self._plugin.getAdapter().playtimeHandler();
+			// }
 		}),
 		onevent : this.wrapCallback(function(eventType, eventData) {
 			log("event type: " + eventType + ", data: " + eventData);
@@ -54,7 +54,7 @@ var Player = function(ui) {
 			self.ui.ready = false
 			self.ui.error({ "type": eventType, "message": eventType })
 			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().errorHandler();
+				self._plugin.getAdapter().fireError(eventType);
 			}
 		}),
 		onsubtitlechange : this.wrapCallback(function(duration, text, data3, data4) {
@@ -67,9 +67,9 @@ var Player = function(ui) {
 			avplay.setDrm("PLAYREADY", "InstallLicense", JSON.stringify(self._drmParam));
 		}),
 		onstreamcompleted : this.wrapCallback(function(e) {
-			// if (self._plugin && self._plugin.getAdapter) {
-			// 	self._plugin.getAdapter().onstreamcompleted();
-			// }
+			if (self._plugin && self._plugin.getAdapter) {
+				self._plugin.getAdapter().fireStop();
+			}
 
 			if (ui.progress < ui.duration - 1) {
 				log("Unexpected ending error occured")
@@ -198,7 +198,7 @@ Player.prototype.playImpl = function() {
 		var ready = avplay.getState() === "READY"
 		if (ui.autoPlay) {
 			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().playHandler();
+				self._plugin.getAdapter().fireStart();
 			}
 			self.play()
 		}
@@ -216,7 +216,7 @@ Player.prototype.play = function() {
 	log('Play Video', this.ui.source);
 	try {
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().playHandler();
+			this._plugin.getAdapter().fireStart();
 		}
 		avplay.play();
 		this.ui.paused = avplay.getState() == "PAUSED"
@@ -236,7 +236,7 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 	} else {
 		error ? error(new Error("Unkbown or not supported DRM type " + type)) : log("Unkbown or not supported DRM type " + type)
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().errorHandler("drmerror");
+			this._plugin.getAdapter().fireError("drmerror");
 		}
 	}
 
@@ -421,7 +421,7 @@ Player.prototype.pause = function() {
 	log('Pause Video', avplay);
 	try {
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().pauseVideo();
+			this._plugin.getAdapter().firePause();
 		}
 		avplay.pause();
 		this.ui.paused = avplay.getState() == "PAUSED"
@@ -442,9 +442,9 @@ Player.prototype.stop = function() {
 	log("Current state: " + avplay.getState());
 	log('Stop Video');
 	try {
-		// if (this._plugin && this._plugin.getAdapter) {
-		// 	this._plugin.getAdapter().stopVideo();
-		// }
+		if (this._plugin && this._plugin.getAdapter) {
+			this._plugin.getAdapter().fireStop();
+		}
 		avplay.stop();
 		log("Current state: " + avplay.getState());
 	} catch (e) {
