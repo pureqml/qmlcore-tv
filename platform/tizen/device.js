@@ -8,12 +8,11 @@ var Device = function(ui) {
 	this._ui = ui
 	var tizenDeviceId = window.tizen.systeminfo.getCapability("http://tizen.org/system/tizenid")
 
-	if (!tizenDeviceId) {
-		if (webapis && webapis.productinfo && webapis.productinfo.getDuid)
-			tizenDeviceId = webapis.productinfo.getDuid()
-		else
-			tizenDeviceId = "tizen_" + Math.random().toString(36).substr(2, 9)
+	log("Device::tizenDeviceId", tizenDeviceId)
+	if (!tizenDeviceId && webapis.productinfo) {
+		tizenDeviceId = webapis.productinfo.getDuid()
 	}
+	log("ui.deviceId", tizenDeviceId)
 	ui.deviceId = tizenDeviceId
 
 	window.tizen.systeminfo.getPropertyValue("BUILD", this.fillDeviceInfo.bind(this), function(error) { log("Failed to get devceinfo", error) });
