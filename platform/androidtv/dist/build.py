@@ -20,8 +20,9 @@ def build(app, title, release):
 	os.system('cordova plugin add cordova-plugin-device')
 	os.system('cordova plugin add cordova-plugin-screen-orientation')
 	os.system('cordova plugin add cordova-plugin-exoplayer-smart')
-	os.system('git clone https://gitlab.tvigle.ru/pubprojects/cordova-plugin-android-tv cordova-plugin-android-tv')
-	os.system('rm -rf cordova-plugin-android-tv')
+	os.system('git clone https://github.com/comrat/Cordova-Android-TV-Plugin Cordova-Android-TV-Plugin')
+	os.system('cordova plugin add Cordova-Android-TV-Plugin')
+	os.system('rm -rf Cordova-Android-TV-Plugin')
 	{% block plugins %}{% endblock %}
 
 	if release:
