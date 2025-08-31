@@ -1,5 +1,12 @@
 {
-	"requires": ["android", "html5"],
-	"templates": ["*.html", "config.xml", "build.py"],
+	"requires": [
+		"android",
+		"html5"
+	],
+	"templates": [
+		"*.html",
+		"config.xml",
+		"build.py"
+	],
 	"strict": false
 }

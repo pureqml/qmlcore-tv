@@ -10,12 +10,12 @@ var fitToScreen = function() {
 	if (height) {
 		window.cordovaExecCall("setSize", [width, height],
 			function() { log("SetSize", width, height) },
-			function(err) { log("Failed to set size") }
+			function(err) { log("Failed to set size", err) }
 		)
 	} else {
-		window.cordovaExecCall("ftiToScreen", [],
+		window.cordovaExecCall("fitToScreen", [],
 			function() { log("Fit to screen") },
-			function(err) { log("Failed to fit screen") }
+			function(err) { log("Failed to fit screen", err) }
 		)
 	}
 }
