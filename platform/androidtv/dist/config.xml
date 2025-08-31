@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget id="{{ domain | default('com.pureqml.app') }}" version="{{ version | default(0.0.1) }}" android-versionCode="{{ versionCode | default(1) }}" android-versionName="{{ version | default(0.0.1) }}"
+  xmlns = "http://www.w3.org/ns/widgets">
+  <!-- xmlns:cdv="http://cordova.apache.org/ns/1.0" -->
+  <!-- xmlns:android="http://schemas.android.com/apk/res/android"> -->
+
+  {% block feature %}{% endblock %}
+
+  <name short="{{ title }}">{{ title }}</name>
+  <description>{{ title }} app optimized for Android TV</description>
+  <author email="support@{{ title }}.com" href="https://{{ title }}.com">{{ title }}</author>
+  <content src="index.html" />
+
+  {% block privilege %}{% endblock %}
+
+  <access origin="*" />
+  <allow-navigation href="*" />
+  <allow-intent href="http://*/*" />
+  <allow-intent href="https://*/*" />
+  <allow-intent href="tel:*" />
+  <allow-intent href="sms:*" />
+  <allow-intent href="mailto:*" />
+  <allow-intent href="geo:*" />
+
+
+  <platform name="android">
+    <!-- Fixing the CORS in Android tv for development -->
+    <!-- <edit-config file="AndroidManifest.xml" target="/manifest/application" mode="merge">
+      <application android:usesCleartextTraffic="true" />
+    </edit-config> -->
+
+    <!-- Set a larger app icon to suit Android TV needs -->
+    <icon src="icon.png" />
+
+    <preference name="SplashScreenBackgroundColor" value="#212121" />
+    <preference name="AndroidWindowSplashScreenIconBackgroundColor" value="#212121" />
+    <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/logo.xml" />
+
+    <!-- Set Android version to target -->
+    <preference name="android-targetSdkVersion" value="35" />
+    <preference name="android-minSdkVersion" value="23" />
+
+    <!-- Set Android windowSoftInputMode -->
+    <preference name="android-windowSoftInputMode" value="adjustResize" />
+
+    <!-- Enable Android TV support -->
+    <preference name="android-manifest/application/activity/intent-filter/category" value="android.intent.category.LEANBACK_LAUNCHER" />
+
+    <!-- Ensure the app uses full-screen mode (as Android TV apps usually run in full screen) -->
+    <preference name="fullscreen" value="true" />
+
+    <!-- Set screen orientation to landscape (most Android TV apps use landscape mode) -->
+    <preference name="Orientation" value="landscape" />
+  </platform>
+</widget>

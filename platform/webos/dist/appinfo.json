@@ -1,5 +1,5 @@
 {
-	"id": "com.{{ title | default('pureqml') }}.app",
+	"id": "{{ domain | default('com.pureqml.app') }}",
 	"version": "{{ version | default('1.0.0') }}",
 	"vendor": "{{ author.name | default('Jhon Doe') if author is defined else 'Jhon Doe' }}",
 	"type": "web",
@@ -9,9 +9,9 @@
 	"bgImage": "preview.png",
 	"icon": "icon.png",
 	"largeIcon": "icon.png",
-	"resolution":"{{ resolutionWidth | default(1280) }}x{{ resolutionHeight | default(720) }}",
+	"resolution": "{{ resolutionWidth | default(1280) }}x{{ resolutionHeight | default(720) }}",
 	"iconColor": "{{ iconColor | default('#eeeeee') }}",
 	"splashBackground": "splash.png",
-	"disableBackHistoryAPI":true,
-	"uiRevision":1
+	"disableBackHistoryAPI": true,
+	"uiRevision": 1
 }

@@ -1,5 +1,14 @@
 .DS_Store
+.cache
 .idea
 .vscode
+.metadata
+.venv
+npm-debug.log
+
 *.swp
+*.swn
 *.swo
+*.ipk
+node_modules
+backup
