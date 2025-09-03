@@ -34,7 +34,7 @@ var Player = function(ui) {
 			self.ui.seeking = false
 			self.ui.waiting = false
 			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().fireBufferEnd();
+				self._plugin.getAdapter().onbufferingcomplete();
 			}
 		}),
 		oncurrentplaytime : this.wrapCallback(function(currentTime) {
@@ -43,7 +43,7 @@ var Player = function(ui) {
 			self.ui.ready = true
 			self.updateCurrentTime(currentTime);
 			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().playtimeHandler();
+				self._plugin.getAdapter().oncurrentplaytime();
 			}
 		}),
 		onevent : this.wrapCallback(function(eventType, eventData) {
@@ -54,7 +54,7 @@ var Player = function(ui) {
 			self.ui.ready = false
 			self.ui.error({ "type": eventType, "message": eventType })
 			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().fireError(eventType);
+				self._plugin.getAdapter().onerror();
 			}
 		}),
 		onsubtitlechange : this.wrapCallback(function(duration, text, data3, data4) {
@@ -68,7 +68,7 @@ var Player = function(ui) {
 		}),
 		onstreamcompleted : this.wrapCallback(function(e) {
 			if (self._plugin && self._plugin.getAdapter) {
-				self._plugin.getAdapter().fireStop();
+				self._plugin.getAdapter().onstreamcompleted();
 			}
 
 			if (ui.progress < ui.duration - 1) {
@@ -216,7 +216,7 @@ Player.prototype.play = function() {
 	log('Play Video', this.ui.source);
 	try {
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().fireStart();
+			this._plugin.getAdapter().playVideo();
 		}
 		avplay.play();
 		this.ui.paused = avplay.getState() == "PAUSED"
@@ -236,7 +236,7 @@ Player.prototype.setupDrm = function(type, options, callback, error) {
 	} else {
 		error ? error(new Error("Unkbown or not supported DRM type " + type)) : log("Unkbown or not supported DRM type " + type)
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().fireError("drmerror");
+			this._plugin.getAdapter().onerror();
 		}
 	}
 
@@ -421,7 +421,7 @@ Player.prototype.pause = function() {
 	log('Pause Video', avplay);
 	try {
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().firePause();
+			this._plugin.getAdapter().pauseVideo();
 		}
 		avplay.pause();
 		this.ui.paused = avplay.getState() == "PAUSED"
@@ -443,7 +443,7 @@ Player.prototype.stop = function() {
 	log('Stop Video');
 	try {
 		if (this._plugin && this._plugin.getAdapter) {
-			this._plugin.getAdapter().fireStop();
+			this._plugin.getAdapter().stopVideo();
 		}
 		avplay.stop();
 		log("Current state: " + avplay.getState());
