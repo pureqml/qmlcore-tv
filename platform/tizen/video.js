@@ -175,10 +175,13 @@ Player.prototype.playImpl = function() {
 	}
 
 	if (ui.playerPosX || ui.playerPosY) {
-		avplay.setDisplayRect(ui.playerPosX, ui.playerPosY, ui.width, ui.height);
+		console.log("SETDISAPLY1:", ui.playerPosX, ui.playerPosY, ui.width, ui.height)
+		avplay.setDisplayRect(ui.playerPosX || 0, ui.playerPosY || 0, ui.width, ui.height);
 	} else {
+		console.log("SETDISAPLY2:", ui.x, ui.y, ui.width, ui.height)
 		avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 	}
+
 	log("Set UHD flag", this._uhdSupported, "allowUhdPlaying", ui.allowUhdPlaying, "startPos", ui.startPosition)
 	avplay.setStreamingProperty("SET_MODE_4K", ui.allowUhdPlaying && this._uhdSupported ? "TRUE" : "FALSE");
 
@@ -485,6 +488,7 @@ Player.prototype.setRect = function(l, t, r, b) {
 		log("AVPlay was not initialized")
 		return
 	}
+	console.log("SETDISAPLY3:", l, t, r - l, b - t)
 	avplay.setDisplayRect(l, t, r - l, b - t)
 }
 
