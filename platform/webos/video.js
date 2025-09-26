@@ -159,12 +159,7 @@ Player.prototype.setDrmSource = function(source) {
 		ui.element.append(sourceElement);
 	this._sourceElement = sourceElement
 	this.element.dom.load()
-
-	var isPlaying = ui.progress > 0 && !ui.paused && ui.ready
-	console.log("setDrmSource", isPlaying)
-	if (!isPlaying) {
-		this.element.dom.play()
-	}
+	this.element.dom.play()
 }
 
 Player.prototype.getVideoTracks = function() {
@@ -241,12 +236,7 @@ Player.prototype.playOptionType = function(source, type) {
 
 	this._sourceElement = sourceElement
 	this.element.dom.load()
-
-	var isPlaying = ui.progress > 0 && !ui.paused && ui.ready
-	console.log("playOptionType", isPlaying)
-	if (!isPlaying) {
-		this.element.dom.play()
-	}
+	this.element.dom.play()
 }
 
 Player.prototype.playDashUrl = function(source) {
