@@ -127,7 +127,6 @@ Player.prototype.getAVPlay = function() {
 Player.prototype.setSource = function(value) {
 	log("src", value)
 	this.ui.ready = false
-	log("drmRequired", this._drm)
 
 	if (this._suspendState) {
 		this._suspendState.url = value
@@ -170,15 +169,18 @@ Player.prototype.playImpl = function() {
 			avplay.setDrm("WIDEVINE", "SetProperties", JSON.stringify(this._drmParam));
 		} else if (drm.playready) {
 			this._drmParam = { LicenseServer: drm.playready.laServer };
+
+			if (drm.playready.headers) {
+				this._drmParam['HttpHeaders'] = drm.playready.headers
+			}
+
 			avplay.setDrm("PLAYREADY", "SetProperties", JSON.stringify(this._drmParam));
 		}
 	}
 
 	if (ui.playerPosX || ui.playerPosY) {
-		console.log("SETDISAPLY1:", ui.playerPosX, ui.playerPosY, ui.width, ui.height)
 		avplay.setDisplayRect(ui.playerPosX || 0, ui.playerPosY || 0, ui.width, ui.height);
 	} else {
-		console.log("SETDISAPLY2:", ui.x, ui.y, ui.width, ui.height)
 		avplay.setDisplayRect(ui.x, ui.y, ui.width, ui.height);
 	}
 
@@ -488,7 +490,6 @@ Player.prototype.setRect = function(l, t, r, b) {
 		log("AVPlay was not initialized")
 		return
 	}
-	console.log("SETDISAPLY3:", l, t, r - l, b - t)
 	avplay.setDisplayRect(l, t, r - l, b - t)
 }
 

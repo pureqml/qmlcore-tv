@@ -269,7 +269,7 @@ Player.prototype.setSource = function(url) {
 	ui.waiting = false
 	ui.duration = 0
 	this._extension = this.getFileExtension(url)
-	log("Set source", url, "ext", this._extension)
+	log("Set source", url, "ext", this._extension, "clientId", this._drmClientId)
 
 	if (!url) {
 		this.element.dom.removeAttribute('src');
@@ -352,11 +352,20 @@ Player.prototype.subscribeLicensingError = function(options, callback, error) {
 	this.lunaRequestImpl("luna://com.webos.service.drm", request)
 }
 
-Player.prototype.getDrmClientId = function(type, callback) {
+Player.prototype.getDrmClientId = function(type, callback, headers) {
 	var self = this
 	var appId = "com." + ($manifest$title || "pureqml") + ".app"
+	var drmOptions = {
+		"drmType": type,
+		"appId": appId
+	}
+
+	if (headers) {
+		drmOptions["headers"] = headers
+	}
+
 	this.createDrmClient(
-		{ "drmType": type, "appId": appId },
+		drmOptions,
 		function(result) {
 			log("DRM Client created", result)
 			self._drmClientId = result.clientId
@@ -371,6 +380,7 @@ Player.prototype.getDrmClientId = function(type, callback) {
 
 Player.prototype.setupDrm = function(type, options, callback) {
 	var self = this
+
 	this.getDrmClientId(type, function(clientId) {
 		var msg
 		var msgType
@@ -472,7 +482,7 @@ Player.prototype.setupDrm = function(type, options, callback) {
 					break
 			}
 		})
-	}.bind(this));
+	}.bind(this), options.headers);
 }
 
 exports.createPlayer = function(ui) {
