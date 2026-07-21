@@ -476,7 +476,6 @@ Player.prototype.setupDrm = function(type, options, callback) {
 				case 4:
 					log("User Consent Needed sendDrmMessage() failed because user consent is needed for that action");
 					break
-				case 1:
 				default:
 					log("Unknown Error: sendDrmMessage() failed because an unspecified error occurred.");
 					break
